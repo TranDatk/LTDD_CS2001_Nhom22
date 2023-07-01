@@ -3,14 +3,16 @@ package com.nhom22.findhostel;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 import com.nhom22.findhostel.ui.Account.AccountPageFragment;
 import com.nhom22.findhostel.ui.Extension.ExtensionPageFragment;
 import com.nhom22.findhostel.ui.Home.HomePageFragment;
 import com.nhom22.findhostel.ui.Save.SavePageFragment;
 import com.nhom22.findhostel.ui.Search.SearchPageFragment;
+import com.nhom22.findhostel.data.DatabaseHelper;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,5 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the initial selected fragment
         binding.navigation.setSelectedItemId(R.id.navigation_search);
+
     }
+
+
 }
