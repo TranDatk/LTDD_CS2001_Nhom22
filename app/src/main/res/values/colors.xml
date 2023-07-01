@@ -7,4 +7,6 @@
     <color name="colorPrimaryDark">#6539ba</color>
     <color name="colorAccent">#FF4081</color>
     <color name="bgBottomNavigation">#fe485a</color>
+    <color name="green">#8DE484</color>
+
 </resources>

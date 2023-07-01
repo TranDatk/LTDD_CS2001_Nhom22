@@ -7,19 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ExtensionPageFragment#newInstance} factory method to
+ * Use the {@link CampaignPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ExtensionPageFragment extends Fragment {
-
-
+public class CampaignPageFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,7 +26,7 @@ public class ExtensionPageFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ExtensionPageFragment() {
+    public CampaignPageFragment() {
         // Required empty public constructor
     }
 
@@ -40,11 +36,11 @@ public class ExtensionPageFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ExtensionPageFragment.
+     * @return A new instance of fragment CampaignPageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ExtensionPageFragment newInstance(String param1, String param2) {
-        ExtensionPageFragment fragment = new ExtensionPageFragment();
+    public static CampaignPageFragment newInstance(String param1, String param2) {
+        CampaignPageFragment fragment = new CampaignPageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,17 +57,10 @@ public class ExtensionPageFragment extends Fragment {
         }
     }
 
-    String[] items = {"", "",
-            ""};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentExtensionPageBinding binding = FragmentExtensionPageBinding.inflate(inflater,container,false);
-        View view = binding.getRoot();
-
-
-
         // Inflate the layout for this fragment
-        return view;
+        return inflater.inflate(R.layout.fragment_campaign_page, container, false);
     }
 }
