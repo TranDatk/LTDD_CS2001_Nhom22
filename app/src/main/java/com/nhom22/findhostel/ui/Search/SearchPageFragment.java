@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.ui.SearchPageFragment;
+package com.nhom22.findhostel.ui.Search;
 
 import android.os.Bundle;
 
