@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Save.SavePageFragment">
+    tools:context=".ui.Save.SaveNullFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp">
             <ImageView
                 android:layout_width="40dp"
@@ -39,11 +39,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#f0f0f0"
             android:orientation="vertical">
-            <ListView
-                android:id="@+id/lvSavedPost"
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_save"
+                android:layout_gravity="center"
+                android:layout_marginTop="200dp"/>
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="30dp"
+                android:textSize="25dp"
+                android:text="Không có dữ liệu"
+                android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,8 @@ import com.nhom22.findhostel.R;
  * create an instance of this fragment.
  */
 public class ExtensionPageFragment extends Fragment {
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,10 +61,17 @@ public class ExtensionPageFragment extends Fragment {
         }
     }
 
+    String[] items = {"", "",
+            ""};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        FragmentExtensionPageBinding binding = FragmentExtensionPageBinding.inflate(inflater,container,false);
+        View view = binding.getRoot();
+
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_extension_page, container, false);
+        return view;
     }
 }

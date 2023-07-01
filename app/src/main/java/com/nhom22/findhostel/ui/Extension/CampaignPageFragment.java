@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.ui.Save;
+package com.nhom22.findhostel.ui.Extension;
 
 import android.os.Bundle;
 
@@ -7,18 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
-import com.nhom22.findhostel.databinding.FragmentSavePageBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SavePageFragment#newInstance} factory method to
+ * Use the {@link CampaignPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SavePageFragment extends Fragment {
+public class CampaignPageFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +26,7 @@ public class SavePageFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SavePageFragment() {
+    public CampaignPageFragment() {
         // Required empty public constructor
     }
 
@@ -39,18 +36,17 @@ public class SavePageFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SavePageFragment.
+     * @return A new instance of fragment CampaignPageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SavePageFragment newInstance(String param1, String param2) {
-        SavePageFragment fragment = new SavePageFragment();
+    public static CampaignPageFragment newInstance(String param1, String param2) {
+        CampaignPageFragment fragment = new CampaignPageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,12 +61,6 @@ public class SavePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentSavePageBinding binding = FragmentSavePageBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        String[] items = {"item 1", "item 2", "item 3", "item 4", "item 5", "item 6"};
-        SavedPostAdapter adapter = new SavedPostAdapter(this, items);
-        ListView lvItems = view.findViewById(R.id.lvSavedPost);
-        lvItems.setAdapter(adapter);
-        return view;
+        return inflater.inflate(R.layout.fragment_campaign_page, container, false);
     }
 }
