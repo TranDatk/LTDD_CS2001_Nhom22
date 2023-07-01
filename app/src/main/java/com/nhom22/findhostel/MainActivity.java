@@ -1,19 +1,16 @@
 package com.nhom22.findhostel;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 import com.nhom22.findhostel.ui.Account.AccountPageFragment;
 import com.nhom22.findhostel.ui.Extension.ExtensionPageFragment;
 import com.nhom22.findhostel.ui.Home.HomePageFragment;
 import com.nhom22.findhostel.ui.Save.SavePageFragment;
-import com.nhom22.findhostel.ui.SearchPageFragment.SearchPageFragment;
+import com.nhom22.findhostel.ui.Search.SearchPageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
