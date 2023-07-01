@@ -1,4 +1,4 @@
 package com.nhom22.findhostel.model;
 
-public class test2 {
+public class Address {
 }
