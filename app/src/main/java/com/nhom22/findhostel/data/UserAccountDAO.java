@@ -1,12 +1,14 @@
 package com.nhom22.findhostel.data;
 
+import com.nhom22.findhostel.model.UserAccount;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class UserAccountDAO {
-    /*private static final String DATABASE_URL = "jdbc:sqlite:/data/data/com.nhom22.findhostel/databases/findhostel.db";
+    private static final String DATABASE_URL = "jdbc:sqlite:/data/data/com.nhom22.findhostel/databases/findhostel.db";
     private Connection connection;
 
     public UserAccountDAO() {
@@ -18,7 +20,7 @@ public class UserAccountDAO {
         }
     }
 
-    public boolean addUserAccount(User_Account user) {
+    public boolean addUserAccount(UserAccount user) {
         PreparedStatement stmt = null;
 
         try {
@@ -39,7 +41,7 @@ public class UserAccountDAO {
         return false;
     }
 
-    public boolean updateUserAccount(User_Account user) {
+    public boolean updateUserAccount(UserAccount user) {
         PreparedStatement stmt = null;
 
         try {
@@ -98,6 +100,5 @@ public class UserAccountDAO {
             }
         }
     }
-*/
     // Các phương thức khác liên quan đến truy vấn dữ liệu, nếu cần
 }

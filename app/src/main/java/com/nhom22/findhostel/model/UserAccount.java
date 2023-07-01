@@ -1,7 +1,7 @@
 package com.nhom22.findhostel.model;
 
 
-public class user_account {
+public class UserAccount {
     private int id;
     private String username; // name of user, not have to login
     private String email;
@@ -93,7 +93,7 @@ public class user_account {
         return address;
     }
 
-    public user_account(int id, String username, String email, String password, String phone, double digital_money, int roleUser, byte[] image, int isActive, Address address) {
+    public UserAccount(int id, String username, String email, String password, String phone, double digital_money, int roleUser, byte[] image, int isActive, Address address) {
         this.id = id;
         this.username = username;
         this.email = email;
