@@ -1,13 +1,15 @@
 package com.nhom22.findhostel;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.os.UserManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 import com.nhom22.findhostel.ui.Account.AccountPageFragment;
 import com.nhom22.findhostel.ui.Extension.ExtensionPageFragment;
@@ -18,7 +20,7 @@ import com.nhom22.findhostel.ui.SearchPageFragment.SearchPageFragment;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private Fragment selectedFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
         binding.navigation.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
             if (item.getItemId() == R.id.navigation_home) {
                 selectedFragment = new HomePageFragment();
             } else if (item.getItemId() == R.id.navigation_exten) {
