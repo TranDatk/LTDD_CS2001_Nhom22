@@ -12,6 +12,13 @@
         android:orientation="vertical"
         android:layout_gravity="center" >
 
+        <TextView
+            android:id="@+id/a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
@@ -23,6 +30,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Đăng ký" />
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng xuất́" />
     </LinearLayout>
 
 </FrameLayout>
