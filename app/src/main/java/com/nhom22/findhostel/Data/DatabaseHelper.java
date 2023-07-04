@@ -3,13 +3,14 @@ package com.nhom22.findhostel.Data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "findhostel.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "findhostel.sqlite";
+    private static final int DATABASE_VERSION = 2;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -170,10 +171,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "text TEXT," +
                 "image BLOB," +
-                "created_date DATETIME," +
+                "created_date Text," +
                 "user_id INTEGER," +
                 "is_active INTEGER" +
                 ")");
+    }
+
+    public void addPostDecor(String text, byte[] image, String created_date, int user_id, int isActive) {
+        SQLiteDatabase database = getWritableDatabase();
+        String sql = "INSERT INTO posts_extension VALUES (null, ?, ?, ?, ?, ?)";
+        SQLiteStatement sqLiteStatement = database.compileStatement(sql);
+        sqLiteStatement.clearBindings();
+
+        sqLiteStatement.bindString(1, text);
+        sqLiteStatement.bindBlob(2, image);
+        sqLiteStatement.bindString(3, created_date);
+        sqLiteStatement.bindLong(4, user_id);
+        sqLiteStatement.bindLong(5, isActive);
+        sqLiteStatement.executeInsert();
     }
 
     @Override
