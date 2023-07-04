@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.ui.Extension;
+package com.nhom22.findhostel.UI.Extension;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
-import com.nhom22.findhostel.ui.Account.RegistrationFragment;
-import com.nhom22.findhostel.ui.Home.HomePageFragment;
 
 /**
  * A simple {@link Fragment} subclass.

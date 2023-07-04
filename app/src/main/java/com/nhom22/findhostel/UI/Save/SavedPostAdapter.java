@@ -1,10 +1,9 @@
-package com.nhom22.findhostel.ui.Save;
+package com.nhom22.findhostel.UI.Save;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.nhom22.findhostel.R;
 
@@ -37,11 +36,11 @@ public class SavedPostAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = fragment.getLayoutInflater();
 
-//        view = inflater.inflate(R.layout.item_saved_post, null);
-//
-//        TextView tvItem = view.findViewById(R.id.tvItem);
-//
-//        tvItem.setText(items[i]);
+        view = inflater.inflate(R.layout.item_saved_post, null);
+
+        /*TextView tvItem = view.findViewById(R.id.tvItem);*/
+
+        /*tvItem.setText(items[i]);*/
 
         return view;
     }

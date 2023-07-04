@@ -1,11 +1,10 @@
-package com.nhom22.findhostel.ui.Extension;
+package com.nhom22.findhostel.UI.Extension;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,11 +23,11 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.MainActivity;
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.data.DatabaseHelper;
-import com.nhom22.findhostel.data.PostDecorDAO;
-import com.nhom22.findhostel.model.PostDecor;
-import com.nhom22.findhostel.ui.Home.HomePageFragment;
-import com.nhom22.findhostel.ui.Save.SavePageFragment;
+import com.nhom22.findhostel.Data.DatabaseHelper;
+import com.nhom22.findhostel.Data.PostDecorDAO;
+import com.nhom22.findhostel.Model.PostDecor;
+import com.nhom22.findhostel.UI.Home.HomePageFragment;
+import com.nhom22.findhostel.UI.Save.SavePageFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;

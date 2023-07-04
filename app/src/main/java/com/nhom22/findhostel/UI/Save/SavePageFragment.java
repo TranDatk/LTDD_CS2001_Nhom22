@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.ui.Save;
+package com.nhom22.findhostel.UI.Save;
 
 import android.os.Bundle;
 
@@ -7,15 +7,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
+import com.nhom22.findhostel.databinding.FragmentSavePageBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SaveNullFragment#newInstance} factory method to
+ * Use the {@link SavePageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SaveNullFragment extends Fragment {
+public class SavePageFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +29,7 @@ public class SaveNullFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SaveNullFragment() {
+    public SavePageFragment() {
         // Required empty public constructor
     }
 
@@ -36,17 +39,18 @@ public class SaveNullFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SaveNullFragment.
+     * @return A new instance of fragment SavePageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SaveNullFragment newInstance(String param1, String param2) {
-        SaveNullFragment fragment = new SaveNullFragment();
+    public static SavePageFragment newInstance(String param1, String param2) {
+        SavePageFragment fragment = new SavePageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,12 @@ public class SaveNullFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_save_null, container, false);
+        FragmentSavePageBinding binding = FragmentSavePageBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        String[] items = {"item 1", "item 2", "item 3", "item 4", "item 5", "item 6"};
+        SavedPostAdapter adapter = new SavedPostAdapter(this, items);
+        ListView lvItems = view.findViewById(R.id.lvSavedPost);
+        lvItems.setAdapter(adapter);
+        return view;
     }
 }

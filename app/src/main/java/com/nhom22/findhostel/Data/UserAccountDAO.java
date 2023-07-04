@@ -1,13 +1,10 @@
-package com.nhom22.findhostel.data;
+package com.nhom22.findhostel.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
-import com.nhom22.findhostel.model.UserAccount;
+import com.nhom22.findhostel.Model.UserAccount;
 
 
 public class UserAccountDAO{
@@ -38,6 +35,7 @@ public class UserAccountDAO{
       return id;
    }
 
+   // Cho nay cua Cap Tan Dat sua lai
    public int updateUserAccount(UserAccount userAccount) {
       SQLiteDatabase db = dbHelper.getWritableDatabase();
 

@@ -1,9 +1,7 @@
-package com.nhom22.findhostel.ui.Account;
+package com.nhom22.findhostel.UI.Account;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -11,13 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.UserManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.nhom22.findhostel.MainActivity;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.databinding.FragmentAccountPageBinding;
 

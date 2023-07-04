@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.ui.Account;
+package com.nhom22.findhostel.UI.Account;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.data.DatabaseHelper;
+import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.databinding.FragmentLoginBinding;
 
 

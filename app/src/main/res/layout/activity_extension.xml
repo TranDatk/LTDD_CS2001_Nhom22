@@ -5,10 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Extension.ExtensionActivity"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
+    tools:context=".UI.Extension.ExtensionActivity">
+
+    <Button
+        android:id="@+id/btnA"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thêm dồ vật"
         android:textSize="32dp"

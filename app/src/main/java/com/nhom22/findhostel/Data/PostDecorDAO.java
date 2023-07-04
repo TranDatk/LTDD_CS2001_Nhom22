@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.data;
+package com.nhom22.findhostel.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteStatement;
 
 import androidx.annotation.Nullable;
 
-import com.nhom22.findhostel.model.PostDecor;
+import com.nhom22.findhostel.Model.PostDecor;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
