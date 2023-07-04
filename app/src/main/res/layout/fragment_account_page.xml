@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Account.AccountPageFragment">
+    tools:context=".UI.Account.AccountPageFragment">
 
     <LinearLayout
         android:layout_marginTop="100dp"

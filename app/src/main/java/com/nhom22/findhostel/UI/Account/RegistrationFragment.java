@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.ui.Account;
+package com.nhom22.findhostel.UI.Account;
 
 import android.os.Bundle;
 
@@ -8,9 +8,9 @@ import androidx.fragment.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.databinding.FragmentRegistrationBinding;
 
 
@@ -25,7 +25,7 @@ public class RegistrationFragment extends Fragment {
 
         databaseHelper = new DatabaseHelper(requireContext());
 
-        binding.signupButton.setOnClickListener(new View.OnClickListener() {
+     /*   binding.signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = binding.signupEmail.getText().toString();
@@ -52,7 +52,7 @@ public class RegistrationFragment extends Fragment {
                     }
                 }
             }
-        });
+        });*/
 
         binding.loginRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override

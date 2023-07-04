@@ -1,4 +1,4 @@
-package com.nhom22.findhostel.data;
+package com.nhom22.findhostel.Data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,21 +50,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE sub_districts (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
-                "is_active INTEGER" +
+                "is_active INTEGER," +
+                "districs_id INTEGER," +
+                "FOREIGN KEY (districs_id) REFERENCES districs(id)" +
                 ")");
 
         // Create the streets table
         db.execSQL("CREATE TABLE streets (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
-                "is_active INTEGER" +
+                "is_active INTEGER," +
+                "sub_districs_id INTEGER," +
+                "FOREIGN KEY (sub_districs_id) REFERENCES sub_districs(id)" +
                 ")");
 
         // Create the cities table
         db.execSQL("CREATE TABLE districts (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
-                "is_active INTEGER" +
+                "is_active INTEGER," +
+                "cities_id INTEGER," +
+                "FOREIGN KEY (cities_id) REFERENCES cities(id)" +
                 ")");
 
         // Create the districs table

@@ -1,15 +1,12 @@
-package com.nhom22.findhostel.ui.Extension;
+package com.nhom22.findhostel.UI.Extension;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.ui.Home.HomePageFragment;
-import com.nhom22.findhostel.ui.Save.SavePageFragment;
 
 public class ExtensionActivity extends AppCompatActivity {
 
