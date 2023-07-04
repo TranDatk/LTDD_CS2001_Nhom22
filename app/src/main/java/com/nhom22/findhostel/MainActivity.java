@@ -22,6 +22,7 @@ import com.nhom22.findhostel.data.DatabaseHelper;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private DatabaseHelper databaseHelper;
 
 
     @Override
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
 
 
         binding.navigation.setOnItemSelectedListener(item -> {
@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the initial selected fragment
         binding.navigation.setSelectedItemId(R.id.navigation_search);
-
+        databaseHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
     }
 
 

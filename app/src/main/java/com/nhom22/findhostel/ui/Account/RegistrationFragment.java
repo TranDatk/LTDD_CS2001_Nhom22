@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.data.DatabaseHelper;
 import com.nhom22.findhostel.databinding.FragmentRegistrationBinding;
 
 
@@ -25,34 +26,34 @@ public class RegistrationFragment extends Fragment {
 
         databaseHelper = new DatabaseHelper(requireContext());
 
-        binding.signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = binding.signupEmail.getText().toString();
-                String password = binding.signupPassword.getText().toString();
-                String confirmPassword = binding.signupConfirm.getText().toString();
-                if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                    Toast.makeText(getActivity(), "All fields are mandatory", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (password.equals(confirmPassword)) {
-                        boolean checkUserEmail = databaseHelper.checkEmail(email);
-                        if (!checkUserEmail) {
-                            boolean insert = databaseHelper.insertData(email, password);
-                            if (insert) {
-                                Toast.makeText(getActivity(), "Signup Successfully!", Toast.LENGTH_SHORT).show();
-                                replaceFragment(new LoginFragment());
-                            } else {
-                                Toast.makeText(getActivity(), "Signup Failed!", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getActivity(), "User already exists! Please login", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(getActivity(), "Invalid Password!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+//        binding.signupButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String email = binding.signupEmail.getText().toString();
+//                String password = binding.signupPassword.getText().toString();
+//                String confirmPassword = binding.signupConfirm.getText().toString();
+//                if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+//                    Toast.makeText(getActivity(), "All fields are mandatory", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    if (password.equals(confirmPassword)) {
+////                        boolean checkUserEmail = databaseHelper.checkEmail(email);
+//                        if (!checkUserEmail) {
+//                            boolean insert = databaseHelper.insertData(email, password);
+//                            if (insert) {
+//                                Toast.makeText(getActivity(), "Signup Successfully!", Toast.LENGTH_SHORT).show();
+//                                replaceFragment(new LoginFragment());
+//                            } else {
+//                                Toast.makeText(getActivity(), "Signup Failed!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        } else {
+//                            Toast.makeText(getActivity(), "User already exists! Please login", Toast.LENGTH_SHORT).show();
+//                        }
+//                    } else {
+//                        Toast.makeText(getActivity(), "Invalid Password!", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
 
         binding.loginRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
