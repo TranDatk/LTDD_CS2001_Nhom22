@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "findhostel.sqlite";
+    private static final String DATABASE_NAME = "findhostel.db";
     private static final int DATABASE_VERSION = 2;
 
     public DatabaseHelper(@Nullable Context context) {
@@ -171,19 +171,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ")");
     }
 
-    public void addPostDecor(String text, byte[] image, String created_date, int user_id, int isActive) {
-        SQLiteDatabase database = getWritableDatabase();
-        String sql = "INSERT INTO posts_extension VALUES (null, ?, ?, ?, ?, ?)";
-        SQLiteStatement sqLiteStatement = database.compileStatement(sql);
-        sqLiteStatement.clearBindings();
-
-        sqLiteStatement.bindString(1, text);
-        sqLiteStatement.bindBlob(2, image);
-        sqLiteStatement.bindString(3, created_date);
-        sqLiteStatement.bindLong(4, user_id);
-        sqLiteStatement.bindLong(5, isActive);
-        sqLiteStatement.executeInsert();
-    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

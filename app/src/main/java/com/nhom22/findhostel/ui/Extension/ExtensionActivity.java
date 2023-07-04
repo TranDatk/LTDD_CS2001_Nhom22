@@ -81,6 +81,8 @@ public class ExtensionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extension);
         databaseHelper = new DatabaseHelper(this);
+        PostDecorDAO dao = new PostDecorDAO(this);
+
 //        postDecorDAO = new PostDecorDAO(this, "/data/data/com.nhom22.findhostel/databases/findhostel.sqlite", null, 2);
 //        Button btnBack = findViewById(R.id.btnA);
 //        btnBack.setOnClickListener(new View.OnClickListener() {
@@ -104,14 +106,15 @@ public class ExtensionActivity extends AppCompatActivity {
                 Date currentDate = Calendar.getInstance().getTime();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String formattedDate = format.format(currentDate);
-//                SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                databaseHelper.addPostDecor(
+
+                SQLiteDatabase db = databaseHelper.getWritableDatabase();
+                dao.addPostDecor(new PostDecor(1000,
                         edtContent.getText().toString().trim(),
                         hinhAnh,
                         formattedDate,
                         1,
                         1
-                );
+                ));
 
                 finish();
             }
