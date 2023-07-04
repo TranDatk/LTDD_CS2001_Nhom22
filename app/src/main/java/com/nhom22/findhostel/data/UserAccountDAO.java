@@ -1,104 +1,64 @@
 package com.nhom22.findhostel.data;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
 import com.nhom22.findhostel.model.UserAccount;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
-public class UserAccountDAO {
-    private static final String DATABASE_URL = "jdbc:sqlite:/data/data/com.nhom22.findhostel/databases/findhostel.db";
-    private Connection connection;
+public class UserAccountDAO{
+   private DatabaseHelper dbHelper;
 
-    public UserAccountDAO() {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(DATABASE_URL);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
+   public UserAccountDAO(Context context) {
+      dbHelper = new DatabaseHelper(context);
+   }
 
-    public boolean addUserAccount(UserAccount user) {
-        PreparedStatement stmt = null;
+   public long addUserAccount(UserAccount userAccount) {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        try {
-            String query = "INSERT INTO user_accounts (username, password, email) VALUES (?, ?, ?)";
-            stmt = connection.prepareStatement(query);
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getEmail());
+      ContentValues values = new ContentValues();
+      values.put("username", userAccount.getUsername());
+      values.put("email",userAccount.getEmail());
+      values.put("phone",userAccount.getPhone());
+      values.put("digital_money",userAccount.getDigital_money());
+      values.put("role_user",userAccount.getRoleUser());
+      values.put("avatar",userAccount.getImage());
+      values.put("is_active",userAccount.getIsActive());
+      values.put("password", userAccount.getPassword());
+      values.put("address_id",userAccount.getAddress().getId());
 
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatement(stmt);
-        }
+      long id = db.insert("user_account", null, values);
 
-        return false;
-    }
+      db.close();
 
-    public boolean updateUserAccount(UserAccount user) {
-        PreparedStatement stmt = null;
+      return id;
+   }
 
-        try {
-            String query = "UPDATE user_accounts SET password = ?, email = ? WHERE username = ?";
-            stmt = connection.prepareStatement(query);
-            stmt.setString(1, user.getPassword());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getUsername());
+   public int updateUserAccount(UserAccount userAccount) {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatement(stmt);
-        }
+      ContentValues values = new ContentValues();
+      values.put("password", userAccount.getPassword());
 
-        return false;
-    }
+      int rowsAffected = db.update("user_accounts", values, "username = ?",
+              new String[]{userAccount.getUsername()});
 
-    public boolean deleteUserAccount(String username) {
-        PreparedStatement stmt = null;
+      db.close();
 
-        try {
-            String query = "DELETE FROM user_accounts WHERE username = ?";
-            stmt = connection.prepareStatement(query);
-            stmt.setString(1, username);
+      return rowsAffected;
+   }
 
-            int rowsDeleted = stmt.executeUpdate();
-            return rowsDeleted > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeStatement(stmt);
-        }
+   public int deleteUserAccount(String username) {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        return false;
-    }
+      int rowsAffected = db.delete("user_accounts", "username = ?", new String[]{username});
 
-    private void closeStatement(PreparedStatement stmt) {
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+      db.close();
 
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    // Các phương thức khác liên quan đến truy vấn dữ liệu, nếu cần
+      return rowsAffected;
+   }
 }
