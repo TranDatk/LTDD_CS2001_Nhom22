@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.UserAccount;
 
 
@@ -61,13 +62,49 @@ public class UserAccountDAO{
 
       return rowsAffected;
    }
+//   @SuppressLint("Range")
+//   public UserAccount getUserAccountById(Integer id) {
+//      SQLiteDatabase db = dbHelper.getReadableDatabase();
+//
+//      String[] columns = {
+//              "username",
+//              "password"
+//      };
+//
+//      String selection = "id = ?";
+//      String[] selectionArgs = {String.valueOf(id)};
+//
+//      Cursor cursor = db.query("user_account", columns, selection, selectionArgs, null, null, null);
+//      UserAccount user = null;
+//
+//      if (cursor != null && cursor.moveToFirst()) {
+//
+//         String username = cursor.getString( cursor.getColumnIndex("username"));
+//         String password = cursor.getString(cursor.getColumnIndex("password"));
+//
+//            // Tạo đối tượng User
+//         user = new UserAccount(username, password);
+//         cursor.close();
+//      }
+//      db.close();
+//
+//      return user;
+//   }
+
    @SuppressLint("Range")
    public UserAccount getUserAccountById(Integer id) {
       SQLiteDatabase db = dbHelper.getReadableDatabase();
 
       String[] columns = {
               "username",
-              "password"
+              "email",
+              "phone",
+              "digital_money",
+              "role_user",
+              "avatar",
+              "is_active",
+              "password",
+              "address_id"
       };
 
       String selection = "id = ?";
@@ -79,10 +116,17 @@ public class UserAccountDAO{
       if (cursor != null && cursor.moveToFirst()) {
 
          String username = cursor.getString( cursor.getColumnIndex("username"));
+         String email = cursor.getString( cursor.getColumnIndex("email"));
+         String phone = cursor.getString( cursor.getColumnIndex("phone"));
+         Double digital_money = cursor.getDouble( cursor.getColumnIndex("digital_money"));
+         Integer role_user = cursor.getInt( cursor.getColumnIndex("role_user"));
+         byte[] avatar = cursor.getBlob( cursor.getColumnIndex("avatar"));
+         Integer is_active = cursor.getInt( cursor.getColumnIndex("is_active"));
          String password = cursor.getString(cursor.getColumnIndex("password"));
+         String address_id = cursor.getString(cursor.getColumnIndex("address_id"));
 
-            // Tạo đối tượng User
-         user = new UserAccount(username, password);
+         // Tạo đối tượng User
+         user = new UserAccount(1000,username, email, password, phone,digital_money, role_user, avatar, is_active, address_id);
          cursor.close();
       }
       db.close();
