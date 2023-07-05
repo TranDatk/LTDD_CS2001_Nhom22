@@ -116,7 +116,6 @@ public class UserAccountDAO{
       UserAccount user = null;
 
       if (cursor != null && cursor.moveToFirst()) {
-
          String username = cursor.getString( cursor.getColumnIndex("username"));
          String email = cursor.getString( cursor.getColumnIndex("email"));
          String phone = cursor.getString( cursor.getColumnIndex("phone"));
@@ -132,7 +131,7 @@ public class UserAccountDAO{
          Address address = addressDAO.getAddressById(address_id);
 
          // Tạo đối tượng User
-         user = new UserAccount(1000,username, email, password, phone,digital_money, role_user, avatar, is_active, address);
+         user = new UserAccount(id,username, email, password, phone,digital_money, role_user, avatar, is_active, address);
          cursor.close();
       }
       db.close();
