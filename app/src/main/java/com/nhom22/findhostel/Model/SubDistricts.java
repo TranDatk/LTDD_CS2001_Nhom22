@@ -1,18 +1,18 @@
 package com.nhom22.findhostel.Model;
 
-public class Streets {
+public class SubDistricts {
     private int id;
     private String name;
     private String isActive;
-    private SubDistricts subDistricts;
+    private Districts districts;
 
-    public Streets(int id, String name, String isActive, SubDistricts subDistricts) {
-
+    public SubDistricts(int id, String name, String isActive, Districts districts) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
-        this.subDistricts = subDistricts;
+        this.districts = districts;
     }
+
     public int getId() {
         return id;
     }
@@ -37,11 +37,11 @@ public class Streets {
         this.isActive = isActive;
     }
 
-    public SubDistricts getSubDistrics() {
-        return subDistricts;
+    public Districts getDistricts() {
+        return districts;
     }
 
-    public void setSubDistrics(SubDistricts subDistricts) {
-        this.subDistricts = subDistricts;
+    public void setDistricts(Districts districts) {
+        this.districts = districts;
     }
 }

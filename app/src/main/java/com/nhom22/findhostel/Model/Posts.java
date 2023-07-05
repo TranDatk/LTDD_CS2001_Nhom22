@@ -1,4 +1,4 @@
 package com.nhom22.findhostel.Model;
 
-public class SubDistrics {
+public class Posts {
 }

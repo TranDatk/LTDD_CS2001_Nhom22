@@ -103,7 +103,8 @@ public class UserAccount {
         return address;
     }
 
-    public UserAccount(int id, String username, String email, String password, String phone, double digital_money, int roleUser, byte[] image, int isActive, Address address) {
+    public UserAccount(int id, String username, String email, String password, String phone,
+                       double digital_money, int roleUser, byte[] image, int isActive, Address address) {
         this.id = id;
         this.username = username;
         this.email = email;

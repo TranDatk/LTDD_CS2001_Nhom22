@@ -1,16 +1,14 @@
 package com.nhom22.findhostel.Model;
 
-public class Districts {
+public class Service {
     private int id;
     private String name;
-    private String isActive;
-    private Cities cities;
+    private int isActive;
 
-    public Districts(int id, String name, String isActive, Cities cities) {
+    public Service(int id, String name, int isActive) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
-        this.cities = cities;
     }
 
     public int getId() {
@@ -29,19 +27,11 @@ public class Districts {
         this.name = name;
     }
 
-    public String getIsActive() {
+    public int getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
+    public void setIsActive(int isActive) {
         this.isActive = isActive;
-    }
-
-    public Cities getCities() {
-        return cities;
-    }
-
-    public void setCities(Cities cities) {
-        this.cities = cities;
     }
 }

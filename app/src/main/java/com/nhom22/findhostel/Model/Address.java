@@ -6,16 +6,16 @@ public class Address {
     private int isActive;
     private Cities cities;
     private Districts districts;
-    private SubDistrics subDistrics;
+    private SubDistricts subDistricts;
     private Streets streets;
 
-    public Address(int id, String houseNumber, int isActive, Cities cities, Districts districts, SubDistrics subDistrics, Streets streets) {
+    public Address(int id, String houseNumber, int isActive, Cities cities, Districts districts, SubDistricts subDistricts, Streets streets) {
         this.id = id;
         this.houseNumber = houseNumber;
         this.isActive = isActive;
         this.cities = cities;
         this.districts = districts;
-        this.subDistrics = subDistrics;
+        this.subDistricts = subDistricts;
         this.streets = streets;
     }
 
@@ -39,8 +39,8 @@ public class Address {
         return districts;
     }
 
-    public SubDistrics getSubDistrics() {
-        return subDistrics;
+    public SubDistricts getSubDistrics() {
+        return subDistricts;
     }
 
     public Streets getStreets() {
@@ -67,8 +67,8 @@ public class Address {
         this.districts = districts;
     }
 
-    public void setSubDistrics(SubDistrics subDistrics) {
-        this.subDistrics = subDistrics;
+    public void setSubDistrics(SubDistricts subDistricts) {
+        this.subDistricts = subDistricts;
     }
 
     public void setStreets(Streets streets) {
