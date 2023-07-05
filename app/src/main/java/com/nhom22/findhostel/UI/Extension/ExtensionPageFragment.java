@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.UI.Extension;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +9,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.nhom22.findhostel.Data.DatabaseHelper;
+import com.nhom22.findhostel.Data.UserAccountDAO;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 
@@ -18,7 +23,6 @@ import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
  * create an instance of this fragment.
  */
 public class ExtensionPageFragment extends Fragment {
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,8 +64,7 @@ public class ExtensionPageFragment extends Fragment {
         }
     }
 
-    String[] items = {"", "",
-            ""};
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,15 +74,15 @@ public class ExtensionPageFragment extends Fragment {
         binding.lnListHouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ExtensionActivity.class);
-                startActivity(intent);
+                replaceFragment(new CampaignPageFragment());
             }
         });
 
         binding.lnListDecor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new CampaignPageFragment());
+                Intent intent = new Intent(getActivity(), ListDecorPost.class);
+                startActivity(intent);
             }
         });
 

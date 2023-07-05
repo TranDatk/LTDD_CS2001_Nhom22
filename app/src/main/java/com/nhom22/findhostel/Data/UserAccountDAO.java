@@ -1,7 +1,9 @@
 package com.nhom22.findhostel.Data;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.UserAccount;
@@ -58,5 +60,33 @@ public class UserAccountDAO{
       db.close();
 
       return rowsAffected;
+   }
+   @SuppressLint("Range")
+   public UserAccount getUserAccountById(Integer id) {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+      String[] columns = {
+              "username",
+              "password"
+      };
+
+      String selection = "id = ?";
+      String[] selectionArgs = {String.valueOf(id)};
+
+      Cursor cursor = db.query("user_account", columns, selection, selectionArgs, null, null, null);
+      UserAccount user = null;
+
+      if (cursor != null && cursor.moveToFirst()) {
+
+         String username = cursor.getString( cursor.getColumnIndex("username"));
+         String password = cursor.getString(cursor.getColumnIndex("password"));
+
+            // Tạo đối tượng User
+         user = new UserAccount(username, password);
+         cursor.close();
+      }
+      db.close();
+
+      return user;
    }
 }

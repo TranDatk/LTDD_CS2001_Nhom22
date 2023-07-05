@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.TextView;
 
+import com.nhom22.findhostel.Data.UserAccountDAO;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 import com.nhom22.findhostel.UI.Account.AccountPageFragment;
 import com.nhom22.findhostel.UI.Extension.ExtensionPageFragment;
@@ -19,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private DatabaseHelper databaseHelper;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         // Set the initial selected fragment
         binding.navigation.setSelectedItemId(R.id.navigation_search);
         databaseHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+
     }
 
 }

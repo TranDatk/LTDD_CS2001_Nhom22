@@ -19,9 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.MainActivity;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Data.PostDecorDAO;
@@ -44,7 +47,12 @@ public class ExtensionActivity extends AppCompatActivity {
     ImageButton ibtnCamera, ibtnFolder;
     ImageView img;
 //    private PostDecorDAO postDecorDAO;
+
+    TextView name;
     private DatabaseHelper databaseHelper;
+    public static PostDecorDAO dao;
+
+    public static UserAccountDAO accountDAO;
 
     private ActivityResultLauncher<Intent> activityResultLauncherC = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -80,7 +88,7 @@ public class ExtensionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extension);
         databaseHelper = new DatabaseHelper(this);
-        PostDecorDAO dao = new PostDecorDAO(this);
+        dao = new PostDecorDAO(this);
 
 //        postDecorDAO = new PostDecorDAO(this, "/data/data/com.nhom22.findhostel/databases/findhostel.sqlite", null, 2);
 //        Button btnBack = findViewById(R.id.btnA);
@@ -115,6 +123,14 @@ public class ExtensionActivity extends AppCompatActivity {
                         1
                 ));
 
+                Intent intent = new Intent(ExtensionActivity.this , ListDecorPost.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });

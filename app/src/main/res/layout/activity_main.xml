@@ -34,6 +34,8 @@
             app:itemIconTint="@android:color/white"
             app:itemTextColor="@android:color/white"
             app:menu="@menu/bottom_navigation_menu" />
+
+
     </FrameLayout>
 
 </RelativeLayout>
