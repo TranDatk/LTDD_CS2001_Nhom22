@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteStatement;
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
     private static final String DATABASE_NAME = "findhostel.db";
     private static final int DATABASE_VERSION = 2;
 

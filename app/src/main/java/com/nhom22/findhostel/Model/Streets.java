@@ -4,14 +4,14 @@ public class Streets {
     private int id;
     private String name;
     private String isActive;
-    private SubDistrics subDistrics;
+    private SubDistricts subDistricts;
 
-    public Streets(int id, String name, String isActive, SubDistrics subDistrics) {
+    public Streets(int id, String name, String isActive, SubDistricts subDistricts) {
 
         this.id = id;
         this.name = name;
         this.isActive = isActive;
-        this.subDistrics = subDistrics;
+        this.subDistricts = subDistricts;
     }
     public int getId() {
         return id;
@@ -37,11 +37,11 @@ public class Streets {
         this.isActive = isActive;
     }
 
-    public SubDistrics getSubDistrics() {
-        return subDistrics;
+    public SubDistricts getSubDistrics() {
+        return subDistricts;
     }
 
-    public void setSubDistrics(SubDistrics subDistrics) {
-        this.subDistrics = subDistrics;
+    public void setSubDistrics(SubDistricts subDistricts) {
+        this.subDistricts = subDistricts;
     }
 }

@@ -1,12 +1,12 @@
 package com.nhom22.findhostel.Model;
 
-public class SubDistrics {
+public class SubDistricts {
     private int id;
     private String name;
     private String isActive;
     private Districts districts;
 
-    public SubDistrics(int id, String name, String isActive, Districts districts) {
+    public SubDistricts(int id, String name, String isActive, Districts districts) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
