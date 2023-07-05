@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.YourApplication;
 
 
 public class UserAccountDAO{
@@ -123,10 +125,14 @@ public class UserAccountDAO{
          byte[] avatar = cursor.getBlob( cursor.getColumnIndex("avatar"));
          Integer is_active = cursor.getInt( cursor.getColumnIndex("is_active"));
          String password = cursor.getString(cursor.getColumnIndex("password"));
-         String address_id = cursor.getString(cursor.getColumnIndex("address_id"));
+         int address_id = cursor.getInt(cursor.getColumnIndex("address_id"));
+
+         // YourApplication.getInstance().getApplicationContext() là biến toàn cục lấy context hiện tại
+         AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
+         Address address = addressDAO.getAddressById(address_id);
 
          // Tạo đối tượng User
-         user = new UserAccount(1000,username, email, password, phone,digital_money, role_user, avatar, is_active, address_id);
+         user = new UserAccount(1000,username, email, password, phone,digital_money, role_user, avatar, is_active, address);
          cursor.close();
       }
       db.close();
