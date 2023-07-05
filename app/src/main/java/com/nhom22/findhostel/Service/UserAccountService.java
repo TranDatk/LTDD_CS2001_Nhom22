@@ -13,7 +13,7 @@ public class UserAccountService {
 
     static {
         Context appContext = YourApplication.getInstance().getApplicationContext();
-        USER_ACCOUNT_DAO = new UserAccountDAO(null);
+        USER_ACCOUNT_DAO = new UserAccountDAO(appContext);
     }
 
     public long addUserAccount(UserAccount userAccount){
