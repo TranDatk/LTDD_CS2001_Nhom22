@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the initial selected fragment
         binding.navigation.setSelectedItemId(R.id.navigation_search);
         databaseHelper = new DatabaseHelper(this);
-
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
     }
 
