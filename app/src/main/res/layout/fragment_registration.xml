@@ -23,46 +23,89 @@
                 android:orientation="vertical"
                 android:layout_marginTop="200dp"
                 android:padding="20dp">
+<!--                <EditText-->
+<!--                    android:layout_width="350dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:id="@+id/signup_email"-->
+<!--                    android:background="@drawable/lavender_border"-->
+<!--                    android:layout_marginTop="30dp"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:hint="Email"-->
+<!--                    android:drawableLeft="@drawable/baseline_email_24"-->
+<!--                    android:drawablePadding="8dp"/>-->
+<!--                <EditText-->
+<!--                    android:layout_width="350dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:id="@+id/signup_username"-->
+<!--                    android:background="@drawable/lavender_border"-->
+<!--                    android:layout_marginTop="30dp"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:hint="Full name"-->
+<!--                    android:drawableLeft="@drawable/baseline_supervised_user_circle_24"-->
+<!--                    android:drawablePadding="8dp"/>-->
+<!--                <EditText-->
+<!--                    android:layout_width="350dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:id="@+id/signup_password"-->
+<!--                    android:background="@drawable/lavender_border"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:hint="Password"-->
+<!--                    android:inputType="textPassword"-->
+<!--                    android:drawableLeft="@drawable/baseline_lock_24"-->
+<!--                    android:drawablePadding="8dp"/>-->
+<!--                <EditText-->
+<!--                    android:layout_width="350dp"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:id="@+id/signup_confirm"-->
+<!--                    android:background="@drawable/lavender_border"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:hint="Confirm Password"-->
+<!--                    android:inputType="textPassword"-->
+<!--                    android:drawableLeft="@drawable/baseline_password_24"-->
+<!--                    android:drawablePadding="8dp"/>-->
+
+<!--                <Button-->
+<!--                    android:layout_width="350dp"-->
+<!--                    android:layout_height="70dp"-->
+<!--                    android:text="Next"-->
+<!--                    android:id="@+id/btn_sign_one"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:layout_marginTop="30dp"-->
+<!--                    app:cornerRadius = "30dp"/>-->
+
                 <EditText
-                    android:layout_width="350dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/signup_email"
-                    android:background="@drawable/lavender_border"
-                    android:layout_marginTop="30dp"
-                    android:padding="8dp"
-                    android:hint="Email"
-                    android:drawableLeft="@drawable/baseline_email_24"
-                    android:drawablePadding="8dp"/>
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email" />
+
                 <EditText
-                    android:layout_width="350dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/signup_password"
-                    android:background="@drawable/lavender_border"
-                    android:layout_marginTop="20dp"
-                    android:padding="8dp"
+                    android:id="@+id/usernameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Username" />
+
+                <EditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:hint="Password"
-                    android:inputType="textPassword"
-                    android:drawableLeft="@drawable/baseline_lock_24"
-                    android:drawablePadding="8dp"/>
+                    android:inputType="textPassword" />
+
                 <EditText
-                    android:layout_width="350dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/signup_confirm"
-                    android:background="@drawable/lavender_border"
-                    android:layout_marginTop="20dp"
-                    android:padding="8dp"
-                    android:hint="Confirm Password"
-                    android:inputType="textPassword"
-                    android:drawableLeft="@drawable/baseline_password_24"
-                    android:drawablePadding="8dp"/>
+                    android:id="@+id/repasswordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Re-enter Password"
+                    android:inputType="textPassword" />
+
                 <Button
-                    android:layout_width="350dp"
-                    android:layout_height="70dp"
-                    android:text="Sign Up"
-                    android:id="@+id/signup_button"
-                    android:textSize="18sp"
-                    android:layout_marginTop="30dp"
-                    app:cornerRadius = "30dp"/>
+                    android:id="@+id/nextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,7 +115,7 @@
                     android:padding="8dp"
                     android:textSize="18sp"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/lavender"/>
             </LinearLayout>
         </LinearLayout>
 
