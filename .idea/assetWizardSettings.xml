@@ -23,8 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/add/baseline_add_24.xml" />
-
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/bathroom/baseline_bathroom_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,10 +33,9 @@
                         </option>
                         <option name="values">
                           <map>
-
-                            <entry key="outputName" value="baseline_add_24" />
+                            <entry key="color" value="00fd9e" />
+                            <entry key="outputName" value="baseline_bathroom_24" />
                             <entry key="sourceFile" value="C:\Users\ADMIN\Desktop\LTDD_CS2001_Nhom22" />
-
                           </map>
                         </option>
                       </PersistentState>

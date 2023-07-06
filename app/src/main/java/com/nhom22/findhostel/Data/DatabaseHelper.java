@@ -111,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "user_id INTEGER," +
                 "post_id INTEGER," +
                 "FOREIGN KEY (user_id) REFERENCES user_account(id)," +
-                "FOREIGN KEY (post_id) REFERENCES posts(id)" +
+                "FOREIGN KEY (posts_id) REFERENCES posts(id)" +
                 ")");
 
         // Create the service table
