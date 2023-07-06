@@ -10,25 +10,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.nhom22.findhostel.Data.CitiesDAO;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 
+import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
+import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.databinding.FragmentSecondRegisterFragmentBinding;
 
 import java.util.ArrayList;
@@ -53,7 +58,7 @@ public class SecondRegisterFragment extends Fragment {
     private SubDistrictsService subDistrictsService = new SubDistrictsService();
     private StreetsService streetsService = new StreetsService();
 
-
+    private UserAccountService userAccountService = new UserAccountService();
 
 
     @Override
@@ -95,19 +100,58 @@ public class SecondRegisterFragment extends Fragment {
                     String username = userData[1];
                     String password = userData[2];
 
-                    // Retrieve the address data from the spinners and EditText
-                    String city = autoCitiesField.getText().toString();
-                    String districts = autoDistrictField.getText().toString();
-                    String subDistrict = autoSubDistrictField.getText().toString();
-                    String street = autoStreetField.getText().toString();
-                    String houseNumber = houseNumberEditText.getText().toString();
+
+                    autoCitiesField = binding.autoCitiesField;
+
+                    int cityID = -1;
+                    Cities selectedCity = null;
+                    int selectedItemPosition = autoCitiesField.getListSelection();
+                    if (selectedItemPosition != AdapterView.INVALID_POSITION) {
+                        selectedCity = (Cities) autoCitiesField.getAdapter().getItem(selectedItemPosition);
+                    }
+
+
+                    int districtsId = -1;
+                    Districts selectedDistrict = null;
+                    int selectedDistrictPosition = autoDistrictField.getListSelection();
+                    if (selectedDistrictPosition != AdapterView.INVALID_POSITION) {
+                        // Retrieve the item object from the adapter
+                        selectedDistrict = (Districts) autoDistrictField.getAdapter().getItem(selectedDistrictPosition);
+
+                    }
+
+                    int subDistrictId = -1;
+                    SubDistricts selectedSubDistrict = null;
+                    int selectedSubDistrictPosition = autoSubDistrictField.getListSelection();
+                    if (selectedSubDistrictPosition != AdapterView.INVALID_POSITION) {
+                        selectedSubDistrict = (SubDistricts) autoSubDistrictField.getAdapter().getItem(selectedSubDistrictPosition);
+
+                    }
+
+                    int streetId = -1;
+                    Streets selectedStreet = null;
+                    int selectedStreetPosition = autoStreetField.getListSelection();
+                    if (selectedStreetPosition != AdapterView.INVALID_POSITION) {
+                        selectedStreet = (Streets) autoStreetField.getAdapter().getItem(selectedStreetPosition);
+
+                    }
+
+                    String numHouse = houseNumberEditText.getText().toString();
+
+
+                    Address address = new Address(1,numHouse,1,selectedCity,selectedDistrict,selectedSubDistrict,selectedStreet);
 
                     // Perform the registration operation with all the new user data
-                    long userId = insertUser(email, username, password, city, districts,subDistrict, street, houseNumber);
+                    UserAccount user = new UserAccount();
+                    user.setAddress(address);
+                    user.setEmail(email);
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    long userId = userAccountService.addUserAccount(user);
                     if (userId != -1) {
-                        // Registration successful
+                        Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                     } else {
-                        // Show an error message if the registration failed
+                        Toast.makeText(getContext(), "Đăng ký không thành công", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -162,6 +206,7 @@ public class SecondRegisterFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, streetNameList);
         autoStreetField.setAdapter(adapter);
     }
+
 
     private long insertUser(String email, String username, String password, String city, String district,String subDistrict, String street, String houseNumber) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();

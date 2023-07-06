@@ -116,4 +116,8 @@ public class UserAccount {
         this.isActive = isActive;
         this.address = address;
     }
+
+    public UserAccount() {
+
+    }
 }
