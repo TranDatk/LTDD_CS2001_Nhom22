@@ -1,11 +1,16 @@
 package com.nhom22.findhostel.Service;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.CitiesDAO;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.YourApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CitiesService {
     private final static CitiesDAO CITIES_DAO;
@@ -25,4 +30,22 @@ public class CitiesService {
             return null; // Return -1 to indicate unsuccessful operation
         }
     }
+
+
+    public List<Cities> getAllCitiesList() {
+        try {
+            if (CITIES_DAO != null) {
+                return CITIES_DAO.getAllCities();
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+
+
+
 }
