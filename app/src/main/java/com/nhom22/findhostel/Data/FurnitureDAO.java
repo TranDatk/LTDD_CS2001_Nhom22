@@ -5,17 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nhom22.findhostel.Model.Amenities;
-import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.Furniture;
 
-public class AmenitiesDAO {
+public class FurnitureDAO {
     private DatabaseHelper dbHelper;
 
-    public AmenitiesDAO(Context context) {
+    public FurnitureDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public Amenities getAmenitiesById(int id) {
+    public Furniture getAmenitiesById(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] columns = {
@@ -27,21 +26,21 @@ public class AmenitiesDAO {
         String selection = "id = ?";
         String[] selectionArgs = {String.valueOf(id)};
 
-        Cursor cursor = db.query("amenities", columns, selection, selectionArgs, null, null, null);
+        Cursor cursor = db.query("furniture", columns, selection, selectionArgs, null, null, null);
 
-        Amenities amenities = null;
+        Furniture furniture = null;
         if (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int imageId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
             @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
 
-            // Tạo đối tượng amenities từ các cột trong Cursor
-            amenities = new Amenities(imageId, name,isActive);
+            // Tạo đối tượng furniture từ các cột trong Cursor
+            furniture = new Furniture(imageId, name,isActive);
         }
 
         cursor.close();
         db.close();
 
-        return amenities;
+        return furniture;
     }
 }

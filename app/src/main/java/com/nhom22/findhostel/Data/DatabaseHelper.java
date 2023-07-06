@@ -115,38 +115,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ")");
 
         // Create the service table
-        db.execSQL("CREATE TABLE service (" +
+        db.execSQL("CREATE TABLE utilities (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
                 "is_active INTEGER" +
                 ")");
 
         // Create the detail_service table
-        db.execSQL("CREATE TABLE detail_service (" +
+        db.execSQL("CREATE TABLE detail_utilities (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "price REAL," +
                 "unit TEXT," +
                 "posts_id INTEGER," +
-                "service_id INTEGER," +
+                "utilities_id INTEGER," +
                 "FOREIGN KEY (posts_id) REFERENCES posts(id)," +
-                "FOREIGN KEY (service_id) REFERENCES service(id)" +
+                "FOREIGN KEY (utilities_id) REFERENCES utilities(id)" +
                 ")");
 
         // Create the amenities table
-        db.execSQL("CREATE TABLE amenities (" +
+        db.execSQL("CREATE TABLE furniture (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
                 "is_active INTEGER" +
                 ")");
 
         // Create the detail_amenities table
-        db.execSQL("CREATE TABLE detail_amenities (" +
+        db.execSQL("CREATE TABLE detail_furniture (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "quantity INTEGER," +
                 "posts_id INTEGER," +
-                "amenities_id INTEGER," +
+                "furniture_id INTEGER," +
                 "FOREIGN KEY (posts_id) REFERENCES posts(id)," +
-                "FOREIGN KEY (amenities_id) REFERENCES amenities(id)" +
+                "FOREIGN KEY (furniture_id) REFERENCES furniture(id)" +
                 ")");
 
         // Create the detail_image table

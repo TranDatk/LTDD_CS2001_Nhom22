@@ -1,18 +1,18 @@
 package com.nhom22.findhostel.Model;
 
-public class Detail_Service {
+public class Detail_Utilities {
     private int id;
     private double price;
     private String unit;
     private Posts posts;
-    private Service service;
+    private Utilities utilities;
 
-    public Detail_Service(int id, double price, String unit, Posts posts, Service service) {
+    public Detail_Utilities(int id, double price, String unit, Posts posts, Utilities utilities) {
         this.id = id;
         this.price = price;
         this.unit = unit;
         this.posts = posts;
-        this.service = service;
+        this.utilities = utilities;
     }
 
     public int getId() {
@@ -47,11 +47,11 @@ public class Detail_Service {
         this.posts = posts;
     }
 
-    public Service getService() {
-        return service;
+    public Utilities getService() {
+        return utilities;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setService(Utilities utilities) {
+        this.utilities = utilities;
     }
 }

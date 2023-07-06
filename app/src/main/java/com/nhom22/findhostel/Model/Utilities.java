@@ -1,11 +1,11 @@
 package com.nhom22.findhostel.Model;
 
-public class Amenities {
+public class Utilities {
     private int id;
     private String name;
     private int isActive;
 
-    public Amenities(int id, String name, int isActive) {
+    public Utilities(int id, String name, int isActive) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;

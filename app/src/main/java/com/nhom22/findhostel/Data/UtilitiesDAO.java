@@ -1,4 +1,4 @@
 package com.nhom22.findhostel.Data;
 
-public class ServiceDAO {
+public class UtilitiesDAO {
 }

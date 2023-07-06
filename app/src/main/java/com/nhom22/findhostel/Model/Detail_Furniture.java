@@ -1,16 +1,16 @@
 package com.nhom22.findhostel.Model;
 
-public class Detail_Amenities {
+public class Detail_Furniture {
     private int id;
     private int quantity;
     private Posts posts;
-    private Amenities amenities;
+    private Furniture furniture;
 
-    public Detail_Amenities(int id, int quantity, Posts posts, Amenities amenities) {
+    public Detail_Furniture(int id, int quantity, Posts posts, Furniture furniture) {
         this.id = id;
         this.quantity = quantity;
         this.posts = posts;
-        this.amenities = amenities;
+        this.furniture = furniture;
     }
 
     public int getId() {
@@ -37,11 +37,11 @@ public class Detail_Amenities {
         this.posts = posts;
     }
 
-    public Amenities getAmenities() {
-        return amenities;
+    public Furniture getAmenities() {
+        return furniture;
     }
 
-    public void setAmenities(Amenities amenities) {
-        this.amenities = amenities;
+    public void setAmenities(Furniture furniture) {
+        this.furniture = furniture;
     }
 }
