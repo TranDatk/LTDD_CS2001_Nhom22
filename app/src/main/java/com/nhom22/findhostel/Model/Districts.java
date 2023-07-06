@@ -3,10 +3,10 @@ package com.nhom22.findhostel.Model;
 public class Districts {
     private int id;
     private String name;
-    private String isActive;
+    private int isActive;
     private Cities cities;
 
-    public Districts(int id, String name, String isActive, Cities cities) {
+    public Districts(int id, String name, int isActive, Cities cities) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
@@ -29,11 +29,11 @@ public class Districts {
         this.name = name;
     }
 
-    public String getIsActive() {
+    public int getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
+    public void setIsActive(int isActive) {
         this.isActive = isActive;
     }
 

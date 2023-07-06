@@ -35,7 +35,7 @@ public class SubDistrictsDAO {
         if (cursor.moveToFirst()) {
             @SuppressLint("Range") int subdistrictId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
-            @SuppressLint("Range") String isActive = cursor.getString(cursor.getColumnIndex("is_active"));
+            @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
             @SuppressLint("Range") int districtId = cursor.getInt(cursor.getColumnIndex("districts_id"));
 
             // Lấy thông tin District từ cơ sở dữ liệu dựa trên districtId

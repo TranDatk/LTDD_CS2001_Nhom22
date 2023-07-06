@@ -3,9 +3,9 @@ package com.nhom22.findhostel.Model;
 public class Cities {
     private int id;
     private String name;
-    private String isActive;
+    private int isActive;
 
-    public Cities(int id, String name, String isActive) {
+    public Cities(int id, String name, int isActive) {
         this.id = id;
         this.name = name;
         this.isActive = isActive;
@@ -19,7 +19,7 @@ public class Cities {
         return name;
     }
 
-    public String getIsActive() {
+    public int getIsActive() {
         return isActive;
     }
 
@@ -31,7 +31,7 @@ public class Cities {
         this.name = name;
     }
 
-    public void setIsActive(String isActive) {
+    public void setIsActive(int isActive) {
         this.isActive = isActive;
     }
 }
