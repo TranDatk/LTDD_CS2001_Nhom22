@@ -8,6 +8,7 @@ import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
+import java.util.List;
 
 public class Save_PostService {
     private final static Save_PostDAO SAVE_POST_DAO;
@@ -58,6 +59,17 @@ public class Save_PostService {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null savePostId", Toast.LENGTH_SHORT).show();
             return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public List<Save_Post> getListSavePostByUserAccountId(int userId) throws ParseException {
+        if(userId >= 0){
+            return SAVE_POST_DAO.getListSavePostByUserAccountId(userId); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null userId", Toast.LENGTH_SHORT).show();
+            return null; // Return -1 to indicate unsuccessful operation
         }
     }
 }

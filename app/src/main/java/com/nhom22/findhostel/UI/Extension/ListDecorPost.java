@@ -39,7 +39,7 @@ public class ListDecorPost extends AppCompatActivity {
         itemAdapter = new ItemPostAdapter(this, R.layout.item_post_decor_layout, arrItem);
         lsvItem.setAdapter(itemAdapter);
 
-        Cursor cursor = dataBase.GetData("Select * From posts_extension");
+        Cursor cursor = dataBase.GetData("Select * From posts_extension Order By created_date DESC");
         while(cursor.moveToNext()){
             arrItem.add(new PostDecor(
                     cursor.getInt(0),
