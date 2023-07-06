@@ -7,8 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +66,17 @@ public class SearchPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_page, container, false);
+        FragmentSearchPageBinding binding = FragmentSearchPageBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        String[] itemsSpinner = {"Mặc định", "Mới nhất", "Chất lượng", "Giá thấp đến cao", "Giá cao đến thấp"};
+        Spinner snOptions = view.findViewById(R.id.snOptions);
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, itemsSpinner);
+        snOptions.setAdapter(adapterSpinner);
+        String[] items = {"item 1", "item 2", "item 3", "item 4", "item 5", "item 6"};
+        SearchPageAdapter adapter = new SearchPageAdapter(this, items);
+        ListView lvPost = view.findViewById(R.id.lvPost);
+        lvPost.setAdapter(adapter);
+        return view;
     }
 }
