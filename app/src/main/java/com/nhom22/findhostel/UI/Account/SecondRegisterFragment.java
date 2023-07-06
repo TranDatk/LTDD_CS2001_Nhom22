@@ -67,6 +67,9 @@ public class SecondRegisterFragment extends Fragment {
         View view = binding.getRoot();
 
 
+        clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        databaseHelper = new DatabaseHelper(getActivity());
+
         houseNumberEditText = binding.houseNumberEditText;
         registerButton = binding.registerButton;
         autoCitiesField = binding.autoCitiesField;
@@ -79,11 +82,39 @@ public class SecondRegisterFragment extends Fragment {
         addSubDistrict();
         addStreet();
 
+        autoCitiesField.setEnabled(true);
+        autoDistrictField.setEnabled(false);
+        autoSubDistrictField.setEnabled(false);
+        autoStreetField.setEnabled(false);
 
-        clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        databaseHelper = new DatabaseHelper(getActivity());
+        autoCitiesField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Enable the district field
+                autoDistrictField.setEnabled(true);
+                // Disable the sub-district and street fields
+                autoSubDistrictField.setEnabled(false);
+                autoStreetField.setEnabled(false);
+            }
+        });
 
+        autoDistrictField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Enable the sub-district field
+                autoSubDistrictField.setEnabled(true);
+                // Disable the street field
+                autoStreetField.setEnabled(false);
+            }
+        });
 
+        autoSubDistrictField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Enable the street field
+                autoStreetField.setEnabled(true);
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
