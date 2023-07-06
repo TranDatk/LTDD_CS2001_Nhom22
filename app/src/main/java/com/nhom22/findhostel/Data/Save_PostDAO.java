@@ -12,6 +12,8 @@ import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Save_PostDAO {
     private DatabaseHelper dbHelper;
@@ -117,5 +119,44 @@ public class Save_PostDAO {
         db.close();
 
         return rowsAffected;
+    }
+
+    public List<Save_Post> getListSavePostByUserAccountId(int userId) throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "posts_id",
+                "user_id"
+        };
+
+        String selection = "user_id = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+
+        Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
+
+        List<Save_Post> save_postList = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") int savePostId = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
+            @SuppressLint("Range") int userAccountId = cursor.getInt(cursor.getColumnIndex("user_id"));
+
+            // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
+            PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            Posts post = postsDAO.getPostById(postId);
+
+            // Lấy thông tin UserAccount từ cơ sở dữ liệu dựa trên userAccountId
+            UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
+            UserAccount userAccount = userAccountDAO.getUserAccountById(userAccountId);
+
+            // Tạo đối tượng Save_Post từ các cột trong Cursor và các đối tượng Posts, UserAccount
+            Save_Post savePost = new Save_Post(savePostId, post, userAccount);
+            save_postList.add(savePost);
+        }
+
+        cursor.close();
+        db.close();
+
+        return save_postList;
     }
 }
