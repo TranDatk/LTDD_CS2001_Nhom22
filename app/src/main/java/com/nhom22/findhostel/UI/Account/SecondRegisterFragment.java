@@ -132,8 +132,6 @@ public class SecondRegisterFragment extends Fragment {
                     String password = userData[2];
 
 
-                    autoCitiesField = binding.autoCitiesField;
-
                     int cityID = -1;
                     Cities selectedCity = null;
                     int selectedItemPosition = autoCitiesField.getListSelection();

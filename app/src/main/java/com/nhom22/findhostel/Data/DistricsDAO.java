@@ -99,4 +99,47 @@ public class DistricsDAO {
 
         return districtList;
     }
+
+    public List<Districts> getAllDistrictsByCitiesId(int citiesId) {
+        List<Districts> districtList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "is_active",
+                "cities_id"
+        };
+
+        String selection = "cities_id = ?";
+        String[] selectionArgs = {String.valueOf(citiesId)};
+
+        Cursor cursor = null;
+        try {
+            cursor = db.query("districts", columns, selection, selectionArgs, null, null, null);
+
+            int columnIndexId = cursor.getColumnIndex("id");
+            int columnIndexName = cursor.getColumnIndex("name");
+            int columnIndexIsActive = cursor.getColumnIndex("is_active");
+
+            while (cursor.moveToNext()) {
+                int districtId = columnIndexId != -1 ? cursor.getInt(columnIndexId) : -1;
+                String name = columnIndexName != -1 ? cursor.getString(columnIndexName) : null;
+                int isActive = columnIndexIsActive != -1 ? cursor.getInt(columnIndexIsActive) : -1;
+
+                Cities city = citiesService.getCityById(citiesId);
+                Districts district = new Districts(districtId, name, isActive, city);
+                districtList.add(district);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Print the exception trace for debugging purposes
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return districtList;
+    }
 }
