@@ -32,7 +32,7 @@ public class StreetsDAO {
         Cursor cursor = db.query("streets", columns, selection, selectionArgs, null, null, null);
 
         Streets streets = null;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int streetId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
             @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));

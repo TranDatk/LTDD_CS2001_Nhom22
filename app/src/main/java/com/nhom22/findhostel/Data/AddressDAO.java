@@ -38,7 +38,7 @@ public class AddressDAO {
         Cursor cursor = db.query("address", columns, selection, selectionArgs, null, null, null);
 
         Address address = null;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String houseNumber = cursor.getString(cursor.getColumnIndex("house_number"));
             @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));

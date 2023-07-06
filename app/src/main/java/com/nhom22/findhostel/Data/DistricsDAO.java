@@ -32,7 +32,7 @@ public class DistricsDAO {
         Cursor cursor = db.query("districts", columns, selection, selectionArgs, null, null, null);
 
         Districts district = null;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int districtId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
             @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));

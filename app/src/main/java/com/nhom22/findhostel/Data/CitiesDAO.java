@@ -29,7 +29,7 @@ public class CitiesDAO {
         Cursor cursor = db.query("cities", columns, selection, selectionArgs, null, null, null);
 
         Cities city = null;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int cityId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
             @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
