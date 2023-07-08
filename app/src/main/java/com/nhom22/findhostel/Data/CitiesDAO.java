@@ -38,7 +38,7 @@ public class CitiesDAO {
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
             @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
 
-            // Tạo đối tượng Cities từ các cột trong Cursor
+            // Tạo đối tượng CitiesFirebase từ các cột trong Cursor
             city = new Cities(cityId, name, isActive);
         }
 
@@ -72,7 +72,7 @@ public class CitiesDAO {
                 String name = columnIndexName != -1 ? cursor.getString(columnIndexName) : null;
                 int isActive = columnIndexIsActive != -1 ? cursor.getInt(columnIndexIsActive) : -1;
 
-                // Create a Cities object from the columns in the Cursor
+                // Create a CitiesFirebase object from the columns in the Cursor
                 Cities city = new Cities(cityId, name, isActive);
                 cityList.add(city);
             }
@@ -86,5 +86,17 @@ public class CitiesDAO {
         }
 
         return cityList;
+    }
+
+    public long addCities(Cities city) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", city.getName());
+        values.put("is_active", city.getIsActive());
+
+        long id = db.insert("cities", null, values);
+        db.close();
+        return id;
     }
 }

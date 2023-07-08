@@ -1,8 +1,6 @@
 package com.nhom22.findhostel.Service;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.CitiesDAO;
@@ -46,6 +44,15 @@ public class CitiesService {
     }
 
 
-
+    public long addCities(Cities city) {
+        if(city != null){
+            return CITIES_DAO.addCities(city); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null city", Toast.LENGTH_SHORT).show();
+            return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
 
 }

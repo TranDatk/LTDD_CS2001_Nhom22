@@ -5,9 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 
 import androidx.annotation.Nullable;
+
+import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Type;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "findhostel.db";
@@ -241,5 +244,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return streetId;
+    }
+
+    public long addPost(Posts post) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("active_post", post.getActivePost());
+        values.put("time_from", String.valueOf(post.getTimeFrom()));
+        values.put("time_to", String.valueOf(post.getTimeTo()));
+        values.put("post_name",post.getPostName());
+        values.put("price", post.getPrice());
+        values.put("description", post.getDescription());
+        values.put("address_id", post.getAddress().getId());
+        values.put("owner_id", post.getUserAccount().getId());
+        values.put("type_id", post.getType().getId());
+
+        long postId = db.insert("posts", null, values);
+        db.close();
+
+        return postId;
+    }
+
+    public long addAddress(Address address) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_active", address.getIsActive());
+        values.put("cities_id", address.getCities().getId());
+        values.put("districts_id", address.getDistricts().getId());
+        values.put("sub_districts_id", address.getSubDistrics().getId());
+        values.put("streets_id", address.getStreets().getId());
+
+        long addressId = db.insert("address", null, values);
+        db.close();
+        return addressId;
+    }
+
+    public long addType(Type type) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_active", type.getIsActive());
+        values.put("name", type.getName());
+
+        long typeId = db.insert("type", null, values);
+        db.close();
+        return typeId;
+    }
+
+    public void clearSQLiteTable() {
+        // Assuming you have a "users" table in SQLite
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.delete("cities", null, null);
+        sqLiteDatabase.close();
     }
 }
