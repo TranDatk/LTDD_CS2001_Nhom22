@@ -1,111 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".UI.Account.RegistrationFragment">
 
-    <ScrollView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="200dp"
+                android:layout_marginTop="20dp"
                 android:padding="20dp">
-<!--                <EditText-->
-<!--                    android:layout_width="350dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:id="@+id/signup_email"-->
-<!--                    android:background="@drawable/lavender_border"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:hint="Email"-->
-<!--                    android:drawableLeft="@drawable/baseline_email_24"-->
-<!--                    android:drawablePadding="8dp"/>-->
-<!--                <EditText-->
-<!--                    android:layout_width="350dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:id="@+id/signup_username"-->
-<!--                    android:background="@drawable/lavender_border"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:hint="Full name"-->
-<!--                    android:drawableLeft="@drawable/baseline_supervised_user_circle_24"-->
-<!--                    android:drawablePadding="8dp"/>-->
-<!--                <EditText-->
-<!--                    android:layout_width="350dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:id="@+id/signup_password"-->
-<!--                    android:background="@drawable/lavender_border"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:hint="Password"-->
-<!--                    android:inputType="textPassword"-->
-<!--                    android:drawableLeft="@drawable/baseline_lock_24"-->
-<!--                    android:drawablePadding="8dp"/>-->
-<!--                <EditText-->
-<!--                    android:layout_width="350dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:id="@+id/signup_confirm"-->
-<!--                    android:background="@drawable/lavender_border"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:hint="Confirm Password"-->
-<!--                    android:inputType="textPassword"-->
-<!--                    android:drawableLeft="@drawable/baseline_password_24"-->
-<!--                    android:drawablePadding="8dp"/>-->
-
-<!--                <Button-->
-<!--                    android:layout_width="350dp"-->
-<!--                    android:layout_height="70dp"-->
-<!--                    android:text="Next"-->
-<!--                    android:id="@+id/btn_sign_one"-->
-<!--                    android:textSize="18sp"-->
-<!--                    android:layout_marginTop="30dp"-->
-<!--                    app:cornerRadius = "30dp"/>-->
-
-                <EditText
-                    android:id="@+id/emailEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Email" />
-
-                <EditText
-                    android:id="@+id/usernameEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Username" />
-
-                <EditText
-                    android:id="@+id/passwordEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:inputType="textPassword" />
-
-                <EditText
-                    android:id="@+id/repasswordEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Re-enter Password"
-                    android:inputType="textPassword" />
-
-                <Button
-                    android:id="@+id/nextButton"
+                <ImageView
+                    android:id="@+id/gifImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Next" />
+                    android:layout_gravity="center"
+                    android:layerType="hardware"
+                    />
+                <EditText
+                    android:layout_width="350dp"
+                    android:layout_height="40dp"
+                     android:id="@+id/emailEditText"
+                    android:background="@drawable/lavender_border"
+                    android:layout_marginTop="30dp"
+                    android:padding="8dp"
+                    android:hint="Email"
+                    android:drawableLeft="@drawable/baseline_email_24"
+                    android:drawablePadding="8dp"/>
+                <EditText
+                    android:layout_width="350dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/usernameEditText"
+                    android:background="@drawable/lavender_border"
+                    android:layout_marginTop="30dp"
+                    android:padding="8dp"
+                    android:hint="Full name"
+                    android:drawableLeft="@drawable/baseline_supervised_user_circle_24"
+                    android:drawablePadding="8dp"/>
+                <EditText
+                    android:layout_width="350dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/passwordEditText"
+                    android:background="@drawable/lavender_border"
+                    android:layout_marginTop="20dp"
+                    android:padding="8dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:drawableLeft="@drawable/baseline_lock_24"
+                    android:drawablePadding="8dp"/>
+                <EditText
+                    android:layout_width="350dp"
+                    android:layout_height="40dp"
+                   android:id="@+id/repasswordEditText"
+                    android:background="@drawable/lavender_border"
+                    android:layout_marginTop="20dp"
+                    android:padding="8dp"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:drawableLeft="@drawable/baseline_password_24"
+                    android:drawablePadding="8dp"/>
+
+                <Button
+                    android:layout_width="350dp"
+                    android:layout_height="70dp"
+                    android:text="Next"
+                     android:id="@+id/nextButton"
+                    android:textSize="18sp"
+                    android:layout_marginTop="30dp"
+                    app:cornerRadius = "30dp"/>
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,9 +88,6 @@
                     android:layout_marginTop="8dp"
                     android:textColor="@color/lavender"/>
             </LinearLayout>
-        </LinearLayout>
 
-
-    </ScrollView>
 
 </FrameLayout>

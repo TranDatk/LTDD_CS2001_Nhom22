@@ -13,7 +13,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.databinding.FragmentRegistrationBinding;
 
@@ -61,6 +64,13 @@ public class RegistrationFragment extends Fragment {
 
         binding.loginRedirectText.setOnClickListener(view1 -> replaceFragment(new LoginFragment()));
 
+
+        ImageView gifImageView = binding.gifImageView;
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.login)
+                .override(800, 600)
+                .into(gifImageView);
         return view;
     }
 
