@@ -60,10 +60,10 @@
 
 
                 <Button
-                    android:id="@+id/registerButton"
+                    android:id="@+id/nextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Register" />
+                    android:text="Next" />
 
             </LinearLayout>
         </LinearLayout>

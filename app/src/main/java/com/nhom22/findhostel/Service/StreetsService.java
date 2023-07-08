@@ -42,4 +42,17 @@ public class StreetsService {
             return new ArrayList<>();
         }
     }
+
+    public List<Streets> getAllStreetsBySubDistrictId(int subDistrictId) {
+        try {
+            if (STREETS_DAO != null) {
+                return STREETS_DAO.getAllStreetsBySubDistrictId(subDistrictId);
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
 }

@@ -19,6 +19,8 @@ public class Address {
         this.streets = streets;
     }
 
+    public Address() {}
+
     public int getId() {
         return id;
     }

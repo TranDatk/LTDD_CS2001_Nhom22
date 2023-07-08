@@ -102,5 +102,49 @@ public class SubDistrictsDAO {
         return subDistrictsList;
     }
 
+    public List<SubDistricts> getAllSubDistrictsByDistrictsId(int districtsId) {
+        List<SubDistricts> subDistrictsList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "is_active",
+                "districts_id"
+        };
+
+        String selection = "districts_id = ?";
+        String[] selectionArgs = {String.valueOf(districtsId)};
+
+        Cursor cursor = null;
+        try {
+            cursor = db.query("sub_districts", columns, selection, selectionArgs, null, null, null);
+
+            int columnIndexId = cursor.getColumnIndex("id");
+            int columnIndexName = cursor.getColumnIndex("name");
+            int columnIndexIsActive = cursor.getColumnIndex("is_active");
+
+            while (cursor.moveToNext()) {
+                int subDistrictId = columnIndexId != -1 ? cursor.getInt(columnIndexId) : -1;
+                String name = columnIndexName != -1 ? cursor.getString(columnIndexName) : null;
+                int isActive = columnIndexIsActive != -1 ? cursor.getInt(columnIndexIsActive) : -1;
+
+                Districts district = districtsService.getDistrictById(districtsId);
+
+                SubDistricts subDistrict = new SubDistricts(subDistrictId, name, isActive, district);
+                subDistrictsList.add(subDistrict);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return subDistrictsList;
+    }
+
 
 }

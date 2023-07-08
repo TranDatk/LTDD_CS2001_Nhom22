@@ -84,7 +84,6 @@ public class CitiesDAO {
             }
             db.close();
         }
-
         return cityList;
     }
 }

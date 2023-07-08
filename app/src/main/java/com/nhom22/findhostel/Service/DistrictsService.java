@@ -43,4 +43,17 @@ public class DistrictsService {
             return new ArrayList<>();
         }
     }
+
+    public List<Districts> getAllDistrictsByCitiesId(int citiesId) {
+        try {
+            if (DISTRICS_DAO != null) {
+                return DISTRICS_DAO.getAllDistrictsByCitiesId(citiesId);
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
 }
