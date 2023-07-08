@@ -28,4 +28,15 @@ public class UserAccountService {
             return -1; // Return -1 to indicate unsuccessful operation
         }
     }
+
+    public UserAccount getUserAccountById(Integer userAccountId) {
+        if(userAccountId!= null){
+            return USER_ACCOUNT_DAO.getUserAccountById(userAccountId); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "userAccountId is null", Toast.LENGTH_SHORT).show();
+            return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
 }

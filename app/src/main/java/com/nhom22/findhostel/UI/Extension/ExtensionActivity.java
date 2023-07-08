@@ -20,17 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.UserAccountDAO;
-import com.nhom22.findhostel.MainActivity;
-import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Data.PostDecorDAO;
 import com.nhom22.findhostel.Model.PostDecor;
-import com.nhom22.findhostel.UI.Home.HomePageFragment;
-import com.nhom22.findhostel.UI.Save.SavePageFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -39,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.sql.DriverManager;
 
 public class ExtensionActivity extends AppCompatActivity {
     Button btnAdd, btnCancel;
