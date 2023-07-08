@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "861675849175",
+    "firebase_url": "https://findhostel-5c3bc-default-rtdb.firebaseio.com",
+    "project_id": "findhostel-5c3bc",
+    "storage_bucket": "findhostel-5c3bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861675849175:android:b9561f5c4682f60c0d3792",
+        "android_client_info": {
+          "package_name": "com.nhom22.findhostel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861675849175-tbs7ment5ktb2k8ljcesogintpj9gu13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeDQu5BHbdjiS70TvgJi6cfrwxJsGtLXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861675849175-tbs7ment5ktb2k8ljcesogintpj9gu13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -48,7 +48,7 @@ public class DistricsDAO {
             CitiesDAO citiesDAO = new CitiesDAO(YourApplication.getInstance().getApplicationContext());
             Cities city = citiesDAO.getCityById(cityId);
 
-            // Tạo đối tượng Districts từ các cột trong Cursor và đối tượng Cities
+            // Tạo đối tượng Districts từ các cột trong Cursor và đối tượng CitiesFirebase
             district = new Districts(districtId, name, isActive, city);
         }
 

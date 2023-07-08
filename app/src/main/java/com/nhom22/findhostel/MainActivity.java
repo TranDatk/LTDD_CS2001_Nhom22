@@ -1,27 +1,38 @@
 package com.nhom22.findhostel;
 
-import androidx.annotation.NonNull;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.database.sqlite.SQLiteDatabase;
-
+import com.google.firebase.database.DatabaseReference;
+import com.nhom22.findhostel.Data.DatabaseHelper;
+import com.nhom22.findhostel.Firebase.CitiesFirebase;
+import com.nhom22.findhostel.Model.Cities;
+import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.UI.Account.AccountPageFragment;
 import com.nhom22.findhostel.UI.Extension.ExtensionPageFragment;
 import com.nhom22.findhostel.UI.Notification.NotificationPageFragment;
 import com.nhom22.findhostel.UI.Save.SavePageFragment;
 import com.nhom22.findhostel.UI.Search.SearchPageFragment;
-import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
+
 import nl.joery.animatedbottombar.AnimatedBottomBar;
+
+import java.util.List;
+
 
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private DatabaseReference databaseReference;
 
 
     @Override
@@ -33,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = this;
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
+
 
 //        long cities = databaseHelper.addCity("Hồ chí minh", 1);
 //        long cities1 = databaseHelper.addCity("Hà nội", 1);
@@ -84,9 +96,37 @@ public class MainActivity extends AppCompatActivity {
                 // Handle tab reselection if needed
             }
         });
+
         Fragment defaultFragment = new SearchPageFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
+
+
+
+
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+
+
+        CitiesFirebase citiesFirebase = new CitiesFirebase();
+        citiesFirebase.getCities(new CitiesFirebase.CitiesCallback() {
+            @Override
+            public void onCityLoaded(List<Cities> cities) {
+                for (Cities city : cities) {
+                    CitiesService citiesService = new CitiesService();
+                    citiesService.addCities(city);
+                    // Thực hiện các xử lý khác với citiesService
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                // Xử lý khi có lỗi xảy ra trong truy vấn
+            }
+        });
+
     }
+
 }
+

@@ -61,7 +61,7 @@ public class AddressDAO {
             StreetsDAO streetsDAO = new StreetsDAO(YourApplication.getInstance().getApplicationContext());
             Streets street = streetsDAO.getStreetsById(streetId);
 
-            // Tạo đối tượng Address từ các cột trong Cursor và các đối tượng City, District, SubDistrict, Street
+            // Tạo đối tượng AddressFirebase từ các cột trong Cursor và các đối tượng City, District, SubDistrict, Street
             address = new Address(id, houseNumber, isActive, city, district, subdistrict, street);
         }
 

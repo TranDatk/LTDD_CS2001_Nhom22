@@ -5,6 +5,12 @@ public class Cities {
     private String name;
     private int isActive;
 
+    public Cities() {
+        this.id = 0;
+        this.name = "";
+        this.isActive = 1;
+    }
+
     public Cities(int id, String name, int isActive) {
         this.id = id;
         this.name = name;
