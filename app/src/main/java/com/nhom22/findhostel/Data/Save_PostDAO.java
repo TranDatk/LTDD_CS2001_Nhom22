@@ -136,7 +136,7 @@ public class Save_PostDAO {
         Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
 
         List<Save_Post> save_postList = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
+        while (cursor.moveToNext())  {
             @SuppressLint("Range") int savePostId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
             @SuppressLint("Range") int userAccountId = cursor.getInt(cursor.getColumnIndex("user_id"));
@@ -175,7 +175,7 @@ public class Save_PostDAO {
         Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
 
         List<Posts> listPosts = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
+        while (cursor.moveToNext())  {
             @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
 
             // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
