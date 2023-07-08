@@ -105,5 +105,50 @@ public class StreetsDAO {
         return streetsList;
     }
 
+    public List<Streets> getAllStreetsBySubDistrictId(int subDistrictId) {
+        List<Streets> streetsList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "is_active",
+                "sub_districts_id"
+        };
+
+        String selection = "sub_districts_id = ?";
+        String[] selectionArgs = {String.valueOf(subDistrictId)};
+
+        Cursor cursor = null;
+        try {
+            cursor = db.query("streets", columns, selection, selectionArgs, null, null, null);
+
+            int columnIndexId = cursor.getColumnIndex("id");
+            int columnIndexName = cursor.getColumnIndex("name");
+            int columnIndexIsActive = cursor.getColumnIndex("is_active");
+
+            while (cursor.moveToNext()) {
+                int streetId = columnIndexId != -1 ? cursor.getInt(columnIndexId) : -1;
+                String name = columnIndexName != -1 ? cursor.getString(columnIndexName) : null;
+                int isActive = columnIndexIsActive != -1 ? cursor.getInt(columnIndexIsActive) : -1;
+
+                // Get the corresponding SubDistricts object from the database
+                SubDistricts subDistricts = subDistrictsService.getSubDistrictById(subDistrictId);
+
+                // Create a Streets object from the columns in the Cursor and the SubDistricts object
+                Streets streets = new Streets(streetId, name, isActive, subDistricts);
+                streetsList.add(streets);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Print the exception trace for debugging purposes
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return streetsList;
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -62,6 +63,71 @@ public class AddressDAO {
 
             // Tạo đối tượng AddressFirebase từ các cột trong Cursor và các đối tượng City, District, SubDistrict, Street
             address = new Address(id, houseNumber, isActive, city, district, subdistrict, street);
+        }
+
+        cursor.close();
+        db.close();
+
+        return address;
+    }
+
+    public long addAddress(Address address) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("house_number", address.getHouseNumber());
+        values.put("is_active", address.getIsActive());
+        values.put("cities_id", address.getCities().getId());
+        values.put("districts_id", address.getDistricts().getId());
+        values.put("sub_districts_id", address.getSubDistrics().getId());
+        values.put("streets_id", address.getStreets().getId());
+        long addressId = db.insert("address", null, values);
+        db.close();
+        return addressId;
+    }
+
+    public Address getAddressByNameStreetAndHouseNumber(String streetName, String houseNumber) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "house_number",
+                "is_active",
+                "cities_id",
+                "districts_id",
+                "sub_districts_id",
+                "streets_id"
+        };
+
+        String selection = "house_number = ? AND streets_id IN (SELECT id FROM streets WHERE name = ?)";
+        String[] selectionArgs = {houseNumber, streetName};
+
+        Cursor cursor = db.query("address", columns, selection, selectionArgs, null, null, null);
+
+        Address address = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") String fetchedHouseNumber = cursor.getString(cursor.getColumnIndex("house_number"));
+            @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
+            @SuppressLint("Range") int cityId = cursor.getInt(cursor.getColumnIndex("cities_id"));
+            @SuppressLint("Range") int districtId = cursor.getInt(cursor.getColumnIndex("districts_id"));
+            @SuppressLint("Range") int subdistrictId = cursor.getInt(cursor.getColumnIndex("sub_districts_id"));
+            @SuppressLint("Range") int streetId = cursor.getInt(cursor.getColumnIndex("streets_id"));
+
+            // Retrieve City, District, SubDistrict, and Street information from the database based on the corresponding IDs
+            CitiesDAO citiesDAO = new CitiesDAO(YourApplication.getInstance().getApplicationContext());
+            Cities city = citiesDAO.getCityById(cityId);
+
+            DistricsDAO districtsDAO = new DistricsDAO(YourApplication.getInstance().getApplicationContext());
+            Districts district = districtsDAO.getDistrictById(districtId);
+
+            SubDistrictsDAO subDistrictsDAO = new SubDistrictsDAO(YourApplication.getInstance().getApplicationContext());
+            SubDistricts subdistrict = subDistrictsDAO.getSubDistrictById(subdistrictId);
+
+            StreetsDAO streetsDAO = new StreetsDAO(YourApplication.getInstance().getApplicationContext());
+            Streets street = streetsDAO.getStreetsById(streetId);
+
+            // Create an Address object from the columns in the Cursor and the City, District, SubDistrict, and Street objects
+            address = new Address(id, fetchedHouseNumber, isActive, city, district, subdistrict, street);
         }
 
         cursor.close();

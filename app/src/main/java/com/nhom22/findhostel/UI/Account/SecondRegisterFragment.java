@@ -3,37 +3,30 @@ package com.nhom22.findhostel.UI.Account;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import com.nhom22.findhostel.Data.CitiesDAO;
-import com.nhom22.findhostel.Data.DatabaseHelper;
-
-import com.nhom22.findhostel.Model.Address;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
-import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
-import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.databinding.FragmentSecondRegisterFragmentBinding;
 
 import java.util.ArrayList;
@@ -42,149 +35,127 @@ import java.util.List;
 
 public class SecondRegisterFragment extends Fragment {
 
+
     private FragmentSecondRegisterFragmentBinding binding;
     private EditText houseNumberEditText;
-    private Button registerButton;
     private AutoCompleteTextView autoCitiesField;
     private AutoCompleteTextView autoDistrictField;
     private AutoCompleteTextView autoSubDistrictField;
     private AutoCompleteTextView autoStreetField;
 
     private ClipboardManager clipboardManager;
-    private DatabaseHelper databaseHelper;
 
-    private CitiesService citiesService = new CitiesService();
-    private DistrictsService districtsService = new DistrictsService();
-    private SubDistrictsService subDistrictsService = new SubDistrictsService();
-    private StreetsService streetsService = new StreetsService();
+    private final CitiesService citiesService = new CitiesService();
+    private final DistrictsService districtsService = new DistrictsService();
+    private final SubDistrictsService subDistrictsService = new SubDistrictsService();
+    private final StreetsService streetsService = new StreetsService();
 
-    private UserAccountService userAccountService = new UserAccountService();
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSecondRegisterFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-
-        clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        databaseHelper = new DatabaseHelper(getActivity());
+        clipboardManager = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 
         houseNumberEditText = binding.houseNumberEditText;
-        registerButton = binding.registerButton;
+        Button nextButton = binding.nextButton;
         autoCitiesField = binding.autoCitiesField;
         autoDistrictField = binding.autoDistrictField;
         autoSubDistrictField = binding.autoSubDistrictField;
         autoStreetField = binding.autoStreetField;
 
         addCities();
-        addDistrict();
-        addSubDistrict();
-        addStreet();
 
         autoCitiesField.setEnabled(true);
         autoDistrictField.setEnabled(false);
         autoSubDistrictField.setEnabled(false);
         autoStreetField.setEnabled(false);
 
-        autoCitiesField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Enable the district field
-                autoDistrictField.setEnabled(true);
-                // Disable the sub-district and street fields
-                autoSubDistrictField.setEnabled(false);
-                autoStreetField.setEnabled(false);
-            }
+
+
+        autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
+            String selectedCityName = (String) parent.getItemAtPosition(position);
+            int selectedCityId = getCitiesIdByName(selectedCityName);
+            autoDistrictField.setEnabled(true);
+            addDistrict(selectedCityId);
+            autoSubDistrictField.setEnabled(false);
+            autoStreetField.setEnabled(false);
         });
 
-        autoDistrictField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Enable the sub-district field
-                autoSubDistrictField.setEnabled(true);
-                // Disable the street field
-                autoStreetField.setEnabled(false);
-            }
+        autoDistrictField.setOnItemClickListener((parent, view12, position, id) -> {
+            String selectedDistrictName = (String) parent.getItemAtPosition(position);
+            int selectedDistrictId = getDistrictByName(selectedDistrictName);
+            autoSubDistrictField.setEnabled(true);
+            addSubDistrict(selectedDistrictId);
+            autoStreetField.setEnabled(false);
         });
 
-        autoSubDistrictField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Enable the street field
-                autoStreetField.setEnabled(true);
-            }
+        autoSubDistrictField.setOnItemClickListener((parent, view13, position, id) -> {
+            String selectedDistrictName = (String) parent.getItemAtPosition(position);
+            int selectedSubDistrictId = getSubDistrictIdByName(selectedDistrictName);
+            autoStreetField.setEnabled(true);
+            addStreet(selectedSubDistrictId);
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Retrieve the user input from the clipboard
-                ClipData clipData = clipboardManager.getPrimaryClip();
-                if (clipData != null && clipData.getItemCount() > 0) {
-                    ClipData.Item item = clipData.getItemAt(0);
-                    String clipboardData = item.getText().toString();
-                    String[] userData = clipboardData.split("\\|");
+        nextButton.setOnClickListener(v -> {
+            ThirdRegisterFragment thirdRegisterFragment = new ThirdRegisterFragment();
+            Bundle dataBundle = new Bundle();
 
-                    // Get the user data from the clipboard
-                    String email = userData[0];
-                    String username = userData[1];
-                    String password = userData[2];
+            ClipData clipData = clipboardManager.getPrimaryClip();
+            if (clipData != null && clipData.getItemCount() > 0) {
+                ClipData.Item item = clipData.getItemAt(0);
+                String clipboardData = item.getText().toString();
+                String[] userData = clipboardData.split("\\|");
 
-
-                    int cityID = -1;
-                    Cities selectedCity = null;
-                    int selectedItemPosition = autoCitiesField.getListSelection();
-                    if (selectedItemPosition != AdapterView.INVALID_POSITION) {
-                        selectedCity = (Cities) autoCitiesField.getAdapter().getItem(selectedItemPosition);
-                    }
-
-
-                    int districtsId = -1;
-                    Districts selectedDistrict = null;
-                    int selectedDistrictPosition = autoDistrictField.getListSelection();
-                    if (selectedDistrictPosition != AdapterView.INVALID_POSITION) {
-                        // Retrieve the item object from the adapter
-                        selectedDistrict = (Districts) autoDistrictField.getAdapter().getItem(selectedDistrictPosition);
-
-                    }
-
-                    int subDistrictId = -1;
-                    SubDistricts selectedSubDistrict = null;
-                    int selectedSubDistrictPosition = autoSubDistrictField.getListSelection();
-                    if (selectedSubDistrictPosition != AdapterView.INVALID_POSITION) {
-                        selectedSubDistrict = (SubDistricts) autoSubDistrictField.getAdapter().getItem(selectedSubDistrictPosition);
-
-                    }
-
-                    int streetId = -1;
-                    Streets selectedStreet = null;
-                    int selectedStreetPosition = autoStreetField.getListSelection();
-                    if (selectedStreetPosition != AdapterView.INVALID_POSITION) {
-                        selectedStreet = (Streets) autoStreetField.getAdapter().getItem(selectedStreetPosition);
-
-                    }
-
-                    String numHouse = houseNumberEditText.getText().toString();
-
-
-                    Address address = new Address(1,numHouse,1,selectedCity,selectedDistrict,selectedSubDistrict,selectedStreet);
-
-                    // Perform the registration operation with all the new user data
-                    UserAccount user = new UserAccount();
-                    user.setAddress(address);
-                    user.setEmail(email);
-                    user.setUsername(username);
-                    user.setPassword(password);
-                    long userId = userAccountService.addUserAccount(user);
-                    if (userId != -1) {
-                        Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Đăng ký không thành công", Toast.LENGTH_SHORT).show();
-                    }
+                String selectedCityName = autoCitiesField.getText().toString();
+                if (!TextUtils.isEmpty(selectedCityName)) {
+                    int cityID = getCitiesIdByName(selectedCityName);
+                    dataBundle.putInt("citiesId", cityID);
                 }
+
+                String selectedDistrictName = autoDistrictField.getText().toString();
+                if (!TextUtils.isEmpty(selectedDistrictName)) {
+                    int districtId = getDistrictByName(selectedDistrictName);
+                    dataBundle.putInt("districtId", districtId);
+                    dataBundle.putString("selectedDistrictName", selectedDistrictName);
+                }
+
+                String selectedSubDistrictName = autoSubDistrictField.getText().toString();
+                if (!TextUtils.isEmpty(selectedSubDistrictName)) {
+                    int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
+                    dataBundle.putInt("subDistrictId", subDistrictId);
+                    dataBundle.putString("selectedSubDistrictName", selectedSubDistrictName);
+                }
+
+                String selectedStreetName = autoStreetField.getText().toString();
+                if (!TextUtils.isEmpty(selectedStreetName)) {
+                    int streetId = getStreetIdByName(selectedStreetName);
+                    dataBundle.putInt("streetId", streetId);
+                    dataBundle.putString("selectedStreetName", selectedStreetName);
+                }
+
+                String email = userData[0];
+                String username = userData[1];
+                String password = userData[2];
+                String houseNumber = houseNumberEditText.getText().toString();
+
+                dataBundle.putString("email", email);
+                dataBundle.putString("username", username);
+                dataBundle.putString("password", password);
+                dataBundle.putString("houseNumber", houseNumber);
+
+                thirdRegisterFragment.setArguments(dataBundle);
+
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_container, thirdRegisterFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
+
 
         return view;
     }
@@ -196,59 +167,94 @@ public class SecondRegisterFragment extends Fragment {
         for (Cities city : cityList) {
             cityNameList.add(city.getName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, cityNameList);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, cityNameList);
         autoCitiesField.setAdapter(adapter);
     }
 
-    private void addDistrict() {
-        List<Districts> districtsList = districtsService.getAllDistricts();
+    private void addDistrict(int citiesId) {
+        List<Districts> districtsList = districtsService.getAllDistrictsByCitiesId(citiesId);
 
         List<String> districtNameList = new ArrayList<>();
         for (Districts district : districtsList) {
             districtNameList.add(district.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, districtNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, districtNameList);
         autoDistrictField.setAdapter(adapter);
     }
 
-    private void addSubDistrict() {
-        List<SubDistricts> subDistrictsList = subDistrictsService.getAllSubDistricts();
+    private void addSubDistrict(int districtId) {
+        List<SubDistricts> subDistrictsList = subDistrictsService.getAllSubDistrictsByDistrictId(districtId);
 
         List<String> subDistrictNameList = new ArrayList<>();
         for (SubDistricts subDistrict : subDistrictsList) {
             subDistrictNameList.add(subDistrict.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, subDistrictNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, subDistrictNameList);
         autoSubDistrictField.setAdapter(adapter);
     }
 
-    private void addStreet() {
-        List<Streets> streetsList = streetsService.getAllStreets();
+    private void addStreet(int subDistrictId) {
+        List<Streets> streetsList = streetsService.getAllStreetsBySubDistrictId(subDistrictId);
 
         List<String> streetNameList = new ArrayList<>();
         for (Streets street : streetsList) {
             streetNameList.add(street.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, streetNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, streetNameList);
         autoStreetField.setAdapter(adapter);
     }
 
-
-    private long insertUser(String email, String username, String password, String city, String district,String subDistrict, String street, String houseNumber) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
-       return 0;
+    private int getCitiesIdByName(String cityName) {
+        List<Cities> cityList = citiesService.getAllCitiesList();
+        for (Cities city : cityList) {
+            if (city.getName().equals(cityName)) {
+                return city.getId();
+            }
+        }
+        return -1;
     }
+
+    private int getDistrictByName(String districtName) {
+        List<Districts> districtList = districtsService.getAllDistricts();
+
+        for (Districts district : districtList) {
+            if (district.getName().equals(districtName)) {
+                return district.getId();
+            }
+        }
+        return -1;
+    }
+
+    private int getSubDistrictIdByName(String districtName) {
+        List<SubDistricts> subdistrictList = subDistrictsService.getAllSubDistricts();
+
+        for (SubDistricts sdistrict : subdistrictList) {
+            if (sdistrict.getName().equals(districtName)) {
+                return sdistrict.getId();
+            }
+        }
+        return -1;
+    }
+
+    private int getStreetIdByName(String districtName) {
+        List<Streets> streetsList = streetsService.getAllStreets();
+
+        for (Streets streets : streetsList) {
+            if (streets.getName().equals(districtName)) {
+                return streets.getId();
+            }
+        }
+        return -1;
+    }
+
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-
-
 }

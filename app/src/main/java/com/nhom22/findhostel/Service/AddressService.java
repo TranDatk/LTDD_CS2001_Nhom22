@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 public class AddressService {
@@ -25,4 +26,28 @@ public class AddressService {
             return null; // Return -1 to indicate unsuccessful operation
         }
     }
+
+    public long addAddress(Address address){
+        if(address != null){
+            return ADDRESS_DAO.addAddress(address);
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Address is null", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+    }
+
+    public Address getAddressByNameStreetAndHouseNumber(String streetName, String houseNumber) {
+        if(!streetName.isEmpty() && !houseNumber.isEmpty()){
+            return ADDRESS_DAO.getAddressByNameStreetAndHouseNumber(streetName,houseNumber); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null streetName and houseNumber ", Toast.LENGTH_SHORT).show();
+            return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+
 }

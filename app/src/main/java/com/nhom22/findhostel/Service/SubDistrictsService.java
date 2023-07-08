@@ -42,4 +42,17 @@ public class SubDistrictsService {
             return new ArrayList<>();
         }
     }
+
+    public List<SubDistricts> getAllSubDistrictsByDistrictId(int districtId) {
+        try {
+            if (SUB_DISTRICTS_DAO != null) {
+                return SUB_DISTRICTS_DAO.getAllSubDistrictsByDistrictsId(districtId);
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
 }
