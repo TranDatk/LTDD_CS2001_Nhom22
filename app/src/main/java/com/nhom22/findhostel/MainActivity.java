@@ -1,5 +1,6 @@
 package com.nhom22.findhostel;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -14,6 +15,8 @@ import com.nhom22.findhostel.UI.Save.SavePageFragment;
 import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
+
+import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,36 +55,38 @@ public class MainActivity extends AppCompatActivity {
 //        long streetId4 =  databaseHelper.addStreet("Đường 1 phuờng 2 quận 2", 1, 4);
 
 
-        binding.navigation.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
-            if (item.getItemId() == R.id.navigation_notification) {
-                selectedFragment = new NotificationPageFragment();
-            } else if (item.getItemId() == R.id.navigation_exten) {
-                selectedFragment = new ExtensionPageFragment();
-            } else if (item.getItemId() == R.id.navigation_search) {
-                selectedFragment = new SearchPageFragment();
-            } else if (item.getItemId() == R.id.navigation_info) {
-                selectedFragment = new SavePageFragment();
-            } else if (item.getItemId() == R.id.navigation_account) {
+        binding.navigation.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
+            @Override
+            public void onTabSelected(int lastIndex, AnimatedBottomBar.Tab lastTab, int newIndex, AnimatedBottomBar.Tab newTab) {
+                Fragment selectedFragment = null;
+                if (newTab.getId() == R.id.navigation_notification) {
+                    selectedFragment = new NotificationPageFragment();
+                } else if (newTab.getId() == R.id.navigation_exten) {
+                    selectedFragment = new ExtensionPageFragment();
+                } else if (newTab.getId() == R.id.navigation_search) {
+                    selectedFragment = new SearchPageFragment();
+                } else if (newTab.getId() == R.id.navigation_info) {
+                    selectedFragment = new SavePageFragment();
+                } else if (newTab.getId() == R.id.navigation_account) {
 
-                selectedFragment = new AccountPageFragment();
+                    selectedFragment = new AccountPageFragment();
+                }
+
+                if (selectedFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame_container, selectedFragment)
+                            .commit();
+                }
             }
 
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, selectedFragment)
-                        .commit();
-                return true;
+            @Override
+            public void onTabReselected(int index, AnimatedBottomBar.Tab tab) {
+                // Handle tab reselection if needed
             }
-
-            return false;
         });
-
-        // Set the initial selected fragment
-        binding.navigation.setSelectedItemId(R.id.navigation_search);
-        databaseHelper = new DatabaseHelper(this);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
+        Fragment defaultFragment = new SearchPageFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_container, defaultFragment)
+                .commit();
     }
-
 }
