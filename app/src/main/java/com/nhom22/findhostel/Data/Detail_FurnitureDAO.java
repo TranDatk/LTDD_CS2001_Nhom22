@@ -1,5 +1,6 @@
 package com.nhom22.findhostel.Data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.YourApplication;
+
+import java.text.ParseException;
 
 public class Detail_FurnitureDAO {
     private DatabaseHelper dbHelper;
@@ -15,7 +19,7 @@ public class Detail_FurnitureDAO {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public Detail_Furniture getADetailFurnitureById(int id) {
+    public Detail_Furniture getADetailFurnitureById(int id) throws ParseException {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] columns = {
@@ -32,16 +36,18 @@ public class Detail_FurnitureDAO {
 
         Detail_Furniture detailFurniture = null;
         if (cursor != null && cursor.moveToFirst()) {
-            int detailFurnitureId = cursor.getInt(cursor.getColumnIndex("id"));
-            int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-            int postId = cursor.getInt(cursor.getColumnIndex("post_id"));
-            int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
+            @SuppressLint("Range") int detailFurnitureId = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
+            @SuppressLint("Range") int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
 
             // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
-            Posts post = getPostById(postId);
+            PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            Posts post = postsDAO.getPostById(postId);
 
             // Lấy thông tin Furniture từ cơ sở dữ liệu dựa trên furnitureId
-            Furniture furniture = getFurnitureById(furnitureId);
+            FurnitureDAO furnitureDAO= new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
+            Furniture furniture = furnitureDAO.getFurnitureById(furnitureId);
 
             // Tạo đối tượng Detail_Furniture từ các cột trong Cursor và các đối tượng Posts, Furniture
             detailFurniture = new Detail_Furniture(detailFurnitureId, quantity, post, furniture);
