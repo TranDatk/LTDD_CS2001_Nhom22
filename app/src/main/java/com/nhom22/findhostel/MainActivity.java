@@ -6,18 +6,14 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.TextView;
 
-import com.nhom22.findhostel.Data.UserAccountDAO;
-import com.nhom22.findhostel.Model.Cities;
-import com.nhom22.findhostel.Model.UserAccount;
-import com.nhom22.findhostel.databinding.ActivityMainBinding;
 import com.nhom22.findhostel.UI.Account.AccountPageFragment;
 import com.nhom22.findhostel.UI.Extension.ExtensionPageFragment;
-import com.nhom22.findhostel.UI.Home.HomePageFragment;
+import com.nhom22.findhostel.UI.Notification.NotificationPageFragment;
 import com.nhom22.findhostel.UI.Save.SavePageFragment;
 import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.Data.DatabaseHelper;
+import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding.navigation.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
-            if (item.getItemId() == R.id.navigation_home) {
-                selectedFragment = new HomePageFragment();
+            if (item.getItemId() == R.id.navigation_notification) {
+                selectedFragment = new NotificationPageFragment();
             } else if (item.getItemId() == R.id.navigation_exten) {
                 selectedFragment = new ExtensionPageFragment();
             } else if (item.getItemId() == R.id.navigation_search) {
