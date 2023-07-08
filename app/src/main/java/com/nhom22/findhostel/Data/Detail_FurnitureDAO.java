@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Detail_FurnitureDAO {
     private DatabaseHelper dbHelper;
@@ -57,5 +60,37 @@ public class Detail_FurnitureDAO {
         db.close();
 
         return detailFurniture;
+    }
+
+    public List<Furniture> getListFurnitureByPostsId(int postsId) throws ParseException {
+        List<Furniture> listFurniture = new ArrayList<>();
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "quantity",
+                "posts_id",
+                "furniture_id"
+        };
+
+        String selection = "posts_id = ?";
+        String[] selectionArgs = {String.valueOf(postsId)};
+
+        Cursor cursor = db.query("detail_furniture", columns, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
+
+            FurnitureDAO furnitureDAO= new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
+            Furniture furniture = furnitureDAO.getFurnitureById(furnitureId);
+
+            listFurniture.add(furniture);
+        }
+
+        cursor.close();
+        db.close();
+
+        return listFurniture;
     }
 }
