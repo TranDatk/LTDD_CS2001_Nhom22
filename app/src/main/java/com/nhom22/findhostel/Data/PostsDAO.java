@@ -69,7 +69,7 @@ public class PostsDAO {
             @SuppressLint("Range") int userAccountId = cursor.getInt(cursor.getColumnIndex("owner_id"));
             @SuppressLint("Range") int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
-            // Lấy thông tin Address từ cơ sở dữ liệu dựa trên addressId
+            // Lấy thông tin AddressFirebase từ cơ sở dữ liệu dựa trên addressId
             AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
             Address address = addressDAO.getAddressById(addressId);
 
@@ -81,7 +81,7 @@ public class PostsDAO {
             TypeDAO typeDAO = new TypeDAO(YourApplication.getInstance().getApplicationContext());
             Type type = typeDAO.getTypeById(typeId);
 
-            // Tạo đối tượng Posts từ các cột trong Cursor và các đối tượng Address, UserAccount, Type
+            // Tạo đối tượng Posts từ các cột trong Cursor và các đối tượng AddressFirebase, UserAccount, Type
             post = new Posts(postId, timeFrom, timeTo, postName, price, description, activePost, address, userAccount, type);
         }
 

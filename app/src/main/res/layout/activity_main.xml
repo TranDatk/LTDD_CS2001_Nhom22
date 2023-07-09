@@ -7,35 +7,26 @@
 
     <!-- Content area -->
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:layout_width="409dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_above="@+id/navigation"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="?android:attr/windowBackground"
-            android:foreground="?attr/selectableItemBackground"
-            app:itemBackground="@color/bgBottomNavigation"
-            app:itemIconTint="@android:color/white"
-            app:itemTextColor="@android:color/white"
-            app:menu="@menu/bottom_navigation_menu" />
-
-
-    </FrameLayout>
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFF"
+        app:abb_indicatorAppearance="round"
+        app:abb_indicatorHeight="4dp"
+        app:abb_indicatorMargin="16dp"
+        app:abb_tabColorSelected="@color/black"
+        app:abb_textAppearance="@style/CustomText"
+        app:abb_selectedIndex="0"
+        app:abb_selectedTabType="text"
+        app:abb_tabs="@menu/bottom_navigation_menu" />
 
 </RelativeLayout>

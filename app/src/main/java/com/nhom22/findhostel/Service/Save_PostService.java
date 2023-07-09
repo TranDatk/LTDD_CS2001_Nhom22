@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.Save_PostDAO;
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.YourApplication;
 
@@ -65,6 +66,17 @@ public class Save_PostService {
     public List<Save_Post> getListSavePostByUserAccountId(int userId) throws ParseException {
         if(userId >= 0){
             return SAVE_POST_DAO.getListSavePostByUserAccountId(userId); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null userId", Toast.LENGTH_SHORT).show();
+            return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public List<Posts> getListPostsByUserAccountId(int userId) throws ParseException {
+        if(userId >= 0){
+            return SAVE_POST_DAO.getListPostsByUserAccountId(userId); // -1 Unsuccessful, >0 Successful
         }
         else {
             Context context = YourApplication.getInstance().getApplicationContext();

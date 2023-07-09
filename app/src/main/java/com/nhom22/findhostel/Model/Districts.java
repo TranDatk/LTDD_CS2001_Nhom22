@@ -6,6 +6,13 @@ public class Districts {
     private int isActive;
     private Cities cities;
 
+    public Districts() {
+        this.id = 0;
+        this.name = "";
+        this.isActive = 1;
+        this.cities = null;
+    }
+
     public Districts(int id, String name, int isActive, Cities cities) {
         this.id = id;
         this.name = name;

@@ -69,7 +69,7 @@ public class Save_PostDAO {
                 "user_id"
         };
 
-        String selection = "post_id = ? AND user_account_id = ?";
+        String selection = "post_id = ? AND user_id = ?";
         String[] selectionArgs = {String.valueOf(postId), String.valueOf(userAccountId)};
 
         Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
@@ -136,7 +136,7 @@ public class Save_PostDAO {
         Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
 
         List<Save_Post> save_postList = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
+        while (cursor.moveToNext())  {
             @SuppressLint("Range") int savePostId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
             @SuppressLint("Range") int userAccountId = cursor.getInt(cursor.getColumnIndex("user_id"));
@@ -158,5 +158,36 @@ public class Save_PostDAO {
         db.close();
 
         return save_postList;
+    }
+
+    public List<Posts> getListPostsByUserAccountId(int userId) throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "posts_id",
+                "user_id"
+        };
+
+        String selection = "user_id = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+
+        Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
+
+        List<Posts> listPosts = new ArrayList<>();
+        while (cursor.moveToNext())  {
+            @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
+
+            // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
+            PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            Posts post = postsDAO.getPostById(postId);
+
+            listPosts.add(post);
+        }
+
+        cursor.close();
+        db.close();
+
+        return listPosts;
     }
 }

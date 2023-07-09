@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.Account.SecondRegisterFragment">
+
+    <ScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="200dp"
+                android:padding="20dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCitiesField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập thành phố"
+                    android:completionThreshold="1" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoDistrictField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập quận"
+                    android:completionThreshold="1" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoSubDistrictField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập phường"
+                    android:completionThreshold="1" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoStreetField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập tên đường"
+                    android:completionThreshold="1" />
+
+                <EditText
+                    android:id="@+id/houseNumberEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="House Number" />
+
+
+                <Button
+                    android:id="@+id/nextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

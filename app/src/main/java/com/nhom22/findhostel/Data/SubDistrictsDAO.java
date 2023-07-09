@@ -5,12 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.SubDistricts;
+import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.YourApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubDistrictsDAO {
     private DatabaseHelper dbHelper;
+
+    private DistrictsService districtsService = new DistrictsService();
 
     public SubDistrictsDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -51,5 +58,93 @@ public class SubDistrictsDAO {
 
         return subdistrict;
     }
+
+    public List<SubDistricts> getAllSubDistricts() {
+        List<SubDistricts> subDistrictsList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "is_active",
+                "districts_id"
+        };
+
+        Cursor cursor = null;
+        try {
+            cursor = db.query("sub_districts", columns, null, null, null, null, null);
+
+            int columnIndexId = cursor.getColumnIndex("id");
+            int columnIndexName = cursor.getColumnIndex("name");
+            int columnIndexIsActive = cursor.getColumnIndex("is_active");
+            int columnIndexDistrictId = cursor.getColumnIndex("districts_id");
+
+            while (cursor.moveToNext()) {
+                int subDistrictId = columnIndexId != -1 ? cursor.getInt(columnIndexId) : -1;
+                String name = columnIndexName != -1 ? cursor.getString(columnIndexName) : null;
+                int isActive = columnIndexIsActive != -1 ? cursor.getInt(columnIndexIsActive) : -1;
+                int districtId = columnIndexDistrictId != -1 ? cursor.getInt(columnIndexDistrictId) : -1;
+
+                Districts district = districtsService.getDistrictById(districtId);
+
+                SubDistricts subDistrict = new SubDistricts(subDistrictId, name, isActive, district);
+                subDistrictsList.add(subDistrict);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return subDistrictsList;
+    }
+
+    public List<SubDistricts> getAllSubDistrictsByDistrictsId(int districtsId) {
+        List<SubDistricts> subDistrictsList = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "is_active",
+                "districts_id"
+        };
+
+        String selection = "districts_id = ?";
+        String[] selectionArgs = {String.valueOf(districtsId)};
+
+        Cursor cursor = null;
+        try {
+            cursor = db.query("sub_districts", columns, selection, selectionArgs, null, null, null);
+
+            int columnIndexId = cursor.getColumnIndex("id");
+            int columnIndexName = cursor.getColumnIndex("name");
+            int columnIndexIsActive = cursor.getColumnIndex("is_active");
+
+            while (cursor.moveToNext()) {
+                int subDistrictId = columnIndexId != -1 ? cursor.getInt(columnIndexId) : -1;
+                String name = columnIndexName != -1 ? cursor.getString(columnIndexName) : null;
+                int isActive = columnIndexIsActive != -1 ? cursor.getInt(columnIndexIsActive) : -1;
+
+                Districts district = districtsService.getDistrictById(districtsId);
+
+                SubDistricts subDistrict = new SubDistricts(subDistrictId, name, isActive, district);
+                subDistrictsList.add(subDistrict);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return subDistrictsList;
+    }
+
 
 }

@@ -5,7 +5,11 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.StreetsDAO;
 import com.nhom22.findhostel.Model.Streets;
+import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.YourApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StreetsService {
     private final static StreetsDAO STREETS_DAO;
@@ -23,6 +27,32 @@ public class StreetsService {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null streetsId", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public List<Streets> getAllStreets() {
+        try {
+            if (STREETS_DAO != null) {
+                return STREETS_DAO.getAllStreets();
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Streets> getAllStreetsBySubDistrictId(int subDistrictId) {
+        try {
+            if (STREETS_DAO != null) {
+                return STREETS_DAO.getAllStreetsBySubDistrictId(subDistrictId);
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 }

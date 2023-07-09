@@ -10,7 +10,7 @@
     <item android:id="@+id/navigation_info"
         android:title="Lưu"
         android:icon="@drawable/ic_save"/>
-    <item android:id="@+id/navigation_home"
+    <item android:id="@+id/navigation_notification"
         android:title="Notification"
         android:icon="@drawable/ic_notification"/>
     <item android:id="@+id/navigation_account"

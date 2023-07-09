@@ -1,12 +1,16 @@
 package com.nhom22.findhostel.Data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 
 import androidx.annotation.Nullable;
+
+import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Type;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "findhostel.db";
@@ -52,8 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
                 "is_active INTEGER," +
-                "districs_id INTEGER," +
-                "FOREIGN KEY (districs_id) REFERENCES districs(id)" +
+                "districts_id INTEGER," +
+                "FOREIGN KEY (districts_id) REFERENCES districts(id)" +
                 ")");
 
         // Create the streets table
@@ -61,8 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name TEXT," +
                 "is_active INTEGER," +
-                "sub_districs_id INTEGER," +
-                "FOREIGN KEY (sub_districs_id) REFERENCES sub_districs(id)" +
+                "sub_districts_id INTEGER," +
+                "FOREIGN KEY (sub_districts_id) REFERENCES sub_districts(id)" +
                 ")");
 
         // Create the cities table
@@ -109,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE save_post (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "user_id INTEGER," +
-                "post_id INTEGER," +
+                "posts_id INTEGER," +
                 "FOREIGN KEY (user_id) REFERENCES user_account(id)," +
                 "FOREIGN KEY (posts_id) REFERENCES posts(id)" +
                 ")");
@@ -186,5 +190,110 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor GetData(String sql){
         SQLiteDatabase  database =getReadableDatabase();
         return database.rawQuery(sql, null);
+    }
+
+    public long addCity(String name, int isActive) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("is_active", isActive);
+
+        long cityId = db.insert("cities", null, values);
+        db.close();
+
+        return cityId;
+    }
+
+    public long addDistrict(String name, int isActive, int citiesId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("is_active", isActive);
+        values.put("cities_id", citiesId);
+
+        long districtId = db.insert("districts", null, values);
+        db.close();
+
+        return districtId;
+    }
+
+    public long addSubDistricts(String name, int isActive, int districtsId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("is_active", isActive);
+        values.put("districts_id", districtsId);
+
+        long subDistrictsId = db.insert("sub_districts", null, values);
+        db.close();
+
+        return subDistrictsId;
+    }
+
+    public long addStreet(String name, int isActive, int subDistrictsId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("is_active", isActive);
+        values.put("sub_districts_id", subDistrictsId);
+
+        long streetId = db.insert("streets", null, values);
+        db.close();
+
+        return streetId;
+    }
+
+    public long addPost(Posts post) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("active_post", post.getActivePost());
+        values.put("time_from", String.valueOf(post.getTimeFrom()));
+        values.put("time_to", String.valueOf(post.getTimeTo()));
+        values.put("post_name",post.getPostName());
+        values.put("price", post.getPrice());
+        values.put("description", post.getDescription());
+        values.put("address_id", post.getAddress().getId());
+        values.put("owner_id", post.getUserAccount().getId());
+        values.put("type_id", post.getType().getId());
+
+        long postId = db.insert("posts", null, values);
+        db.close();
+
+        return postId;
+    }
+
+    public long addAddress(Address address) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_active", address.getIsActive());
+        values.put("cities_id", address.getCities().getId());
+        values.put("districts_id", address.getDistricts().getId());
+        values.put("sub_districts_id", address.getSubDistrics().getId());
+        values.put("streets_id", address.getStreets().getId());
+
+        long addressId = db.insert("address", null, values);
+        db.close();
+        return addressId;
+    }
+
+    public long addType(Type type) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_active", type.getIsActive());
+        values.put("name", type.getName());
+
+        long typeId = db.insert("type", null, values);
+        db.close();
+        return typeId;
+    }
+
+    public void clearSQLiteTable() {
+        // Assuming you have a "users" table in SQLite
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.delete("cities", null, null);
+        sqLiteDatabase.close();
     }
 }
