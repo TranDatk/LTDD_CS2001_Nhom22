@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="TextView"
             android:textSize="20dp"
             android:maxLines="2"
@@ -83,7 +84,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="abx"
+            android:text="date"
+            android:paddingRight="10dp"
             android:gravity="end"
             android:layout_gravity="center"/>
     </LinearLayout>
