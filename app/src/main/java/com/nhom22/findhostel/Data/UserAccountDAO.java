@@ -115,8 +115,10 @@ public class UserAccountDAO{
    public void insertImageUserAccount(int idUserAccount, byte[] image) {
       SQLiteDatabase db = dbHelper.getWritableDatabase();
       ContentValues values = new ContentValues();
-      values.put("image", image);
-      db.insert("user_account", null, values);
+      values.put("avatar", image);
+      String whereClause = "id = ?";
+      String[] whereArgs = {String.valueOf(idUserAccount)};
+      db.update("user_account", values, whereClause, whereArgs);
       db.close();
    }
 }

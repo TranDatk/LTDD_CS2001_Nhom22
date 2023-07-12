@@ -12,8 +12,7 @@ import java.util.List;
 
 public class FirebaseCallbackHandler implements CitiesFirebase.CitiesCallback, DistrictsFirebase.DistrictsCallback
         , SubDistrictsFirebase.SubDistrictsCallback, StreetsFirebase.StreetsCallback,
-        AddressFirebase.AddressCallback, UserAccountFirebase.UserAccountCallback,
-ImageUserFirebase.ImageUserCallback{
+        AddressFirebase.AddressCallback, UserAccountFirebase.UserAccountCallback{
 
     private MainActivity mainActivity;
 
@@ -30,11 +29,6 @@ ImageUserFirebase.ImageUserCallback{
     @Override
     public void onAddressLoaded(List<Address> addressesList) {
         mainActivity.onAddressLoaded(addressesList);
-    }
-
-    @Override
-    public void onImageUserLoaded(List<ImageUser> imageUserList) {
-        mainActivity.onImageUserLoaded(imageUserList);
     }
 
     @Override
