@@ -56,7 +56,8 @@ public class ListDecorPost extends AppCompatActivity {
         btnBackExtension.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(ListDecorPost.this , ExtensionPageFragment.class);
+                startActivity(intent);
             }
         });
 

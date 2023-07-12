@@ -102,7 +102,7 @@ public class ItemPostAdapter extends BaseAdapter {
                 if (layout != null && layout.getEllipsisCount(layout.getLineCount() - 1) > 0) {
                     // Show "View more" TextView and set the truncated text
                     holder.tvMoreContentPost.setVisibility(View.VISIBLE);
-                    holder.tvMoreContentPost.setText("View more");
+                    holder.tvMoreContentPost.setText("Thêm");
 
                     holder.tvMoreContentPost.setOnClickListener(new View.OnClickListener() {
                         boolean isExpanded = false;
@@ -111,10 +111,10 @@ public class ItemPostAdapter extends BaseAdapter {
                             isExpanded = !isExpanded;
                             if (isExpanded) {
                                 holder.tvContent.setMaxLines(Integer.MAX_VALUE);
-                                holder.tvMoreContentPost.setText("Thêm");
+                                holder.tvMoreContentPost.setText("Ẩn bớt");
                             } else {
                                 holder.tvContent.setMaxLines(2); // Số dòng tối đa
-                                holder.tvMoreContentPost.setText("Ẩn bớt");
+                                holder.tvMoreContentPost.setText("Thêm");
                             }
                         }
                         });

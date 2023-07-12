@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,6 +85,7 @@ public class ExtensionActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         dao = new PostDecorDAO(this);
 
+
 //        postDecorDAO = new PostDecorDAO(this, "/data/data/com.nhom22.findhostel/databases/findhostel.sqlite", null, 2);
 //        Button btnBack = findViewById(R.id.btnA);
 //        btnBack.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +95,9 @@ public class ExtensionActivity extends AppCompatActivity {
 //            }
 //        });
         AnhXa();
+
+
+        edtContent.setFilters(new InputFilter[]{new MaxLengthInputFilter(100, edtContent)});
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
