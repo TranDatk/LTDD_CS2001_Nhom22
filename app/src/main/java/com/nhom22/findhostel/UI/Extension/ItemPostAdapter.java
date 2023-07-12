@@ -1,6 +1,5 @@
 package com.nhom22.findhostel.UI.Extension;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nhom22.findhostel.Data.UserAccountDAO;
@@ -80,10 +78,10 @@ public class ItemPostAdapter extends BaseAdapter {
         holder.tvCreatedPost.setText(item.getCreatedDate());
         int id = item.getUserId();
 
-        UserAccountDAO dao = new UserAccountDAO(context);
+        /*UserAccountDAO dao = new UserAccountDAO(context);
         UserAccount user = dao.getUserAccountById(id);
 
-        holder.tvAuthor.setText(user.getUsername());
+        holder.tvAuthor.setText(user.getUsername());*/
 
 
         //chuyen byte -> bitmap

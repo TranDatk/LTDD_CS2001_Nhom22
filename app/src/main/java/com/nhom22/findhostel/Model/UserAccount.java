@@ -17,16 +17,6 @@ public class UserAccount {
         this.id = id;
     }
 
-    public UserAccount(String username, byte[] image) {
-        this.username = username;
-        this.image = image;
-    }
-
-    public UserAccount(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -118,6 +108,15 @@ public class UserAccount {
     }
 
     public UserAccount() {
-
+        this.id = 1;
+        this.username = "";
+        this.email = "";
+        this.password = "";
+        this.phone = phone;
+        this.digital_money = 0;
+        this.roleUser = 0;
+        this.image = null;
+        this.isActive = 1;
+        this.address = null;
     }
 }

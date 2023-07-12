@@ -14,4 +14,5 @@ public class YourApplication extends Application {
     public static YourApplication getInstance() {
         return instance;
     }
+
 }

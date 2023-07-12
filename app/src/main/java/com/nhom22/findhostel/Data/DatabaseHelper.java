@@ -192,19 +192,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return database.rawQuery(sql, null);
     }
 
-    public long addCity(String name, int isActive) {
-        SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("name", name);
-        values.put("is_active", isActive);
-
-        long cityId = db.insert("cities", null, values);
-        db.close();
-
-        return cityId;
-    }
-
     public long addDistrict(String name, int isActive, int citiesId) {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -288,12 +275,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long typeId = db.insert("type", null, values);
         db.close();
         return typeId;
-    }
-
-    public void clearSQLiteTable() {
-        // Assuming you have a "users" table in SQLite
-        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        sqLiteDatabase.delete("cities", null, null);
-        sqLiteDatabase.close();
     }
 }

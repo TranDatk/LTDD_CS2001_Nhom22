@@ -1,11 +1,11 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Service.DistrictsService;
@@ -146,5 +146,34 @@ public class SubDistrictsDAO {
         return subDistrictsList;
     }
 
+    public long addSubDistricts(SubDistricts subDistricts) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put("name", subDistricts.getName());
+        values.put("is_active", subDistricts.getIsActive());
+        values.put("districts_id", subDistricts.getDistricts().getId());
+
+        long id = db.insert("sub_districts", null, values);
+        db.close();
+
+        return id;
+    }
+
+    public void deleteAllSubDistricts() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("sub_districts", null, null);
+
+        db.close();
+    }
+
+    public void resetSubDistrictsAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='sub_districts'";
+        db.execSQL(query);
+
+        db.close();
+    }
 }

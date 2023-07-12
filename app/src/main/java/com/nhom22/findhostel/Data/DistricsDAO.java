@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -141,5 +142,36 @@ public class DistricsDAO {
         }
 
         return districtList;
+    }
+
+    public long addDistricts(Districts district) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", district.getName());
+        values.put("is_active", district.getIsActive());
+        values.put("cities_id", district.getCities().getId());
+
+        long id = db.insert("districts", null, values);
+        db.close();
+
+        return id;
+    }
+
+    public void deleteAllDistricts() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("districts", null, null);
+
+        db.close();
+    }
+
+    public void resetDistrictsAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='districts'";
+        db.execSQL(query);
+
+        db.close();
     }
 }

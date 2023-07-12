@@ -26,6 +26,8 @@ public class CitiesFirebase {
         citiesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                citiesList.clear(); // Xóa danh sách cũ trước khi thêm mới
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Cities city = snapshot.getValue(Cities.class);
                     citiesList.add(city);
@@ -43,6 +45,7 @@ public class CitiesFirebase {
 
     public interface CitiesCallback {
         void onCityLoaded(List<Cities> cities);
+
         void onError(String errorMessage);
     }
 }

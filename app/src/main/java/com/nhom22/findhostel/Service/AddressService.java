@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Model.Address;
-import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 public class AddressService {
@@ -49,5 +48,11 @@ public class AddressService {
         }
     }
 
+    public void deleteAllAddress() {
+        ADDRESS_DAO.deleteAllAddress();
+    }
 
+    public void resetAddressAutoIncrement() {
+        ADDRESS_DAO.resetAddressAutoIncrement();
+    }
 }

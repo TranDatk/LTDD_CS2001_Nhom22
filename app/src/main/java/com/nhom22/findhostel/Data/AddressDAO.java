@@ -136,4 +136,20 @@ public class AddressDAO {
         return address;
     }
 
+    public void deleteAllAddress() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("address", null, null);
+
+        db.close();
+    }
+
+    public void resetAddressAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='address'";
+        db.execSQL(query);
+
+        db.close();
+    }
 }
