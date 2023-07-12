@@ -13,11 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Streets;
@@ -61,6 +64,7 @@ public class SecondRegisterFragment extends Fragment {
 
         houseNumberEditText = binding.houseNumberEditText;
         Button nextButton = binding.nextButton;
+        Button backButton = binding.backButton;
         autoCitiesField = binding.autoCitiesField;
         autoDistrictField = binding.autoDistrictField;
         autoSubDistrictField = binding.autoSubDistrictField;
@@ -139,11 +143,13 @@ public class SecondRegisterFragment extends Fragment {
                 String email = userData[0];
                 String username = userData[1];
                 String password = userData[2];
+                String phone = userData[3];
                 String houseNumber = houseNumberEditText.getText().toString();
 
                 dataBundle.putString("email", email);
                 dataBundle.putString("username", username);
                 dataBundle.putString("password", password);
+                dataBundle.putString("phone", phone);
                 dataBundle.putString("houseNumber", houseNumber);
 
                 thirdRegisterFragment.setArguments(dataBundle);
@@ -157,7 +163,22 @@ public class SecondRegisterFragment extends Fragment {
         });
 
 
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        ImageView gifImageView = binding.gifImageView;
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.gps)
+                .override(600, 600)
+                .into(gifImageView);
         return view;
+
     }
 
     private void addCities() {

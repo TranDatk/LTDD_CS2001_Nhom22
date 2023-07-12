@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.activity.result.ActivityResult;
@@ -24,12 +25,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
@@ -107,6 +110,7 @@ public class ThirdRegisterFragment extends Fragment {
                 String email = dataBundle.getString("email");
                 String username = dataBundle.getString("username");
                 String password = dataBundle.getString("password");
+                String phone  = dataBundle.getString("phone");
                 String houseNumber = dataBundle.getString("houseNumber");
                 int streetId = dataBundle.getInt("streetId");
                 int cityId = dataBundle.getInt("citiesId");
@@ -133,6 +137,7 @@ public class ThirdRegisterFragment extends Fragment {
                 UserAccount userAccount = new UserAccount();
                 userAccount.setAddress(newAddress);
                 userAccount.setEmail(email);
+                userAccount.setPhone(phone);
                 userAccount.setUsername(username);
                 userAccount.setPassword(password);
                 userAccount.setImage(hinhAnh);
@@ -149,6 +154,12 @@ public class ThirdRegisterFragment extends Fragment {
             }
         });
 
+        ImageView gifImageView = binding.imageView;
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.profile)
+                .override(400, 400)
+                .into(gifImageView);
         return view;
     }
 

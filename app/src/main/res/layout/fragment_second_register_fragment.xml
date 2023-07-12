@@ -6,66 +6,109 @@
     tools:context=".UI.Account.SecondRegisterFragment">
 
     <ScrollView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:orientation="vertical"
-            >
+            android:padding="20dp">
+
+            <ImageView
+                android:id="@+id/gifImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layerType="hardware" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCitiesField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:completionThreshold="1"
+                android:hint="Nhập thành phố"
+                android:textColor="@color/black"
+                android:padding="10dp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoDistrictField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:completionThreshold="1"
+                android:hint="Nhập quận"
+                android:textColor="@color/black"
+                android:padding="10dp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoSubDistrictField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:completionThreshold="1"
+                android:hint="Nhập phường"
+                android:textColor="@color/black"
+                android:padding="10dp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoStreetField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:completionThreshold="1"
+                android:hint="Nhập tên đường"
+                android:textColor="@color/black"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/houseNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:hint="Số nhà"
+                android:textColor="@color/black"
+                android:inputType="number"
+                android:padding="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="200dp"
-                android:padding="20dp">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCitiesField"
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/backButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Nhập thành phố"
-                    android:completionThreshold="1" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoDistrictField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhập quận"
-                    android:completionThreshold="1" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoSubDistrictField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhập phường"
-                    android:completionThreshold="1" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoStreetField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nhập tên đường"
-                    android:completionThreshold="1" />
-
-                <EditText
-                    android:id="@+id/houseNumberEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="House Number" />
-
+                    android:layout_gravity="center"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="Trở về" />
 
                 <Button
                     android:id="@+id/nextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Next" />
-
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="Tiếp tục" />
             </LinearLayout>
+
+
         </LinearLayout>
 
     </ScrollView>
