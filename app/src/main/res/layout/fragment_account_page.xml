@@ -93,6 +93,7 @@
                 android:drawablePadding="8dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/changeMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -154,14 +155,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Đăng xuất́" />
-
-            <Button
-                android:id="@+id/btnRegister"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đăng ký" />
-
-
         </LinearLayout>
     </ScrollView>
 
