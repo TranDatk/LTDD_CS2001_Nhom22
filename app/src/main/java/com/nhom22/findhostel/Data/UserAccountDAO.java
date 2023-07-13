@@ -121,4 +121,37 @@ public class UserAccountDAO{
       db.update("user_account", values, whereClause, whereArgs);
       db.close();
    }
+
+
+   @SuppressLint("Range")
+   public UserAccount checkUserLogin(String email, String password) {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+      Cursor cursor = db.rawQuery("SELECT * FROM user_account WHERE email = ? AND password = ?", new String[]{email, password});
+
+      UserAccount user = null;
+
+      if (cursor != null && cursor.moveToFirst()) {
+         int id = cursor.getInt(cursor.getColumnIndex("id"));
+         String username = cursor.getString(cursor.getColumnIndex("username"));
+         String phone = cursor.getString(cursor.getColumnIndex("phone"));
+         Double digital_money = cursor.getDouble( cursor.getColumnIndex("digital_money"));
+         Integer role_user = cursor.getInt( cursor.getColumnIndex("role_user"));
+         byte[] avatar = cursor.getBlob( cursor.getColumnIndex("avatar"));
+         Integer is_active = cursor.getInt( cursor.getColumnIndex("is_active"));
+
+         AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
+         int address_id = cursor.getInt(cursor.getColumnIndex("address_id"));
+         Address address = addressDAO.getAddressById(address_id);
+
+
+         user = new UserAccount(id, username, email, password, phone, digital_money, role_user, avatar, is_active, address);
+      }
+      if (cursor != null) {
+         cursor.close();
+      }
+      db.close();
+
+      return user;
+   }
 }
