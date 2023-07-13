@@ -5,7 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.Model.UserAccount;
@@ -59,34 +59,24 @@ public class AccountPageFragment extends Fragment {
                 binding.screenNotLogin.setVisibility(View.VISIBLE);
                 binding.btnLogin.setVisibility(View.VISIBLE);
                 binding.btnRegister.setVisibility(View.VISIBLE);
-                binding.a.setText("Vui lòng đăng nhập or đăng ký");
                 binding.btnLogout.setVisibility(View.INVISIBLE);
                 binding.screenLogined.setVisibility(View.GONE);
             }
 
 
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the fragment with LoginFragment
-                replaceFragment(new LoginFragment());
-            }
+        binding.btnLogin.setOnClickListener(v -> {
+            // Replace the fragment with LoginFragment
+            replaceFragment(new LoginFragment());
         });
 
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the fragment with RegistrationFragment
-                replaceFragment(new RegistrationFragment());
-            }
+        binding.btnRegister.setOnClickListener(v -> {
+            // Replace the fragment with RegistrationFragment
+            replaceFragment(new RegistrationFragment());
         });
 
-        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearUserSession();
-               replaceFragment(new LoginFragment());
-            }
+        binding.btnLogout.setOnClickListener(view1 -> {
+            clearUserSession();
+           replaceFragment(new LoginFragment());
         });
 
         ImageView gifImageView = binding.imageView;
