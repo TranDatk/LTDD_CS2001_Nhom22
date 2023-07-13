@@ -76,14 +76,13 @@ public class AccountPageFragment extends Fragment {
 
         binding.btnLogout.setOnClickListener(view1 -> {
             clearUserSession();
-           replaceFragment(new LoginFragment());
+           replaceFragment(new AccountPageFragment());
         });
 
         ImageView gifImageView = binding.imageView;
         Glide.with(this)
                 .asBitmap()
                 .load(R.drawable.login_art)
-                .override(400, 400)
                 .into(gifImageView);
         return view;
 

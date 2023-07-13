@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:layout_marginTop="60dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,9 +36,6 @@
                 android:text="@string/login_text"
                 android:gravity="center"
                 android:textStyle="bold" />
-
-
-
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLogin"

@@ -146,6 +146,7 @@ public class ThirdRegisterFragment extends Fragment {
 
                 if (addUser != -1) {
                     Toast.makeText(getContext(), "Đăng ký thành công!!!", Toast.LENGTH_LONG).show();
+                    replaceFragment(new LoginFragment());
                 } else {
                     Toast.makeText(getContext(), "Đăng ký không thành công!!!", Toast.LENGTH_LONG).show();
                 }
@@ -199,6 +200,15 @@ public class ThirdRegisterFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
