@@ -9,8 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
-import com.nhom22.findhostel.Model.Save_Post;
-import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -102,6 +100,10 @@ public class Detail_ImageDAO {
         values.put("posts_id", postsId);
 
         long rowsAffected = db.insert("detail_image", null, values);
+        if(rowsAffected > 0){
+            rowsAffected = getIdOfLastInsertedRow();
+        }
+
         db.close();
 
         return rowsAffected;
@@ -134,7 +136,7 @@ public class Detail_ImageDAO {
         Cursor cursor = db.query("detail_image", columns, selection, selectionArgs, null, null, null);
 
         List<Detail_Image> listDetailImage = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
+        while (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int detailImageId = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") int imagesId = cursor.getInt(cursor.getColumnIndex("images_id"));
 
@@ -169,9 +171,8 @@ public class Detail_ImageDAO {
         Cursor cursor = db.query("detail_image", columns, selection, selectionArgs, null, null, null);
 
         List<Images> listImage = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
+        while (cursor != null && cursor.moveToFirst()) {
             @SuppressLint("Range") int imagesId = cursor.getInt(cursor.getColumnIndex("images_id"));
-
             ImagesDAO imagesDAO = new ImagesDAO(YourApplication.getInstance().getApplicationContext());
             Images images = imagesDAO.getImagesById(imagesId);
 
@@ -182,6 +183,39 @@ public class Detail_ImageDAO {
         db.close();
 
         return listImage;
+    }
+
+    public void deleteAllDetailImage() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("detail_image", null, null);
+
+        db.close();
+    }
+
+    public void resetDetailImageAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='detail_image'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public int getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "detail_image";
+        Cursor cursor = db.rawQuery(query, null);
+
+        int id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }
 

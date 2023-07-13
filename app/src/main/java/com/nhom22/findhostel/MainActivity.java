@@ -13,23 +13,35 @@ import androidx.fragment.app.Fragment;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Firebase.AddressFirebase;
 import com.nhom22.findhostel.Firebase.CitiesFirebase;
+import com.nhom22.findhostel.Firebase.Detail_ImageFirebase;
 import com.nhom22.findhostel.Firebase.DistrictsFirebase;
 import com.nhom22.findhostel.Firebase.FirebaseCallbackHandler;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
+import com.nhom22.findhostel.Firebase.ImagesFirebase;
+import com.nhom22.findhostel.Firebase.PostsFirebase;
 import com.nhom22.findhostel.Firebase.StreetsFirebase;
 import com.nhom22.findhostel.Firebase.SubDistrictsFirebase;
+import com.nhom22.findhostel.Firebase.TypeFirebase;
 import com.nhom22.findhostel.Firebase.UserAccountFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
+import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Districts;
+import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
+import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
+import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.DistrictsService;
+import com.nhom22.findhostel.Service.ImagesService;
+import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
+import com.nhom22.findhostel.Service.TypeService;
 import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.UI.Account.AccountPageFragment;
 import com.nhom22.findhostel.UI.Extension.ExtensionPageFragment;
@@ -38,10 +50,11 @@ import com.nhom22.findhostel.UI.Save.SavePageFragment;
 import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -93,17 +106,23 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-
-
-
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
+        /*Detail_ImageService detail_imageService = new Detail_ImageService();
+        try {
+            detail_imageService.addADetailImage(1,1);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }*/
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        AddressService addressService = new AddressService();
+        UserAccountService userAccountService = new UserAccountService();
+        TypeService typeService = new TypeService();
 
         createFirebase();
     }
 
-    private void createFirebase(){
+    private void createFirebase() {
         firebaseCallbackHandler = new FirebaseCallbackHandler(this);
 
         CitiesFirebase citiesFirebase = new CitiesFirebase();
@@ -123,7 +142,18 @@ public class MainActivity extends AppCompatActivity {
 
         UserAccountFirebase userAccountFirebase = new UserAccountFirebase();
         userAccountFirebase.getUserAccount(firebaseCallbackHandler);
-        
+
+        TypeFirebase typeFirebase = new TypeFirebase();
+        typeFirebase.getType(firebaseCallbackHandler);
+
+        PostsFirebase postsFirebase = new PostsFirebase();
+        postsFirebase.getPosts(firebaseCallbackHandler);
+
+        ImagesFirebase imagesFirebase = new ImagesFirebase();
+        imagesFirebase.getImages(firebaseCallbackHandler);
+
+        Detail_ImageFirebase detail_imageFirebase = new Detail_ImageFirebase();
+        detail_imageFirebase.getDetailImage(firebaseCallbackHandler);
     }
 
     public void onDistrictsLoaded(List<Districts> districts) {
@@ -137,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onError(String errorMessage) {
-        Toast.makeText(MainActivity.this,"Thực hiện truy vấn firebase thất bại",Toast.LENGTH_LONG).show();
-        Log.d("FirebaseLog",errorMessage);
+        Toast.makeText(MainActivity.this, "Thực hiện truy vấn firebase thất bại", Toast.LENGTH_LONG).show();
+        Log.d("FirebaseLog", errorMessage);
     }
 
 
@@ -203,6 +233,59 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("ErrorDowloadImage", "Failed to download image: " + errorMessage);
                         }
                     });
+        }
+    }
+
+    public void onTypeLoaded(List<Type> typeList) {
+        TypeService typeService = new TypeService();
+        typeService.deleteAllType();
+        typeService.resetTypeAutoIncrement();
+        for (Type type : typeList) {
+            typeService.addType(type);
+        }
+    }
+
+    public void onPostsLoaded(List<Posts> postsList) {
+        PostsService postsService = new PostsService();
+        postsService.deleteAllPosts();
+        postsService.resetPostsAutoIncrement();
+        for (Posts posts : postsList) {
+            postsService.addAPost(posts);
+        }
+    }
+
+    public void onImagesLoaded(List<Images> imagesList) {
+        ImagesService imagesService = new ImagesService();
+        imagesService.deleteAllImages();
+        imagesService.resetImagesAutoIncrement();
+
+        for (Images images : imagesList) {
+            imagesService.addAImages(images);
+
+            final Images finalImages = images;
+
+            ImageUserAccountFirebase.getImages(String.valueOf(images.getId()) + ".png",
+                    new ImageUserAccountFirebase.ImageDownloadListener() {
+                        @Override
+                        public void onImageDownloaded(byte[] imageData) {
+                            imagesService.insertImages(finalImages.getId(), imageData);
+                        }
+
+                        @Override
+                        public void onImageDownloadFailed(String errorMessage) {
+                            // Xử lý khi có lỗi tải xuống ảnh
+                            Log.e("ErrorDowloadImage", "Failed to download image: " + errorMessage);
+                        }
+                    });
+        }
+    }
+
+    public void onDetailImageLoaded(List<Detail_Image> detail_imageList) throws ParseException {
+        Detail_ImageService detail_imageService = new Detail_ImageService();
+        detail_imageService.deleteAllDetailImage();
+        detail_imageService.resetDetailImageAutoIncrement();
+        for (Detail_Image detail_image : detail_imageList) {
+            detail_imageService.addADetailImage(detail_image.getImages().getId(), detail_image.getPosts().getId());
         }
     }
 }

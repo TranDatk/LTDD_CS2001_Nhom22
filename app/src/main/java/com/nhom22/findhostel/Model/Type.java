@@ -11,6 +11,12 @@ public class Type {
         this.isActive = isActive;
     }
 
+    public Type() {
+        this.id = 1;
+        this.name = "";
+        this.isActive = 1;
+    }
+
     public int getId() {
         return id;
     }

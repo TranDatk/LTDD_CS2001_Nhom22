@@ -33,6 +33,9 @@ public class UserAccountDAO{
       values.put("address_id",userAccount.getAddress().getId());
 
       long id = db.insert("user_account", null, values);
+      if(id > 0){
+         id = getIdOfLastInsertedRow();
+      }
 
       db.close();
 
@@ -120,5 +123,21 @@ public class UserAccountDAO{
       String[] whereArgs = {String.valueOf(idUserAccount)};
       db.update("user_account", values, whereClause, whereArgs);
       db.close();
+   }
+
+   public int getIdOfLastInsertedRow() {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+      String query = "SELECT last_insert_rowid() FROM " + "user_account";
+      Cursor cursor = db.rawQuery(query, null);
+
+      int id = -1;
+      if (cursor != null && cursor.moveToFirst()) {
+         id = cursor.getInt(0);
+      }
+
+      cursor.close();
+      db.close();
+
+      return id;
    }
 }

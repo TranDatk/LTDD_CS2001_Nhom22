@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +12,6 @@ import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,15 +51,12 @@ public class PostsDAO {
             @SuppressLint("Range") String timeFromStr = cursor.getString(cursor.getColumnIndex("time_from"));
             @SuppressLint("Range") String timeToStr = cursor.getString(cursor.getColumnIndex("time_to"));
 
-            // Định dạng của cột "time_from" và "time_to" trong SQLite là "YYYY-MM-DD HH:MM:SS.SSS"
+            // Định dạng của cột "time_from" và "time_to" trong SQLite là "YYYY-MM-DD HH:MM:SS"
             // Để chuyển đổi thành đối tượng Timestamp, sử dụng SimpleDateFormat
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date timeFromDate = sdf.parse(timeFromStr);
             Date timeToDate = sdf.parse(timeToStr);
 
-            // Tạo đối tượng Timestamp từ các giá trị Date
-            Timestamp timeFrom = new Timestamp(timeFromDate.getTime());
-            Timestamp timeTo = new Timestamp(timeToDate.getTime());
 
             @SuppressLint("Range") String postName = cursor.getString(cursor.getColumnIndex("post_name"));
             @SuppressLint("Range") float price = cursor.getFloat(cursor.getColumnIndex("price"));
@@ -82,12 +79,67 @@ public class PostsDAO {
             Type type = typeDAO.getTypeById(typeId);
 
             // Tạo đối tượng Posts từ các cột trong Cursor và các đối tượng AddressFirebase, UserAccount, Type
-            post = new Posts(postId, timeFrom, timeTo, postName, price, description, activePost, address, userAccount, type);
+            post = new Posts(postId, timeFromDate, timeToDate, postName, price, description, activePost, address, userAccount, type);
         }
 
         cursor.close();
         db.close();
 
         return post;
+    }
+
+    public long addAPost(Posts post) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("time_from", post.getTimeFrom().toString());
+        values.put("time_to", post.getTimeTo().toString());
+        values.put("post_name", post.getPostName());
+        values.put("price", post.getPrice());
+        values.put("description", post.getDescription());
+        values.put("active_post", post.getActivePost());
+        values.put("address_id", post.getAddress().getId());
+        values.put("owner_id", post.getUserAccount().getId());
+        values.put("type_id", post.getType().getId());
+
+        long id = db.insert("posts", null, values);
+        if(id > 0){
+            id = getIdOfLastInsertedRow();
+        }
+        db.close();
+        return id;
+    }
+
+    public void deleteAllPosts() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("posts", null, null);
+
+        db.close();
+    }
+
+    public void resetPostsAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='posts'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public int getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "posts";
+        Cursor cursor = db.rawQuery(query, null);
+
+        int id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }

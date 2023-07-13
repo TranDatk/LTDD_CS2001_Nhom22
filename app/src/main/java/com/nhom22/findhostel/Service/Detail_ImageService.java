@@ -3,11 +3,11 @@ package com.nhom22.findhostel.Service;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.Detail_ImageDAO;
 import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Images;
-import com.nhom22.findhostel.Model.Posts;
-import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -15,6 +15,9 @@ import java.util.List;
 
 public class Detail_ImageService {
     private final static Detail_ImageDAO DETAIL_IMAGE_DAO;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    DatabaseReference detail_imageRef = database.getReference("detail_image");
 
     static {
         Context appContext = YourApplication.getInstance().getApplicationContext();
@@ -43,9 +46,18 @@ public class Detail_ImageService {
         }
     }
 
-    public long addADetailImage(int imagesId, int postsId) {
+    public long addADetailImage(int imagesId, int postsId) throws ParseException {
         if(imagesId >= 0 && postsId >=0){
-            return DETAIL_IMAGE_DAO.addADetailImage(imagesId, postsId); // -1 Unsuccessful, >0 Successful
+            long result = DETAIL_IMAGE_DAO.addADetailImage(imagesId, postsId);
+            ImagesService imagesService = new ImagesService();
+            PostsService postsService = new PostsService();
+
+            Detail_Image detail_imageFirebase = new Detail_Image(Integer.parseInt(String.valueOf(result)),
+                    imagesService.getImagesById(imagesId),postsService.getPostById(postsId));
+
+            detail_imageRef.child(String.valueOf(detail_imageFirebase.getId())).setValue(detail_imageFirebase);
+
+            return result; // -1 Unsuccessful, >0 Successful
         }
         else {
             Context context = YourApplication.getInstance().getApplicationContext();
@@ -85,5 +97,13 @@ public class Detail_ImageService {
             Toast.makeText(context, "Null postsId", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
         }
+    }
+
+    public void deleteAllDetailImage() {
+        DETAIL_IMAGE_DAO.deleteAllDetailImage();
+    }
+
+    public void resetDetailImageAutoIncrement() {
+        DETAIL_IMAGE_DAO.resetDetailImageAutoIncrement();
     }
 }

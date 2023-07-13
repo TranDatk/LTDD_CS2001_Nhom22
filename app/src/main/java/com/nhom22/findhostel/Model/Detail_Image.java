@@ -1,22 +1,28 @@
 package com.nhom22.findhostel.Model;
 
 public class Detail_Image {
-    private int in;
+    private int id;
     private Images images;
     private Posts posts;
 
-    public Detail_Image(int in, Images images, Posts posts) {
-        this.in = in;
+    public Detail_Image(int id, Images images, Posts posts) {
+        this.id = id;
         this.images = images;
         this.posts = posts;
     }
 
-    public int getIn() {
-        return in;
+    public Detail_Image() {
+        this.id = 1;
+        this.images = null;
+        this.posts = null;
     }
 
-    public void setIn(int in) {
-        this.in = in;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Images getImages() {
