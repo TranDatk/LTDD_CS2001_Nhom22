@@ -19,12 +19,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.databinding.FragmentRegistrationBinding;
+import java.util.regex.Pattern;
 
 
 public class RegistrationFragment extends Fragment {
 
     private FragmentRegistrationBinding binding;
     private ClipboardManager clipboardManager;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRegistrationBinding.inflate(inflater, container, false);
@@ -35,11 +37,14 @@ public class RegistrationFragment extends Fragment {
             String username = binding.usernameEditText.getText().toString();
             String password = binding.passwordEditText.getText().toString();
             String repassword = binding.repasswordEditText.getText().toString();
+            String phone = binding.phoneNumber.getText().toString();
 
-            if (TextUtils.isEmpty(email)) {
-                Toast.makeText(requireContext(), "Please enter email", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(email) && patternMatches(email)) {
+                Toast.makeText(requireContext(), "Email của bạn đang trống", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(username)) {
                 Toast.makeText(requireContext(), "Please enter username", Toast.LENGTH_SHORT).show();
+            } else if (TextUtils.isEmpty(phone)) {
+                Toast.makeText(requireContext(), "Please enter phone", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(password)) {
                 Toast.makeText(requireContext(), "Please enter password", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(repassword)) {
@@ -48,7 +53,7 @@ public class RegistrationFragment extends Fragment {
                 Toast.makeText(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
             } else {
 
-                String clipboardData = email + "|" + username + "|" + password;
+                String clipboardData = email + "|" + username + "|" + password + "|" + phone;
                 ClipData clipData = ClipData.newPlainText("UserInput", clipboardData);
                 clipboardManager.setPrimaryClip(clipData);
 
@@ -72,6 +77,13 @@ public class RegistrationFragment extends Fragment {
                 .override(800, 600)
                 .into(gifImageView);
         return view;
+    }
+
+    public boolean patternMatches(String emailAddress) {
+        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*(\\\\.[A-Za-z]{2,})$";
+        return Pattern.compile(regexPattern)
+                .matcher(emailAddress)
+                .matches();
     }
 
     private void replaceFragment(Fragment fragment) {

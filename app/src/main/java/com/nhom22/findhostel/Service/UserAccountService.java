@@ -82,4 +82,15 @@ public class UserAccountService {
     public void insertImageUserAccount(int idUserAccount, byte[] image) {
         USER_ACCOUNT_DAO.insertImageUserAccount(idUserAccount,image);
     }
+
+
+    public UserAccount checkLoginUser(String email, String password) {
+        if (email != null && password != null) {
+            return USER_ACCOUNT_DAO.checkUserLogin(email, password); // -1 Unsuccessful, >0 Successful
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Email or password is null", Toast.LENGTH_SHORT).show();
+            return null; // Return null to indicate unsuccessful operation
+        }
+    }
 }
