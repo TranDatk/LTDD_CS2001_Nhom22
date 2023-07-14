@@ -140,7 +140,7 @@ public class UserAccountDAO{
 
       return id;
    }
-   
+
    @SuppressLint("Range")
    public UserAccount checkUserLogin(String email, String password) {
       SQLiteDatabase db = dbHelper.getReadableDatabase();

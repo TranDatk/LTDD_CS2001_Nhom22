@@ -11,6 +11,7 @@ import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
+import java.util.List;
 
 public class PostsService {
     private final static PostsDAO POSTS_DAO;
@@ -63,5 +64,9 @@ public class PostsService {
 
     public void resetPostsAutoIncrement() {
         POSTS_DAO.resetPostsAutoIncrement();
+    }
+
+    public List<Posts> getAllPost() throws ParseException {
+        return POSTS_DAO.getAllPost();
     }
 }
