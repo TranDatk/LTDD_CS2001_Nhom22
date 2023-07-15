@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.Detail_ImageDAO;
 import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -56,9 +57,14 @@ public class Detail_ImageService {
             else {
                 ImagesService imagesService = new ImagesService();
                 PostsService postsService = new PostsService();
+                Posts posts = postsService.getPostById(postsId);
+                posts.getUserAccount().setImage(null);
+
+                Images images = imagesService.getImagesById(imagesId);
+                images.setImage(null);
 
                 Detail_Image detail_imageFirebase = new Detail_Image(Integer.parseInt(String.valueOf(result)),
-                        imagesService.getImagesById(imagesId), postsService.getPostById(postsId));
+                        images, posts);
 
                 detail_imageRef.child(String.valueOf(detail_imageFirebase.getId())).setValue(detail_imageFirebase);
             }
