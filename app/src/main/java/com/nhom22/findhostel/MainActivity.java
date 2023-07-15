@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
 
-
+//
 //        long cities = databaseHelper.addCity("Hồ chí minh", 1);
 //        long cities1 = databaseHelper.addCity("Hà nội", 1);
 //        long cities2 = databaseHelper.addCity("Kon tum", 1);
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 //        long districtId1 = databaseHelper.addDistrict("Quận 1", 1, 1);
 //        long districtId2 = databaseHelper.addDistrict("Quận 2", 1, 1);
 //        long districtId3 = databaseHelper.addDistrict("Quận 3", 1, 1);
-
+//
 //        long subDistrictsId1 =  databaseHelper.addSubDistricts("Phường 1 Quận 1", 1, 1);
 //        long subDistrictsId2 =  databaseHelper.addSubDistricts("Phường 2 Quận 1", 1, 1);
 //        long subDistrictsId3 =  databaseHelper.addSubDistricts("Phường 1 Quận 2", 1, 2);
@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
 //        long streetId2 =  databaseHelper.addStreet("Đường 1 phuờng 2 quận 1", 1, 2);
 //        long streetId3 =  databaseHelper.addStreet("Đường 1 phường 1 quận 2", 1, 3);
 //        long streetId4 =  databaseHelper.addStreet("Đường 1 phuờng 2 quận 2", 1, 4);
-
-
         binding.navigation.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override
             public void onTabSelected(int lastIndex, AnimatedBottomBar.Tab lastTab, int newIndex, AnimatedBottomBar.Tab newTab) {
@@ -109,22 +107,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        CitiesFirebase citiesFirebase = new CitiesFirebase();
-        citiesFirebase.getCities(new CitiesFirebase.CitiesCallback() {
-            @Override
-            public void onCityLoaded(List<Cities> cities) {
-                for (Cities city : cities) {
-                    CitiesService citiesService = new CitiesService();
-                    citiesService.addCities(city);
-                    // Thực hiện các xử lý khác với citiesService
-                }
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                // Xử lý khi có lỗi xảy ra trong truy vấn
-            }
-        });
+//        CitiesFirebase citiesFirebase = new CitiesFirebase();
+//        citiesFirebase.getCities(new CitiesFirebase.CitiesCallback() {
+//            @Override
+//            public void onCityLoaded(List<Cities> cities) {
+//                for (Cities city : cities) {
+//                    CitiesService citiesService = new CitiesService();
+//                    citiesService.addCities(city);
+//                    // Thực hiện các xử lý khác với citiesService
+//                }
+//            }
+//
+//            @Override
+//            public void onError(String errorMessage) {
+//                // Xử lý khi có lỗi xảy ra trong truy vấn
+//            }
+//        });
 
     }
 

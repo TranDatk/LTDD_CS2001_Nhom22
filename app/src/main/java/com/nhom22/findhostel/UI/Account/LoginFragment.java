@@ -42,7 +42,7 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(getActivity(), "All fields are mandatory", Toast.LENGTH_SHORT).show();
                 } else {
                     SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                    Cursor cursor = db.rawQuery("SELECT * FROM users WHERE email = ? AND password = ?", new String[]{email, password});
+                    Cursor cursor = db.rawQuery("SELECT * FROM user_account WHERE email = ? AND password = ?", new String[]{email, password});
                     if (cursor != null && cursor.moveToFirst()) {
                         int userIdIndex = cursor.getColumnIndex("id");
                         if (userIdIndex != -1) {

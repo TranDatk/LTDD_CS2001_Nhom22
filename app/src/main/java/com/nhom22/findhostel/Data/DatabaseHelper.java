@@ -179,6 +179,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "user_id INTEGER," +
                 "is_active INTEGER" +
                 ")");
+
+
+        db.execSQL("CREATE TABLE hostel_collection (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "text TEXT," +
+                "image BLOB," +
+                "address_id INTEGER" +
+                ")");
     }
 
 
