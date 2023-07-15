@@ -171,7 +171,7 @@ public class Detail_ImageDAO {
         Cursor cursor = db.query("detail_image", columns, selection, selectionArgs, null, null, null);
 
         List<Images> listImage = new ArrayList<>();
-        while (cursor != null && cursor.moveToFirst()) {
+        while (cursor != null && cursor.moveToNext()) {
             @SuppressLint("Range") int imagesId = cursor.getInt(cursor.getColumnIndex("images_id"));
             ImagesDAO imagesDAO = new ImagesDAO(YourApplication.getInstance().getApplicationContext());
             Images images = imagesDAO.getImagesById(imagesId);

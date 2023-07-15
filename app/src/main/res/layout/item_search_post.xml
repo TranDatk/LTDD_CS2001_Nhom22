@@ -5,6 +5,11 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:background="#f2f2f2">
+    <LinearLayout
+        android:id="@+id/postLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <ImageView
         android:id="@+id/imgMain"
         android:layout_width="match_parent"
@@ -77,5 +82,6 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/border_background"
         android:padding="5dp"/>
+    </LinearLayout>
 
 </LinearLayout>
