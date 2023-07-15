@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item1"
+        android:title="Tin đăng của tôi"
+        android:enabled="true"
+        android:icon="@drawable/baseline_menu_24"
+        />
+    <item
+        android:id="@+id/item2"
+        android:title="Quản lý Credit"
+        android:icon="@drawable/baseline_credit_card_24"/>
+    <item
+        android:id="@+id/item3"
+        android:title="Cài đặt"
+        android:icon="@drawable/baseline_settings_24"/>
+    <item
+        android:id="@+id/item4"
+        android:title="Trung tâm hỗ trợ"
+        android:icon="@drawable/baseline_chat_bubble_24"/>
+    <item
+        android:id="@+id/item5"
+        android:title="Đổi vai trò khách thuê"
+        android:icon="@drawable/ic_account"/>
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Đăng xuất"
+        android:icon="@drawable/baseline_logout_24"/>
+
+</menu>
