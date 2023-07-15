@@ -69,4 +69,15 @@ public class PostsService {
     public List<Posts> getAllPost() throws ParseException {
         return POSTS_DAO.getAllPosts();
     }
+
+    public List<Posts> getPostsBySubDistrics(int subDistrics) throws ParseException {
+        if(subDistrics >= 0){
+            return POSTS_DAO.getPostsBySubDistrics(subDistrics);
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null posts", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 }

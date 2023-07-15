@@ -81,8 +81,11 @@ public class HostelCollectionPageFragment extends Fragment {
 //                String itemTitle = item.getTitle();
                 int itemDistrict = item.getAddress();
                 Address address = addressService.getAddressById(itemDistrict);
+
                 int itemSubDistrict = address.getSubDistrics().getId();
                 String text = String.valueOf(itemSubDistrict);
+
+
                 ListPostsFragement fragment = new ListPostsFragement();
                 Bundle bundle = new Bundle();
                 bundle.putString("key", text);

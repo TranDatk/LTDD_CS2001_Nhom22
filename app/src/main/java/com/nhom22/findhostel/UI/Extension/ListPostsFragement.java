@@ -13,13 +13,17 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.HostelCollection;
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.HotelCollectionService;
+import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 import com.nhom22.findhostel.databinding.FragmentListPostsBinding;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ListPostsFragement extends Fragment {
@@ -27,9 +31,9 @@ public class ListPostsFragement extends Fragment {
     private String subDistric_id;
     public static DatabaseHelper dataBase;
     ListView lsvItem;
-    ArrayList<HostelCollection> arrItem;
-    ItemHotelCollectionAdapter itemAdapter;
-    private final HotelCollectionService hotelCollectionService = new HotelCollectionService();
+    List<Posts> arrItem;
+    ItemPostsHostelAdapter itemAdapter;
+    private final PostsService postsService = new PostsService();
     public ListPostsFragement() {
         // Required empty public constructor
     }
@@ -61,22 +65,16 @@ public class ListPostsFragement extends Fragment {
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
         lsvItem = binding.lvHotelCollection;
-        arrItem = new ArrayList<>();
-        itemAdapter = new ItemHotelCollectionAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_hostel_collection_layout, arrItem);
+        try {
+            arrItem = postsService.getPostsBySubDistrics(Integer.parseInt(subDistric_id));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        itemAdapter = new ItemPostsHostelAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_hostel_collection_layout, arrItem);
         lsvItem.setAdapter(itemAdapter);
 
-        Cursor cursor = dataBase.GetData("SELECT hc.* \n" +
-                "FROM hostel_collection hc\n" +
-                "INNER JOIN address a ON hc.address_id = a.id\n" +
-                "WHERE a.sub_districts_id = " + subDistric_id);
-        while(cursor.moveToNext()){
-            arrItem.add(new HostelCollection(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getBlob(2),
-                    cursor.getInt(3)
-            ));
-        }
+
         itemAdapter.notifyDataSetChanged();
 
 
