@@ -26,34 +26,38 @@ public class UserAccountService {
 
     public long addUserAccount(UserAccount userAccount) {
         if (userAccount != null) {
-            long result =  USER_ACCOUNT_DAO.addUserAccount(userAccount);
+            long result = USER_ACCOUNT_DAO.addUserAccount(userAccount);
+            if (result < 1) {
+                Log.e("AddUserAccount", "Failed to add UserAccount to Sqlite");
+            } else {
 
-            UserAccount userAccountFirebase = new UserAccount(Integer.parseInt(String.valueOf(result)),userAccount.getUsername(),
-                    userAccount.getEmail(),userAccount.getPassword(),userAccount.getPhone(),
-                    userAccount.getDigital_money(),userAccount.getRoleUser(), null, userAccount.getIsActive(), userAccount.getAddress());
+                UserAccount userAccountFirebase = new UserAccount(Integer.parseInt(String.valueOf(result)), userAccount.getUsername(),
+                        userAccount.getEmail(), userAccount.getPassword(), userAccount.getPhone(),
+                        userAccount.getDigital_money(), userAccount.getRoleUser(), null, userAccount.getIsActive(), userAccount.getAddress());
 
-            userAccountRef.child(String.valueOf(userAccountFirebase.getId())).setValue(userAccountFirebase);
+                userAccountRef.child(String.valueOf(userAccountFirebase.getId())).setValue(userAccountFirebase);
 
-            // Tải lên ảnh lên Firebase Storage
-            byte[] imageData = userAccount.getImage();
-            if (imageData != null) {
-                String fileName = userAccountFirebase.getId() + ".png";
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReference().child("image_user_account").child(fileName);
+                // Tải lên ảnh lên Firebase Storage
+                byte[] imageData = userAccount.getImage();
+                if (imageData != null) {
+                    String fileName = userAccountFirebase.getId() + ".png";
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference().child("image_user_account").child(fileName);
 
-                storageRef.putBytes(imageData)
-                        .addOnSuccessListener(taskSnapshot -> {
-                            // Ảnh đã được tải lên thành công
-                            Log.d("AddUserAccount", "Image uploaded successfully");
-                        })
-                        .addOnFailureListener(exception -> {
-                            // Xảy ra lỗi khi tải lên ảnh
-                            String errorMessage = exception.getMessage();
-                            Log.e("AddUserAccount", "Failed to upload image: " + errorMessage);
-                        });
+                    storageRef.putBytes(imageData)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                // Ảnh đã được tải lên thành công
+                                Log.d("AddImageUserAccount", "Image uploaded successfully");
+                            })
+                            .addOnFailureListener(exception -> {
+                                // Xảy ra lỗi khi tải lên ảnh
+                                String errorMessage = exception.getMessage();
+                                Log.e("AddImageUserAccount", "Failed to upload image: " + errorMessage);
+                            });
+                }
             }
-
             return result; // -1 Unsuccessful, >0 Successful
+
         } else {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "User account is null", Toast.LENGTH_SHORT).show();
@@ -80,7 +84,7 @@ public class UserAccountService {
     }
 
     public void insertImageUserAccount(int idUserAccount, byte[] image) {
-        USER_ACCOUNT_DAO.insertImageUserAccount(idUserAccount,image);
+        USER_ACCOUNT_DAO.insertImageUserAccount(idUserAccount, image);
     }
 
 

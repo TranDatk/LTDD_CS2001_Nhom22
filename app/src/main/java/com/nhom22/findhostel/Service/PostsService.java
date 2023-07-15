@@ -67,6 +67,6 @@ public class PostsService {
     }
 
     public List<Posts> getAllPost() throws ParseException {
-        return POSTS_DAO.getAllPost();
+        return POSTS_DAO.getAllPosts();
     }
 }
