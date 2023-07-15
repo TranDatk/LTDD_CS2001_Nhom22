@@ -98,4 +98,21 @@ public class CitiesDAO {
         db.close();
         return id;
     }
+
+    public void deleteAllCities() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("cities", null, null);
+
+        db.close();
+    }
+
+    public void resetCitiesAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='cities'";
+        db.execSQL(query);
+
+        db.close();
+    }
 }

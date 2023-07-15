@@ -13,6 +13,15 @@ public class Streets {
         this.isActive = isActive;
         this.subDistricts = subDistricts;
     }
+
+    public Streets() {
+
+        this.id = 1;
+        this.name = "";
+        this.isActive = 1;
+        this.subDistricts = null;
+    }
+
     public int getId() {
         return id;
     }

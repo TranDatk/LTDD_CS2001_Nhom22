@@ -15,14 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Data.DatabaseHelper;
+import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.databinding.FragmentLoginBinding;
 
 
 public class LoginFragment extends Fragment {
 
-    private DatabaseHelper databaseHelper;
+    UserAccountService userAccountService = new UserAccountService();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,41 +33,25 @@ public class LoginFragment extends Fragment {
         FragmentLoginBinding binding = FragmentLoginBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        databaseHelper = new DatabaseHelper(requireContext());
+        binding.loginButton.setOnClickListener(v -> {
+            String email = binding.loginEmail.getText().toString();
+            String password = binding.loginPassword.getText().toString();
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(getActivity(), "All fields are mandatory", Toast.LENGTH_SHORT).show();
+            } else {
+                UserAccount user = userAccountService.checkLoginUser(email, password);
+                if (user != null) {
+                    int userId = user.getId();
 
-        binding.loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = binding.loginEmail.getText().toString();
-                String password = binding.loginPassword.getText().toString();
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(getActivity(), "All fields are mandatory", Toast.LENGTH_SHORT).show();
+                    saveUserSession(userId);
+                    replaceFragment(new AccountPageFragment());
                 } else {
-                    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                    Cursor cursor = db.rawQuery("SELECT * FROM user_account WHERE email = ? AND password = ?", new String[]{email, password});
-                    if (cursor != null && cursor.moveToFirst()) {
-                        int userIdIndex = cursor.getColumnIndex("id");
-                        if (userIdIndex != -1) {
-                            int userId = cursor.getInt(userIdIndex);
-                            saveUserSession(userId);
-                            replaceFragment(new AccountPageFragment());
-                        } else {
-                            Toast.makeText(getActivity(), "Invalid column name: user_id", Toast.LENGTH_SHORT).show();
-                        }
-                        cursor.close();
-                    } else {
-                        Toast.makeText(getActivity(), "Invalid email or password", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(getActivity(), "Invalid email or password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        binding.signupRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                replaceFragment(new RegistrationFragment());
-            }
-        });
+        binding.signupRedirectText.setOnClickListener(view1 -> replaceFragment(new RegistrationFragment()));
 
         return view;
     }

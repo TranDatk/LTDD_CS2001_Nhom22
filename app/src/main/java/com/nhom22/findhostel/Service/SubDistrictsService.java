@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.SubDistrictsDAO;
-import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.YourApplication;
 
@@ -54,5 +53,24 @@ public class SubDistrictsService {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    public long addSubDistricts(SubDistricts subDistricts) {
+        if(subDistricts != null){
+            return SUB_DISTRICTS_DAO.addSubDistricts(subDistricts); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null subDistricts", Toast.LENGTH_SHORT).show();
+            return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public void deleteAllSubDistricts() {
+        SUB_DISTRICTS_DAO.deleteAllSubDistricts();
+    }
+
+    public void resetSubDistrictsAutoIncrement() {
+        SUB_DISTRICTS_DAO.resetSubDistrictsAutoIncrement();
     }
 }

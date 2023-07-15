@@ -33,25 +33,13 @@ public class UserAccountDAO{
       values.put("address_id",userAccount.getAddress().getId());
 
       long id = db.insert("user_account", null, values);
+      if(id > 0){
+         id = getIdOfLastInsertedRow();
+      }
 
       db.close();
 
       return id;
-   }
-
-   // Cho nay cua Cap Tan Dat sua lai
-   public int updateUserAccount(UserAccount userAccount) {
-      SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-      ContentValues values = new ContentValues();
-      values.put("password", userAccount.getPassword());
-
-      int rowsAffected = db.update("user_accounts", values, "username = ?",
-              new String[]{userAccount.getUsername()});
-
-      db.close();
-
-      return rowsAffected;
    }
 
    public int deleteUserAccount(String username) {
@@ -63,7 +51,6 @@ public class UserAccountDAO{
 
       return rowsAffected;
    }
-
 
    @SuppressLint("Range")
    public UserAccount getUserAccountById(Integer id) {
@@ -110,4 +97,80 @@ public class UserAccountDAO{
 
       return user;
    }
+
+   public void deleteAllUserAccount() {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+      db.delete("user_account", null, null);
+
+      db.close();
+   }
+
+   public void resetUserAccountAutoIncrement() {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+      String query = "DELETE FROM sqlite_sequence WHERE name='user_account'";
+      db.execSQL(query);
+
+      db.close();
+   }
+
+   public void insertImageUserAccount(int idUserAccount, byte[] image) {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
+      ContentValues values = new ContentValues();
+      values.put("avatar", image);
+      String whereClause = "id = ?";
+      String[] whereArgs = {String.valueOf(idUserAccount)};
+      db.update("user_account", values, whereClause, whereArgs);
+      db.close();
+   }
+
+   public int getIdOfLastInsertedRow() {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+      String query = "SELECT last_insert_rowid() FROM " + "user_account";
+      Cursor cursor = db.rawQuery(query, null);
+
+      int id = -1;
+      if (cursor != null && cursor.moveToFirst()) {
+         id = cursor.getInt(0);
+      }
+
+      cursor.close();
+      db.close();
+
+      return id;
+   }
+
+   @SuppressLint("Range")
+   public UserAccount checkUserLogin(String email, String password) {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+      Cursor cursor = db.rawQuery("SELECT * FROM user_account WHERE email = ? AND password = ?", new String[]{email, password});
+
+      UserAccount user = null;
+
+      if (cursor != null && cursor.moveToFirst()) {
+          int id = cursor.getInt(cursor.getColumnIndex("id"));
+         String username = cursor.getString(cursor.getColumnIndex("username"));
+         String phone = cursor.getString(cursor.getColumnIndex("phone"));
+         Double digital_money = cursor.getDouble( cursor.getColumnIndex("digital_money"));
+         Integer role_user = cursor.getInt( cursor.getColumnIndex("role_user"));
+         byte[] avatar = cursor.getBlob( cursor.getColumnIndex("avatar"));
+         Integer is_active = cursor.getInt( cursor.getColumnIndex("is_active"));
+
+         AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
+         int address_id = cursor.getInt(cursor.getColumnIndex("address_id"));
+         Address address = addressDAO.getAddressById(address_id);
+
+
+         user = new UserAccount(id, username, email, password, phone, digital_money, role_user, avatar, is_active, address);
+      }
+      if (cursor != null) {
+         cursor.close();
+      }
+      db.close();
+
+      return user;
+   }
+
 }

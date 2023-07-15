@@ -1,10 +1,11 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.nhom22.findhostel.Model.Cities;
+
 import com.nhom22.findhostel.Model.Type;
 
 public class TypeDAO {
@@ -42,5 +43,34 @@ public class TypeDAO {
         db.close();
 
         return type;
+    }
+
+    public long addType(Type type) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", type.getName());
+        values.put("is_active", type.getIsActive());
+
+        long id = db.insert("type", null, values);
+        db.close();
+        return id;
+    }
+
+    public void deleteAllType() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("type", null, null);
+
+        db.close();
+    }
+
+    public void resetTypeAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='type'";
+        db.execSQL(query);
+
+        db.close();
     }
 }

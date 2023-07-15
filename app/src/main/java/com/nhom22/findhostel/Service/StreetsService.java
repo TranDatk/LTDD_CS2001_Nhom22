@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.StreetsDAO;
 import com.nhom22.findhostel.Model.Streets;
-import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.YourApplication;
 
 import java.util.ArrayList;
@@ -54,5 +53,23 @@ public class StreetsService {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    public long addStreets(Streets streets) {
+        if(streets != null){
+            return STREETS_DAO.addStreets(streets);
+        }else{
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null streets", Toast.LENGTH_SHORT).show();
+            return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public void deleteAllStreets() {
+        STREETS_DAO.deleteAllStreets();
+    }
+
+    public void resetStreetsAutoIncrement() {
+        STREETS_DAO.resetStreetsAutoIncrement();
     }
 }

@@ -3,9 +3,7 @@ package com.nhom22.findhostel.Service;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.nhom22.findhostel.Data.CitiesDAO;
 import com.nhom22.findhostel.Data.DistricsDAO;
-import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.YourApplication;
 
@@ -55,5 +53,23 @@ public class DistrictsService {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    public long addDistricts(Districts district) {
+        if (district == null) {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null districts", Toast.LENGTH_SHORT).show();
+            return -1; // Trả về -1 để chỉ ra thao tác không thành công
+        }
+
+        return DISTRICS_DAO.addDistricts(district); // Trả về kết quả từ phương thức addDistricts() trong DAO
+    }
+
+    public void deleteAllDistricts() {
+        DISTRICS_DAO.deleteAllDistricts();
+    }
+
+    public void resetDistrictsAutoIncrement() {
+        DISTRICS_DAO.resetDistrictsAutoIncrement();
     }
 }

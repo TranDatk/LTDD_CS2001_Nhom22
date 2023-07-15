@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -44,5 +45,65 @@ public class ImagesDAO {
         db.close();
 
         return images;
+    }
+
+    public long addAImages(Images image) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("id", image.getId());
+        values.put("name", image.getName());
+        values.put("image", image.getImage());
+        values.put("is_active", image.getIsActive());
+
+        long result = db.insert("images", null, values);
+        if(result > 0){
+            result = getIdOfLastInsertedRow();
+        }
+        db.close();
+        return  result;
+    }
+
+    public void deleteAllImages() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("images", null, null);
+
+        db.close();
+    }
+
+    public void resetImagesAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='images'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public void insertImages(int idImages, byte[] image) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("image", image);
+        String whereClause = "id = ?";
+        String[] whereArgs = {String.valueOf(idImages)};
+        db.update("images", values, whereClause, whereArgs);
+        db.close();
+    }
+
+    public int getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "images";
+        Cursor cursor = db.rawQuery(query, null);
+
+        int id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }

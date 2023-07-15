@@ -55,4 +55,11 @@ public class CitiesService {
         }
     }
 
+    public void deleteAllCities() {
+        CITIES_DAO.deleteAllCities();
+    }
+
+    public void resetCitiesAutoIncrement() {
+        CITIES_DAO.resetCitiesAutoIncrement();
+    }
 }

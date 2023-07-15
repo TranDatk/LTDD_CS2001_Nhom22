@@ -19,7 +19,15 @@ public class Address {
         this.streets = streets;
     }
 
-    public Address() {}
+    public Address() {
+        this.id = 1;
+        this.houseNumber = "";
+        this.isActive = 1;
+        this.cities = null;
+        this.districts = null;
+        this.subDistricts = null;
+        this.streets = null;
+    }
 
     public int getId() {
         return id;
