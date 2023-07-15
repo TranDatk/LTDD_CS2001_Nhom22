@@ -4,4 +4,8 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">italic|bold</item>
     </style>
+
+    <style name="style1" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textColor">@color/lavender</item> <!-- Change to your desired text color -->
+    </style>
 </resources>

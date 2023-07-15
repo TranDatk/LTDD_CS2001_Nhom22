@@ -7,4 +7,6 @@
     <string name="enter_address">Enter Address</string>
     <string name="select_city">Select a city</string>
     <string name="login_text">Đăng nhập để có trải nghiệm tốt nhất &amp; đồng bộ hóa tài khoản tài khoản củạ bạn trên mọi thiết bị</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
