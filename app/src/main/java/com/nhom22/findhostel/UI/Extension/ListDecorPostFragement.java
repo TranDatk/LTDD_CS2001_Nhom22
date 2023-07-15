@@ -1,9 +1,13 @@
 package com.nhom22.findhostel.UI.Extension;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -34,7 +38,16 @@ public class ListDecorPostFragement extends Fragment {
     ListView lsvItem;
     ArrayList<PostDecor> arrItem;
     ItemPostAdapter itemAdapter;
+    private int userId = 0 ;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        userId = sharedPreferences.getInt("userId", -1);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,6 +57,16 @@ public class ListDecorPostFragement extends Fragment {
         View view = binding.getRoot();
 
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
+
+
+
+        if (userId > 0) {
+            binding.btnAddPostDeco.setVisibility(View.VISIBLE);
+        } else {
+            binding.btnAddPostDeco.setVisibility(View.GONE);
+        }
+
+
 
         lsvItem = binding.lvItemDecoPost;
         arrItem = new ArrayList<>();

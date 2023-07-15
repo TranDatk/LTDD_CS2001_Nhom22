@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -50,8 +51,17 @@ public class AccountPageFragment extends Fragment {
                     binding.screenLogined.setVisibility(View.VISIBLE);
                     binding.btnLogin.setVisibility(View.INVISIBLE);
                     binding.userName.setText("Xin chào " + username);
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                    binding.userAvatar.setImageBitmap(bitmap);
+                    try {
+                        if (image != null && image.length > 0) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                            binding.userAvatar.setImageBitmap(bitmap);
+                        } else {
+                            Toast.makeText(requireContext(), "Ko cos anh", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
+
 
                     binding.btnLogout.setVisibility(View.VISIBLE);
 

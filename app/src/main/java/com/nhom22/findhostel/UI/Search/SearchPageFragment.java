@@ -13,8 +13,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
 
@@ -86,9 +88,14 @@ public class SearchPageFragment extends Fragment {
         } catch (ParseException e) {
              throw new RuntimeException(e);
         }
-        SearchPageAdapter adapter = new SearchPageAdapter(this, items);
-        ListView lvPost = view.findViewById(R.id.lvPost);
-        lvPost.setAdapter(adapter);
+
+        if (!items.isEmpty()) {
+            SearchPageAdapter adapter = new SearchPageAdapter(this, items);
+            ListView lvPost = view.findViewById(R.id.lvPost);
+            lvPost.setAdapter(adapter);
+        }
+
+
         return view;
     }
 }

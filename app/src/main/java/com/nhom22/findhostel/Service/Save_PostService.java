@@ -63,6 +63,17 @@ public class Save_PostService {
         }
     }
 
+    public long deleteASavePostByUserIdAndPostId(int userId, int postId) {
+        if(userId >= 0 && postId >=0){
+            return SAVE_POST_DAO.deleteASavePostByUserIdAndPostId(userId, postId); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null savePostId", Toast.LENGTH_SHORT).show();
+            return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
     public List<Save_Post> getListSavePostByUserAccountId(int userId) throws ParseException {
         if(userId >= 0){
             return SAVE_POST_DAO.getListSavePostByUserAccountId(userId); // -1 Unsuccessful, >0 Successful
