@@ -91,7 +91,7 @@ public class ItemPostAdapter extends BaseAdapter {
 
         //chuyen byte -> bitmap
         byte[] avatar = user.getImage();
-        Bitmap bitmap2 = BitmapFactory.decodeByteArray(hinhAnh,0,hinhAnh.length);
+        Bitmap bitmap2 = BitmapFactory.decodeByteArray(avatar,0,avatar.length);
         holder.imgAvatar.setImageBitmap(bitmap2);
 
         holder.tvContent.post(new Runnable() {

@@ -40,17 +40,4 @@ public class PostDecorDAO{
 
         return id;
     }
-
-
-    private void closeStatement(PreparedStatement stmt) {
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
 }

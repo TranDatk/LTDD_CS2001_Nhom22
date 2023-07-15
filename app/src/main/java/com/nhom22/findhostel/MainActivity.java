@@ -71,10 +71,6 @@ public class MainActivity extends AppCompatActivity {
         Context context = this;
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-
-//        Save_PostService save_postService = new Save_PostService();
-//        save_postService.addASavePost(1, 1);
-
         binding.navigation.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override
             public void onTabSelected(int lastIndex, AnimatedBottomBar.Tab lastTab, int newIndex, AnimatedBottomBar.Tab newTab) {
@@ -112,15 +108,6 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         Detail_ImageService detail_imageService = new Detail_ImageService();
-    /*    try {
-            detail_imageService.addADetailImage(1,1);
-            detail_imageService.addADetailImage(2,1);
-            detail_imageService.addADetailImage(3,1);
-            detail_imageService.addADetailImage(4,1);
-            detail_imageService.addADetailImage(5,1);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }*/
 
         createFirebase();
     }
