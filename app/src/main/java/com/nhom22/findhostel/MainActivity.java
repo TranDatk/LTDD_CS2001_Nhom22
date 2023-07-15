@@ -11,18 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
-import com.nhom22.findhostel.Firebase.AddressFirebase;
-import com.nhom22.findhostel.Firebase.CitiesFirebase;
-import com.nhom22.findhostel.Firebase.Detail_ImageFirebase;
-import com.nhom22.findhostel.Firebase.DistrictsFirebase;
-import com.nhom22.findhostel.Firebase.FirebaseCallbackHandler;
+import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
-import com.nhom22.findhostel.Firebase.ImagesFirebase;
-import com.nhom22.findhostel.Firebase.PostsFirebase;
-import com.nhom22.findhostel.Firebase.StreetsFirebase;
-import com.nhom22.findhostel.Firebase.SubDistrictsFirebase;
-import com.nhom22.findhostel.Firebase.TypeFirebase;
-import com.nhom22.findhostel.Firebase.UserAccountFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Image;
@@ -39,7 +29,6 @@ import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
-import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
@@ -60,7 +49,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private FirebaseCallbackHandler firebaseCallbackHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,43 +96,58 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-        Detail_ImageService detail_imageService = new Detail_ImageService();
-
         createFirebase();
     }
 
     private void createFirebase() {
-        firebaseCallbackHandler = new FirebaseCallbackHandler(this);
-
-        CitiesFirebase citiesFirebase = new CitiesFirebase();
-        citiesFirebase.getCities(firebaseCallbackHandler);
-
-        DistrictsFirebase districtsFireBase = new DistrictsFirebase();
-        districtsFireBase.getDistricts(firebaseCallbackHandler);
-
-        SubDistrictsFirebase subDistrictsFireBase = new SubDistrictsFirebase();
-        subDistrictsFireBase.getSubDistricts(firebaseCallbackHandler);
-
-        StreetsFirebase streetsFirebase = new StreetsFirebase();
-        streetsFirebase.getStreets(firebaseCallbackHandler);
-
-        AddressFirebase addressFirebase = new AddressFirebase();
-        addressFirebase.getAddress(firebaseCallbackHandler);
-
-        UserAccountFirebase userAccountFirebase = new UserAccountFirebase();
-        userAccountFirebase.getUserAccount(firebaseCallbackHandler);
-
-        TypeFirebase typeFirebase = new TypeFirebase();
-        typeFirebase.getType(firebaseCallbackHandler);
-
-        PostsFirebase postsFirebase = new PostsFirebase();
-        postsFirebase.getPosts(firebaseCallbackHandler);
-
-        ImagesFirebase imagesFirebase = new ImagesFirebase();
-        imagesFirebase.getImages(firebaseCallbackHandler);
-
-        Detail_ImageFirebase detail_imageFirebase = new Detail_ImageFirebase();
-        detail_imageFirebase.getDetailImage(firebaseCallbackHandler);
+        FirebasePromises.getCities()
+                .thenCompose(cities -> {
+                    onCityLoaded(cities);
+                    return FirebasePromises.getDistricts();
+                })
+                .thenCompose(districts -> {
+                    onDistrictsLoaded(districts);
+                    return FirebasePromises.getSubDistricts();
+                })
+                .thenCompose(subDistricts -> {
+                    onSubDistrictsLoaded(subDistricts);
+                    return FirebasePromises.getStreets();
+                })
+                .thenCompose(streets -> {
+                    onStreetsLoaded(streets);
+                    return FirebasePromises.getAddress();
+                })
+                .thenCompose(addresses -> {
+                    onAddressLoaded(addresses);
+                    return FirebasePromises.getUserAccount();
+                })
+                .thenCompose(userAccounts -> {
+                    onUserAccountLoaded(userAccounts);
+                    return FirebasePromises.getType();
+                })
+                .thenCompose(types -> {
+                    onTypeLoaded(types);
+                    return FirebasePromises.getPosts();
+                })
+                .thenCompose(posts -> {
+                    onPostsLoaded(posts);
+                    return FirebasePromises.getImages();
+                })
+                .thenCompose(images -> {
+                    onImagesLoaded(images);
+                    return FirebasePromises.getDetailImage();
+                })
+                .thenAccept(detailImages -> {
+                    try {
+                        onDetailImageLoaded(detailImages);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .exceptionally(error -> {
+                    onError(error.getMessage());
+                    return null;
+                });
     }
 
     public void onDistrictsLoaded(List<Districts> districts) {
@@ -207,14 +211,11 @@ public class MainActivity extends AppCompatActivity {
 
         for (UserAccount userAccount : userAccountList) {
             userAccountService.addUserAccount(userAccount);
-
-            final UserAccount finalUserAccount = userAccount; // Tạo biến cuối cùng (final) bằng biến userAccount
-
             ImageUserAccountFirebase.getImageUserAccount(String.valueOf(userAccount.getId()) + ".png",
                     new ImageUserAccountFirebase.ImageDownloadListener() {
                         @Override
                         public void onImageDownloaded(byte[] imageData) {
-                            userAccountService.insertImageUserAccount(finalUserAccount.getId(), imageData);
+                            userAccountService.insertImageUserAccount(userAccount.getId(), imageData);
                         }
 
                         @Override
