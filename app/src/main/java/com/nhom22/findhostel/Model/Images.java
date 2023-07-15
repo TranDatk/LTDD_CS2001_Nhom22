@@ -13,6 +13,13 @@ public class Images {
         this.isActive = isActive;
     }
 
+    public Images() {
+        this.id = 1;
+        this.name = "";
+        this.image = null;
+        this.isActive = 1;
+    }
+
     public int getId() {
         return id;
     }

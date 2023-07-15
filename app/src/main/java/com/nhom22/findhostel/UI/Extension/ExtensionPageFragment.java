@@ -74,15 +74,14 @@ public class ExtensionPageFragment extends Fragment {
         binding.lnListHouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new CampaignPageFragment());
+                replaceFragment(new HostelCollectionPageFragment());
             }
         });
 
         binding.lnListDecor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ListDecorPost.class);
-                startActivity(intent);
+               replaceFragment(new ListDecorPostFragement());
             }
         });
 

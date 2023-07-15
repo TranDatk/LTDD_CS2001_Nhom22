@@ -15,6 +15,7 @@ import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.Detail_ImageService;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class ItemPostAdapter extends BaseAdapter {
     private UserAccount user;
 
     public static UserAccountDAO accountDAO;
-
 
     public ItemPostAdapter(Context context, int layout, List<PostDecor> itemPost) {
         this.context = context;
@@ -78,10 +78,10 @@ public class ItemPostAdapter extends BaseAdapter {
         holder.tvCreatedPost.setText(item.getCreatedDate());
         int id = item.getUserId();
 
-        /*UserAccountDAO dao = new UserAccountDAO(context);
+        UserAccountDAO dao = new UserAccountDAO(context);
         UserAccount user = dao.getUserAccountById(id);
 
-        holder.tvAuthor.setText(user.getUsername());*/
+        holder.tvAuthor.setText(user.getUsername());
 
 
         //chuyen byte -> bitmap
@@ -91,8 +91,18 @@ public class ItemPostAdapter extends BaseAdapter {
 
         //chuyen byte -> bitmap
         byte[] avatar = user.getImage();
-        Bitmap bitmap2 = BitmapFactory.decodeByteArray(hinhAnh,0,hinhAnh.length);
-        holder.imgAvatar.setImageBitmap(bitmap2);
+        try {
+            if (avatar != null && avatar.length > 0) {
+                Bitmap bitmap2 = BitmapFactory.decodeByteArray(avatar,0,avatar.length);
+                holder.imgAvatar.setImageBitmap(bitmap2);
+            } else {
+                // Handle the case where the image array is null or empty
+            }
+        } catch (Exception e) {
+            // Handle the exception appropriately (e.g., log the error, show an error message, etc.)
+        }
+
+
 
         holder.tvContent.post(new Runnable() {
             @Override

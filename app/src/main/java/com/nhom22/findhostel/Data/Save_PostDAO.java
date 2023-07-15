@@ -121,6 +121,18 @@ public class Save_PostDAO {
         return rowsAffected;
     }
 
+    public long deleteASavePostByUserIdAndPostId(int userId, int postId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String selection = "posts_id = ? AND user_id = ?";
+        String[] selectionArgs = {String.valueOf(postId), String.valueOf(userId)};
+
+        long rowsAffected = db.delete("save_post", selection, selectionArgs);
+        db.close();
+
+        return rowsAffected;
+    }
+
     public List<Save_Post> getListSavePostByUserAccountId(int userId) throws ParseException {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 

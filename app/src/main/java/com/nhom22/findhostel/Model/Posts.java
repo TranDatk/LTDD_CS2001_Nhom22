@@ -1,11 +1,11 @@
 package com.nhom22.findhostel.Model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class Posts {
     private int id;
-    private Timestamp timeFrom;
-    private Timestamp timeTo;
+    private Date timeFrom;
+    private Date timeTo;
     private String postName;
     private float price;
     private String description;
@@ -14,7 +14,7 @@ public class Posts {
     private UserAccount userAccount;
     private Type type;
 
-    public Posts(int id, Timestamp timeFrom, Timestamp timeTo, String postName, float price,
+    public Posts(int id, Date timeFrom, Date timeTo, String postName, float price,
                  String description, int activePost, Address address, UserAccount userAccount, Type type) {
         this.id = id;
         this.timeFrom = timeFrom;
@@ -28,6 +28,19 @@ public class Posts {
         this.type = type;
     }
 
+    public Posts() {
+        this.id = 1;
+        this.timeFrom = null;
+        this.timeTo = null;
+        this.postName = "";
+        this.price = 0;
+        this.description = "";
+        this.activePost = 1;
+        this.address = null;
+        this.userAccount = null;
+        this.type = null;
+    }
+
     public int getId() {
         return id;
     }
@@ -36,19 +49,19 @@ public class Posts {
         this.id = id;
     }
 
-    public Timestamp getTimeFrom() {
+    public Date getTimeFrom() {
         return timeFrom;
     }
 
-    public void setTimeFrom(Timestamp timeFrom) {
+    public void setTimeFrom(Date timeFrom) {
         this.timeFrom = timeFrom;
     }
 
-    public Timestamp getTimeTo() {
+    public Date getTimeTo() {
         return timeTo;
     }
 
-    public void setTimeTo(Timestamp timeTo) {
+    public void setTimeTo(Date timeTo) {
         this.timeTo = timeTo;
     }
 

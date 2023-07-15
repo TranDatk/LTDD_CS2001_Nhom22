@@ -5,7 +5,13 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:background="#f2f2f2">
+    <LinearLayout
+        android:id="@+id/postLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <ImageView
+        android:id="@+id/imgMain"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:src="@drawable/ic_launcher_background"
@@ -15,18 +21,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="5dp"
-        android:background="@color/white"
+        android:background="@drawable/border_background"
         android:padding="5dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2,000,000đ"
                 android:textSize="25dp"/>
             <TextView
+                android:id="@+id/tvType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Căn hộ"
@@ -66,12 +74,14 @@
         </LinearLayout>
     </LinearLayout>
     <TextView
+        android:id="@+id/tvAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25dp"
         android:text="gò vấp gò vấp gò vấp gò vấp gò vấp"
         android:layout_marginTop="5dp"
-        android:background="@color/white"
+        android:background="@drawable/border_background"
         android:padding="5dp"/>
+    </LinearLayout>
 
 </LinearLayout>

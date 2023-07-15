@@ -9,9 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 import com.nhom22.findhostel.databinding.FragmentSavePageBinding;
+
+import java.text.ParseException;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,10 +72,18 @@ public class SavePageFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentSavePageBinding binding = FragmentSavePageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        String[] items = {"item 1", "item 2", "item 3", "item 4", "item 5", "item 6"};
-        SavedPostAdapter adapter = new SavedPostAdapter(this, items);
-        ListView lvItems = view.findViewById(R.id.lvSavedPost);
-        lvItems.setAdapter(adapter);
+        Save_PostService save_postService = new Save_PostService();
+        List<Posts> items = null;
+        try {
+            items = save_postService.getListPostsByUserAccountId(1);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        if (!items.isEmpty()) {
+            SavedPostAdapter adapter = new SavedPostAdapter(this, items);
+            ListView lvItems = view.findViewById(R.id.lvSavedPost);
+            lvItems.setAdapter(adapter);
+        }
         return view;
     }
 }

@@ -33,6 +33,9 @@ public class UserAccountDAO{
       values.put("address_id",userAccount.getAddress().getId());
 
       long id = db.insert("user_account", null, values);
+      if(id > 0){
+         id = getIdOfLastInsertedRow();
+      }
 
       db.close();
 
@@ -122,6 +125,21 @@ public class UserAccountDAO{
       db.close();
    }
 
+   public int getIdOfLastInsertedRow() {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+      String query = "SELECT last_insert_rowid() FROM " + "user_account";
+      Cursor cursor = db.rawQuery(query, null);
+
+      int id = -1;
+      if (cursor != null && cursor.moveToFirst()) {
+         id = cursor.getInt(0);
+      }
+
+      cursor.close();
+      db.close();
+
+      return id;
+   }
 
    @SuppressLint("Range")
    public UserAccount checkUserLogin(String email, String password) {
@@ -132,7 +150,7 @@ public class UserAccountDAO{
       UserAccount user = null;
 
       if (cursor != null && cursor.moveToFirst()) {
-         int id = cursor.getInt(cursor.getColumnIndex("id"));
+          int id = cursor.getInt(cursor.getColumnIndex("id"));
          String username = cursor.getString(cursor.getColumnIndex("username"));
          String phone = cursor.getString(cursor.getColumnIndex("phone"));
          Double digital_money = cursor.getDouble( cursor.getColumnIndex("digital_money"));
@@ -154,4 +172,5 @@ public class UserAccountDAO{
 
       return user;
    }
+
 }
