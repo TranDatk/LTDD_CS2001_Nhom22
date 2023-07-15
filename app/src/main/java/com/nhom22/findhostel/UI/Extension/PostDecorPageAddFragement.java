@@ -1,8 +1,11 @@
 package com.nhom22.findhostel.UI.Extension;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,8 +31,10 @@ import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.PostDecorDAO;
 import com.nhom22.findhostel.Model.PostDecor;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.PostDecorService;
+import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.databinding.FragmentPostDecorPageAddBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -43,6 +48,7 @@ import java.util.Map;
 public class PostDecorPageAddFragement extends Fragment {
 
     public static PostDecorService postDecorService;
+    private static UserAccountService userAccountService;
 
     private static final String[] CAMERA_PERMISSION = {Manifest.permission.CAMERA};
 
@@ -67,6 +73,12 @@ public class PostDecorPageAddFragement extends Fragment {
         FragmentPostDecorPageAddBinding binding = FragmentPostDecorPageAddBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        int userId = sharedPreferences.getInt("userId", -1);
+
+//        UserAccount userAccount = userAccountService.getUserAccountById(userId);
+
         postDecorService = new PostDecorService();
 
         imageView = binding.imgPostDecor;
@@ -75,6 +87,8 @@ public class PostDecorPageAddFragement extends Fragment {
         EditText edtContent = binding.edtPostDecorContent;
         Button btnAdd = binding.btnAddImgPostDecor;
         Button btnCancel = binding.btnCancelPostDecor;
+
+
 
         edtContent.setFilters(new InputFilter[]{new MaxLengthInputFilter(100, edtContent)});
 
@@ -93,26 +107,39 @@ public class PostDecorPageAddFragement extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // chuyển data imageview -> byte[]
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] hinhAnh = byteArrayOutputStream.toByteArray();
 
-                Date currentDate = Calendar.getInstance().getTime();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String formattedDate = format.format(currentDate);
+                if(!binding.edtPostDecorContent.getText().toString().trim().isEmpty() && binding.edtPostDecorContent.getText().toString().trim() != null){
 
-                postDecorService.addPostDecor(new PostDecor(1000,
-                        edtContent.getText().toString().trim(),
-                        hinhAnh,
-                        formattedDate,
-                        1,
-                        1
-                ));
+                    if (imageView.getDrawable() != null) {
+                        // chuyển data imageview -> byte[]
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                        byte[] hinhAnh = byteArrayOutputStream.toByteArray();
 
-                replaceFragment(new ListDecorPostFragement());
+                        Date currentDate = Calendar.getInstance().getTime();
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        String formattedDate = format.format(currentDate);
+
+                        postDecorService.addPostDecor(new PostDecor(1000,
+                                edtContent.getText().toString().trim(),
+                                hinhAnh,
+                                formattedDate,
+                                userId,
+                                1
+                        ));
+
+                        replaceFragment(new ListDecorPostFragement());
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Bạn phải thêm ảnh vào bài viết", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "Bạn phải nhập nội dung bài viết", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -151,6 +178,7 @@ public class PostDecorPageAddFragement extends Fragment {
             Bundle extras = result.getData().getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
+            imageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -160,6 +188,7 @@ public class PostDecorPageAddFragement extends Fragment {
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
                 imageView.setImageBitmap(imageBitmap);
+                imageView.setVisibility(View.VISIBLE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
