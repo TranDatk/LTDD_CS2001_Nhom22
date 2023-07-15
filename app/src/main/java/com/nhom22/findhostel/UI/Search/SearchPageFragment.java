@@ -11,9 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
+
+import java.text.ParseException;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,7 +79,13 @@ public class SearchPageFragment extends Fragment {
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, itemsSpinner);
         snOptions.setAdapter(adapterSpinner);
-        String[] items = {"item 1", "item 2", "item 3", "item 4", "item 5", "item 6"};
+        PostsService postsService = new PostsService();
+        List<Posts> items = null;
+        try {
+            items = postsService.getAllPost();
+        } catch (ParseException e) {
+             throw new RuntimeException(e);
+        }
         SearchPageAdapter adapter = new SearchPageAdapter(this, items);
         ListView lvPost = view.findViewById(R.id.lvPost);
         lvPost.setAdapter(adapter);

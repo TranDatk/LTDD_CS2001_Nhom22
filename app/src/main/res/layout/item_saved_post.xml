@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:background="#f2f2f2">
+        android:background="@drawable/border_background">
         <ImageView
             android:id="@+id/imgMain"
             android:layout_width="80dp"
