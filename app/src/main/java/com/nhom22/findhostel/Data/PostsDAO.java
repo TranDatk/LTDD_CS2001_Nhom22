@@ -147,7 +147,7 @@ public class PostsDAO {
     }
 
     @SuppressLint("Range")
-    public List<Posts> getAllPost() throws ParseException {
+    public List<Posts> getAllPosts() throws ParseException {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] columns = {
