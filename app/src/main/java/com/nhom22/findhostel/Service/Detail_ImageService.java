@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Service;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -49,13 +50,18 @@ public class Detail_ImageService {
     public long addADetailImage(int imagesId, int postsId) throws ParseException {
         if(imagesId >= 0 && postsId >=0){
             long result = DETAIL_IMAGE_DAO.addADetailImage(imagesId, postsId);
-            ImagesService imagesService = new ImagesService();
-            PostsService postsService = new PostsService();
+            if(result < 1){
+                Log.d("AddDetail", "DetailImage uploaded failed");
+            }
+            else {
+                ImagesService imagesService = new ImagesService();
+                PostsService postsService = new PostsService();
 
-            Detail_Image detail_imageFirebase = new Detail_Image(Integer.parseInt(String.valueOf(result)),
-                    imagesService.getImagesById(imagesId),postsService.getPostById(postsId));
+                Detail_Image detail_imageFirebase = new Detail_Image(Integer.parseInt(String.valueOf(result)),
+                        imagesService.getImagesById(imagesId), postsService.getPostById(postsId));
 
-            detail_imageRef.child(String.valueOf(detail_imageFirebase.getId())).setValue(detail_imageFirebase);
+                detail_imageRef.child(String.valueOf(detail_imageFirebase.getId())).setValue(detail_imageFirebase);
+            }
 
             return result; // -1 Unsuccessful, >0 Successful
         }

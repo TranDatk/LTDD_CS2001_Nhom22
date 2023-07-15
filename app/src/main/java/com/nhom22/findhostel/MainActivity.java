@@ -51,7 +51,6 @@ import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
@@ -108,16 +107,16 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-        /*Detail_ImageService detail_imageService = new Detail_ImageService();
-        try {
+        Detail_ImageService detail_imageService = new Detail_ImageService();
+    /*    try {
             detail_imageService.addADetailImage(1,1);
+            detail_imageService.addADetailImage(2,1);
+            detail_imageService.addADetailImage(3,1);
+            detail_imageService.addADetailImage(4,1);
+            detail_imageService.addADetailImage(5,1);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }*/
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        AddressService addressService = new AddressService();
-        UserAccountService userAccountService = new UserAccountService();
-        TypeService typeService = new TypeService();
 
         createFirebase();
     }
