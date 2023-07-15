@@ -79,9 +79,11 @@ public class SavePageFragment extends Fragment {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        SavedPostAdapter adapter = new SavedPostAdapter(this, items);
-        ListView lvItems = view.findViewById(R.id.lvSavedPost);
-        lvItems.setAdapter(adapter);
+        if (!items.isEmpty()) {
+            SavedPostAdapter adapter = new SavedPostAdapter(this, items);
+            ListView lvItems = view.findViewById(R.id.lvSavedPost);
+            lvItems.setAdapter(adapter);
+        }
         return view;
     }
 }
