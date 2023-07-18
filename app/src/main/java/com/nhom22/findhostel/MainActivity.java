@@ -102,13 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
-        UtilitiesService utilitiesService = new UtilitiesService();
-        utilitiesService.addAUtilities(new Utilities(1,"Điện",1));
-        utilitiesService.addAUtilities(new Utilities(2,"Nước",1));
-        utilitiesService.addAUtilities(new Utilities(3,"Giữ xe",1));
-        utilitiesService.addAUtilities(new Utilities(4,"Rác",1));
-        utilitiesService.addAUtilities(new Utilities(5,"Mạng",1));
-
         createFirebase();
     }
 
