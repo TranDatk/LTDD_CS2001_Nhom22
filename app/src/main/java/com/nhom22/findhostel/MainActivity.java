@@ -25,6 +25,7 @@ import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.Model.Utilities;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.Detail_FurnitureService;
@@ -37,6 +38,7 @@ import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
 import com.nhom22.findhostel.Service.UserAccountService;
+import com.nhom22.findhostel.Service.UtilitiesService;
 import com.nhom22.findhostel.UI.Account.AccountPageFragment;
 import com.nhom22.findhostel.UI.Extension.ExtensionPageFragment;
 import com.nhom22.findhostel.UI.Notification.NotificationPageFragment;
@@ -100,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
+        UtilitiesService utilitiesService = new UtilitiesService();
+        utilitiesService.addAUtilities(new Utilities(1,"Điện",1));
+        utilitiesService.addAUtilities(new Utilities(2,"Nước",1));
+        utilitiesService.addAUtilities(new Utilities(3,"Giữ xe",1));
+        utilitiesService.addAUtilities(new Utilities(4,"Rác",1));
+        utilitiesService.addAUtilities(new Utilities(5,"Mạng",1));
+
         createFirebase();
     }
 
@@ -127,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .thenCompose(furniture-> {
                     onFurnitureLoaded(furniture);
+                    return FirebasePromises.getUtilities();
+                })
+                .thenCompose(utilities -> {
+                    onUtilitiesLoaded(utilities);
                     return FirebasePromises.getUserAccount();
                 })
                 .thenCompose(userAccounts -> {
@@ -311,6 +324,15 @@ public class MainActivity extends AppCompatActivity {
         detail_furnitureService.resetDetailFurnitureAutoIncrement();
         for (Detail_Furniture detail_furniture : detail_furnitureList) {
             detail_furnitureService.addADetailFurniture(detail_furniture);
+        }
+    }
+
+    public void onUtilitiesLoaded(List<Utilities> utilitiesList) {
+        UtilitiesService utilitiesService = new UtilitiesService();
+        utilitiesService.deleteAllUtilities();
+        utilitiesService.resetUtilitiesAutoIncrement();
+        for (Utilities utilities : utilitiesList) {
+            utilitiesService.addAUtilities(utilities);
         }
     }
 }

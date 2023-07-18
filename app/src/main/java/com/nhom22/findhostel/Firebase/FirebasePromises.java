@@ -12,6 +12,7 @@ import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.Model.Utilities;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -243,5 +244,24 @@ public class FirebasePromises {
         });
 
         return detail_furniture;
+    }
+
+    public static CompletableFuture<List<Utilities>> getUtilities() {
+        CompletableFuture<List<Utilities>> utilities = new CompletableFuture<>();
+
+        UtilitiesFirebase utilitiesFirebase = new UtilitiesFirebase();
+        utilitiesFirebase.getUtilities(new UtilitiesFirebase.UtilitiesCallback() {
+            @Override
+            public void onUtilitiesLoaded(List<Utilities> utilitiesList) {
+                utilities.complete(utilitiesList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                utilities.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return utilities;
     }
 }

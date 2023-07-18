@@ -11,6 +11,12 @@ public class Utilities {
         this.isActive = isActive;
     }
 
+    public Utilities() {
+        this.id = 1;
+        this.name = "";
+        this.isActive = 1;
+    }
+
     public int getId() {
         return id;
     }
