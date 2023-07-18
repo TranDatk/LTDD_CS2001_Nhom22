@@ -1,6 +1,6 @@
 # LTDD_CS2001_Nhom22
 
-This is a big exercise in Programming on mobile devices with the topic of building an application to find hostel. This project is made entirely of pure Java and generates and retrieves data using Sqlite.
+This is a big exercise in Programming on mobile devices with the topic of building an application to find hostel. This project is made entirely of pure Java and generates and retrieves data using Sqlite and Firebase.
 
  Database
 
