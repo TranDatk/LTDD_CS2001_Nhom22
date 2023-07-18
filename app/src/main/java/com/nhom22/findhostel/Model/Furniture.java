@@ -11,6 +11,12 @@ public class Furniture {
         this.isActive = isActive;
     }
 
+    public Furniture() {
+        this.id = 0;
+        this.name = "";
+        this.isActive = 1;
+    }
+
     public int getId() {
         return id;
     }

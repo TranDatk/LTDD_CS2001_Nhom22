@@ -15,8 +15,10 @@ import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
+import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Districts;
+import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Streets;
@@ -25,8 +27,10 @@ import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
+import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.DistrictsService;
+import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.StreetsService;
@@ -119,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .thenCompose(addresses -> {
                     onAddressLoaded(addresses);
+                    return FirebasePromises.getFurniture();
+                })
+                .thenCompose(furniture-> {
+                    onFurnitureLoaded(furniture);
                     return FirebasePromises.getUserAccount();
                 })
                 .thenCompose(userAccounts -> {
@@ -131,6 +139,14 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .thenCompose(posts -> {
                     onPostsLoaded(posts);
+                    return FirebasePromises.getDetailFurniture();
+                })
+                .thenCompose(detail_furnitures -> {
+                    try {
+                        onDetailFurnitureLoaded(detail_furnitures);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     return FirebasePromises.getImages();
                 })
                 .thenCompose(images -> {
@@ -277,6 +293,24 @@ public class MainActivity extends AppCompatActivity {
         detail_imageService.resetDetailImageAutoIncrement();
         for (Detail_Image detail_image : detail_imageList) {
             detail_imageService.addADetailImage(detail_image.getImages().getId(), detail_image.getPosts().getId());
+        }
+    }
+
+    public void onFurnitureLoaded(List<Furniture> furnitureList) {
+        FurnitureService furnitureService = new FurnitureService();
+        furnitureService.deleteAllFurniture();
+        furnitureService.resetFurnitureAutoIncrement();
+        for (Furniture furniture : furnitureList) {
+            furnitureService.addAFurniture(furniture);
+        }
+    }
+
+    public void onDetailFurnitureLoaded(List<Detail_Furniture> detail_furnitureList) throws ParseException {
+        Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+        detail_furnitureService.deleteAllDetailFurniture();
+        detail_furnitureService.resetDetailFurnitureAutoIncrement();
+        for (Detail_Furniture detail_furniture : detail_furnitureList) {
+            detail_furnitureService.addADetailFurniture(detail_furniture);
         }
     }
 }

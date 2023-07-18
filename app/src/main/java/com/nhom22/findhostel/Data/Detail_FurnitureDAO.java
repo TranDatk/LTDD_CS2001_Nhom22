@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Posts;
-import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -92,5 +92,55 @@ public class Detail_FurnitureDAO {
         db.close();
 
         return listFurniture;
+    }
+
+    public long addADetailFurniture(Detail_Furniture detailFurniture) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("quantity", detailFurniture.getQuantity());
+        values.put("posts_id",detailFurniture.getPosts().getId());
+        values.put("furniture_id",detailFurniture.getFurniture().getId());
+
+        long id = db.insert("detail_furniture", null, values);
+        if(id > 1){
+            id = getIdOfLastInsertedRow();
+        }
+        db.close();
+
+        return id;
+    }
+
+    public void deleteAllDetailFurniture() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("detail_furniture", null, null);
+
+        db.close();
+    }
+
+    public void resetDetailFurnitureAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='detail_furniture'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "detail_furniture";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }

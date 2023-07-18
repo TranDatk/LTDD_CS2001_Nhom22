@@ -91,7 +91,7 @@ public class FurnitureDAO {
         return furnitureList;
     }
 
-    public void deleteAllDetailImage() {
+    public void deleteAllFurniture() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         db.delete("furniture", null, null);
@@ -99,7 +99,7 @@ public class FurnitureDAO {
         db.close();
     }
 
-    public void resetDetailImageAutoIncrement() {
+    public void resetFurnitureAutoIncrement() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         String query = "DELETE FROM sqlite_sequence WHERE name='furniture'";

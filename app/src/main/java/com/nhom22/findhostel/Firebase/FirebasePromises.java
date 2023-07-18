@@ -2,8 +2,10 @@ package com.nhom22.findhostel.Firebase;
 
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
+import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Districts;
+import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Streets;
@@ -203,5 +205,43 @@ public class FirebasePromises {
         });
 
         return future;
+    }
+
+    public static CompletableFuture<List<Furniture>> getFurniture() {
+        CompletableFuture<List<Furniture>> furniture = new CompletableFuture<>();
+
+        FurnitureFirebase furnitureFirebase = new FurnitureFirebase();
+        furnitureFirebase.getFurniture(new FurnitureFirebase.FurnitureCallback() {
+            @Override
+            public void onFurnitureLoaded(List<Furniture> furnitureList) {
+                furniture.complete(furnitureList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                furniture.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return furniture;
+    }
+
+    public static CompletableFuture<List<Detail_Furniture>> getDetailFurniture() {
+        CompletableFuture<List<Detail_Furniture>> detail_furniture = new CompletableFuture<>();
+
+        Detail_FurnitureFirebase detail_furnitureFirebase = new Detail_FurnitureFirebase();
+        detail_furnitureFirebase.getDetailFurniture(new Detail_FurnitureFirebase.DetailFurnitureCallback() {
+            @Override
+            public void onDetailFurnitureLoaded(List<Detail_Furniture> detail_furnitureList) {
+                detail_furniture.complete(detail_furnitureList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                detail_furniture.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return detail_furniture;
     }
 }
