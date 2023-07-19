@@ -13,6 +13,13 @@ public class Detail_Furniture {
         this.furniture = furniture;
     }
 
+    public Detail_Furniture() {
+        this.id = 1;
+        this.quantity = 0;
+        this.posts = null;
+        this.furniture = null;
+    }
+
     public int getId() {
         return id;
     }
@@ -37,11 +44,11 @@ public class Detail_Furniture {
         this.posts = posts;
     }
 
-    public Furniture getAmenities() {
+    public Furniture getFurniture() {
         return furniture;
     }
 
-    public void setAmenities(Furniture furniture) {
+    public void setFurniture(Furniture furniture) {
         this.furniture = furniture;
     }
 }

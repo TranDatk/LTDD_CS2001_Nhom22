@@ -57,7 +57,9 @@ public class StreetsService {
 
     public long addStreets(Streets streets) {
         if(streets != null){
-            return STREETS_DAO.addStreets(streets);
+            long result = STREETS_DAO.addStreets(streets);
+
+            return result;
         }else{
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null streets", Toast.LENGTH_SHORT).show();
