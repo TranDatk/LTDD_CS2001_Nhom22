@@ -2,11 +2,14 @@ package com.nhom22.findhostel.UI.Extension;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -43,12 +47,15 @@ import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.HotelCollectionService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
+import com.nhom22.findhostel.Service.UserAccountService;
+import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentHostelCollectionPageAddBinding;
 import com.nhom22.findhostel.databinding.FragmentPostDecorPageAddBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +84,7 @@ public class HostelCollectionPageAddFragment extends Fragment {
     private final AddressService addressService = new AddressService();
     private final HotelCollectionService hotelCollectionService = new HotelCollectionService();
 
+    private final UserAccountService userAccountService = new UserAccountService();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,9 +192,15 @@ public class HostelCollectionPageAddFragment extends Fragment {
                 hostelCollection.setAddress(newAddress.getId());
 
 
+
+
                 long addHostelCollection = hotelCollectionService.addHostelCollection(hostelCollection);
                 if (addHostelCollection != -1) {
                     Toast.makeText(getContext(), "Tạo tin thành công!!!", Toast.LENGTH_LONG).show();
+                    List<UserAccount> userAccountList = userAccountService.getAllUserAccountByDistrictId(newAddress.getDistricts().getId());
+                    for (UserAccount user : userAccountList) {
+                        sendNotification(user.getUsername());
+                    }
                 } else {
                     Toast.makeText(getContext(), "Tạo tin không thành công!!!", Toast.LENGTH_LONG).show();
                 }
@@ -354,6 +368,26 @@ public class HostelCollectionPageAddFragment extends Fragment {
             }
         }
         return -1;
+    }
+
+
+
+    private void sendNotification(String content){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+        Notification notification = new NotificationCompat.Builder(getContext(), YourApplication.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_search)
+                .setContentTitle("Thông báo phòng trọ mới")
+                .setContentText("Hiện đang có 1 phòng trọ mới xung quanh khu vực " + content + " của bạn")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT).build();
+
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
+        if(notificationManager != null)
+            notificationManager.notify(getNotificationId(), notification);
+    }
+
+    private int getNotificationId(){
+        return (int) new Date().getTime();
     }
 
 }

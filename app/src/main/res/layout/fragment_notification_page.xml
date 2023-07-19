@@ -9,38 +9,12 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:orientation="vertical">
-    <TextView
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Day la trang Notification" />
+        android:text="Click"
+        android:textSize="20dp"
+        android:id="@+id/btn_add_notify"/>
  </LinearLayout>
 
 </FrameLayout>

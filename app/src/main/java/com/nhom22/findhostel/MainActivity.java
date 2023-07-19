@@ -1,8 +1,11 @@
 package com.nhom22.findhostel;
 
 
+import android.app.Notification;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -301,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
             detail_imageService.addADetailImage(detail_image.getImages().getId(), detail_image.getPosts().getId());
         }
     }
+
 
     public void onFurnitureLoaded(List<Furniture> furnitureList) {
         FurnitureService furnitureService = new FurnitureService();
