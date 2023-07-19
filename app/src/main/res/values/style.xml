@@ -8,4 +8,8 @@
     <style name="style1" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/lavender</item> <!-- Change to your desired text color -->
     </style>
+
+    <style name="BottomNavigationTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

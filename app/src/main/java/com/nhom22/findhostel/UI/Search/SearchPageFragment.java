@@ -92,8 +92,7 @@ public class SearchPageFragment extends Fragment {
         PostsService postsService = new PostsService();
         try {
             items = postsService.getAllPost();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        } catch (ParseException e) {throw new RuntimeException(e);
         }
 
         if (!items.isEmpty()) {

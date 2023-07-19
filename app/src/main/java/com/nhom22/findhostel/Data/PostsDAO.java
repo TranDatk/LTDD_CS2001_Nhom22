@@ -147,7 +147,7 @@ public class PostsDAO {
     }
 
     @SuppressLint("Range")
-    public List<Posts> getAllPosts() throws ParseException {
+    public List<Posts> getAllPosts() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] columns = {
@@ -179,10 +179,20 @@ public class PostsDAO {
             int ownerId = cursor.getInt(cursor.getColumnIndex("owner_id"));
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
-            // Chuyển đổi chuỗi thời gian thành đối tượng Date
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault());
-            Date timeFrom = dateFormat.parse(timeFromStr);
-            Date timeTo = dateFormat.parse(timeToStr);
+            // Create SimpleDateFormat with the correct pattern
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+
+            // Parse the date strings using the SimpleDateFormat
+            Date timeFrom;
+            Date timeTo;
+            try {
+                timeFrom = dateFormat.parse(timeFromStr);
+                timeTo = dateFormat.parse(timeToStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                // Handle the parsing exception as needed
+                continue; // Skip this iteration and proceed with the next iteration
+            }
 
             // Tạo các đối tượng liên quan
             AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
