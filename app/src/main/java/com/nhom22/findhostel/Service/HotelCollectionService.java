@@ -4,10 +4,11 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.HostelCollectionDAO;
-import com.nhom22.findhostel.Data.PostDecorDAO;
 import com.nhom22.findhostel.Model.HostelCollection;
-import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.YourApplication;
+
+import java.text.ParseException;
+import java.util.List;
 
 public class HotelCollectionService {
     private final static HostelCollectionDAO HOSTEL_COLLECTION_DAO;
@@ -37,5 +38,9 @@ public class HotelCollectionService {
             Toast.makeText(context, "Null hostelCollection", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
         }
+    }
+
+    public List<HostelCollection> getAllHostelCollection() {
+        return HOSTEL_COLLECTION_DAO.getAllHostelCollection();
     }
 }

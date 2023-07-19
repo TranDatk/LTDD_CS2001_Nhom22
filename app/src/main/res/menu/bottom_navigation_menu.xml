@@ -8,7 +8,7 @@
         android:title="Extension"
         android:icon="@drawable/ic_extention"/>
     <item android:id="@+id/navigation_info"
-        android:title="Lưu"
+        android:title="Save"
         android:icon="@drawable/ic_save"/>
     <item android:id="@+id/navigation_notification"
         android:title="Notification"

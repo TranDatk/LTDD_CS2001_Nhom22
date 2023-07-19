@@ -71,7 +71,7 @@ public class ListPostsFragement extends Fragment {
             throw new RuntimeException(e);
         }
 
-        itemAdapter = new ItemPostsHostelAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_hostel_collection_layout, arrItem);
+        itemAdapter = new ItemPostsHostelAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_search_post, arrItem);
         lsvItem.setAdapter(itemAdapter);
 
 

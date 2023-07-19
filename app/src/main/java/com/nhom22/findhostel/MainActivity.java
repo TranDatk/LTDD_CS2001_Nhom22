@@ -36,6 +36,7 @@ import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
@@ -68,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
         Context context = this;
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
+
+//        Save_PostService save_postService = new Save_PostService();
+//        save_postService.addASavePost(1, 1);
+//        save_postService.addASavePost(2, 1);
         binding.navigation.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override
             public void onTabSelected(int lastIndex, AnimatedBottomBar.Tab lastTab, int newIndex, AnimatedBottomBar.Tab newTab) {

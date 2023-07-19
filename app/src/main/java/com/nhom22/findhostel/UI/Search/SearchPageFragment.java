@@ -1,8 +1,11 @@
 package com.nhom22.findhostel.UI.Search;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +21,11 @@ import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.UI.Account.SecondRegisterFragment;
 import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -76,7 +81,8 @@ public class SearchPageFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentSearchPageBinding binding = FragmentSearchPageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        String[] itemsSpinner = {"Mặc định", "Mới nhất", "Chất lượng", "Giá thấp đến cao", "Giá cao đến thấp"};
+        ListView lvPost = view.findViewById(R.id.lvPost);
+        String[] itemsSpinner = {"Mặc định", "Mới nhất", "Giá thấp đến cao", "Giá cao đến thấp"};
         Spinner snOptions = view.findViewById(R.id.snOptions);
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, itemsSpinner);
@@ -86,16 +92,76 @@ public class SearchPageFragment extends Fragment {
         try {
             items = postsService.getAllPost();
         } catch (ParseException e) {
-             throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
 
         if (!items.isEmpty()) {
             SearchPageAdapter adapter = new SearchPageAdapter(this, items);
-            ListView lvPost = view.findViewById(R.id.lvPost);
             lvPost.setAdapter(adapter);
         }
 
+//        List<Posts> finalItems = items;
+//        lvPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                // Tạo Bundle và chuyển dữ liệu cần truyền vào
+//                Bundle dataBundle = new Bundle();
+//
+//                Posts p = finalItems.get(i);
+//
+//                dataBundle.putString("description", p.getDescription());
+//                dataBundle.putString("type", p.getType().getName());
+//                dataBundle.putString("price", String.valueOf(p.getPrice()));
+//                dataBundle.putString("address", p.getAddress().getHouseNumber() + ", " +
+//                        p.getAddress().getStreets().getName() + ", " +
+//                        p.getAddress().getSubDistrics().getName() + ", " +
+//                        p.getAddress().getDistricts().getName() + ", " +
+//                        p.getAddress().getCities().getName());
+//                dataBundle.putString("phoneNumber", p.getUserAccount().getPhone());
+////                dataBundle.putByteArray("avatar", p.getUserAccount().getImage());
+//
+//                // Tạo Fragment mới và gắn Bundle vào Fragment
+//                PostDetail postDetailFragment = new PostDetail();
+//                postDetailFragment.setArguments(dataBundle);
+//
+//                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
+//                replaceFragment(postDetailFragment);
+//            }
+//        });
+
+        snOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if (itemsSpinner[i].equals("Mới nhất")) {
+                    Toast.makeText(getContext(), "moi nhat", Toast.LENGTH_SHORT).show();
+                }
+
+                if (itemsSpinner[i].equals("Giá thấp đến cao")) {
+                    Toast.makeText(getContext(), "gia thap den cao", Toast.LENGTH_SHORT).show();
+                }
+
+                if (itemsSpinner[i].equals("Giá cao đến thấp")) {
+                    Toast.makeText(getContext(), "gia cao den thap", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         return view;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -4,8 +4,11 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.PostDecorDAO;
+import com.nhom22.findhostel.Model.HostelCollection;
 import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.YourApplication;
+
+import java.util.List;
 
 public class PostDecorService {
     private final static PostDecorDAO POST_DECOR_DAO;
@@ -24,5 +27,9 @@ public class PostDecorService {
             Toast.makeText(context, "Null postDecor", Toast.LENGTH_SHORT).show();
             return -1; // Return -1 to indicate unsuccessful operation
         }
+    }
+
+    public List<PostDecor> getAllPostDecor(){
+        return POST_DECOR_DAO.getAllPostDecor();
     }
 }
