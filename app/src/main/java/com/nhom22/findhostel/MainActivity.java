@@ -17,6 +17,7 @@ import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Detail_Image;
+import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
@@ -30,6 +31,7 @@ import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
@@ -158,6 +160,10 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
+                    return FirebasePromises.getDetailUtilities();
+                })
+                .thenCompose(detail_utilities -> {
+                    onDetailUtilitiesLoaded(detail_utilities);
                     return FirebasePromises.getImages();
                 })
                 .thenCompose(images -> {
@@ -331,6 +337,15 @@ public class MainActivity extends AppCompatActivity {
         utilitiesService.resetUtilitiesAutoIncrement();
         for (Utilities utilities : utilitiesList) {
             utilitiesService.addAUtilities(utilities);
+        }
+    }
+
+    public void onDetailUtilitiesLoaded(List<Detail_Utilities> detail_utilitiesList) {
+        Detail_UtilitiesService detail_utilitiesService = new Detail_UtilitiesService();
+        detail_utilitiesService.deleteAllDetailUtilities();
+        detail_utilitiesService.resetDetailUtilitiesAutoIncrement();
+        for (Detail_Utilities detail_utilities : detail_utilitiesList) {
+            detail_utilitiesService.addADetailUtilities(detail_utilities);
         }
     }
 }

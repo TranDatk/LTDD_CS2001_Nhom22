@@ -64,6 +64,7 @@ public class Detail_FurnitureDAO {
 
     public List<Furniture> getListFurnitureByPostsId(int postsId) throws ParseException {
         List<Furniture> listFurniture = new ArrayList<>();
+        FurnitureDAO furnitureDAO= new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -82,7 +83,6 @@ public class Detail_FurnitureDAO {
         while (cursor.moveToNext()) {
             @SuppressLint("Range") int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
 
-            FurnitureDAO furnitureDAO= new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
             Furniture furniture = furnitureDAO.getFurnitureById(furnitureId);
 
             listFurniture.add(furniture);
@@ -142,5 +142,37 @@ public class Detail_FurnitureDAO {
         db.close();
 
         return id;
+    }
+
+    public List<Furniture> getAllFurniture() {
+        List<Furniture> listFurniture = new ArrayList<>();
+        FurnitureDAO furnitureDAO= new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "quantity",
+                "posts_id",
+                "furniture_id"
+        };
+
+
+
+
+        Cursor cursor = db.query("detail_furniture", columns, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
+
+            Furniture furniture = furnitureDAO.getFurnitureById(furnitureId);
+
+            listFurniture.add(furniture);
+        }
+
+        cursor.close();
+        db.close();
+
+        return listFurniture;
     }
 }

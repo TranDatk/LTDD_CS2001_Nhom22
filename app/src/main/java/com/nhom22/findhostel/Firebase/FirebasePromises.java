@@ -4,6 +4,7 @@ import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Detail_Image;
+import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
@@ -263,5 +264,24 @@ public class FirebasePromises {
         });
 
         return utilities;
+    }
+
+    public static CompletableFuture<List<Detail_Utilities>> getDetailUtilities() {
+        CompletableFuture<List<Detail_Utilities>> detail_utilities = new CompletableFuture<>();
+
+        Detail_UtilitiesFirebase detail_utilitiesFirebase = new Detail_UtilitiesFirebase();
+        detail_utilitiesFirebase.getDetailUtilities(new Detail_UtilitiesFirebase.DetailUtilitiesCallback() {
+            @Override
+            public void onDetailUtilitiesLoaded(List<Detail_Utilities> detail_utilitiesList) {
+                detail_utilities.complete(detail_utilitiesList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                detail_utilities.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return detail_utilities;
     }
 }
