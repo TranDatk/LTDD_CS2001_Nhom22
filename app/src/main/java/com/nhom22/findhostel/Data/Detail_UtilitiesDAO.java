@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.Data;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -48,15 +49,15 @@ public class Detail_UtilitiesDAO {
             @SuppressLint("Range") int utilities_id = cursor.getInt(cursor.getColumnIndex("utilities_id"));
 
             // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
-            PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
             Posts post = postsDAO.getPostById(postId);
 
             // Lấy thông tin Furniture từ cơ sở dữ liệu dựa trên furnitureId
-            UtilitiesDAO utilitiesDAO= new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
+            UtilitiesDAO utilitiesDAO = new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
             Utilities utilities = utilitiesDAO.getUtilitiesById(utilities_id);
 
             // Tạo đối tượng Detail_Furniture từ các cột trong Cursor và các đối tượng Posts, Furniture
-            detail_utilities = new Detail_Utilities(detailUtilitiesId, quantity, unit, post,utilities);
+            detail_utilities = new Detail_Utilities(detailUtilitiesId, quantity, unit, post, utilities);
         }
 
         cursor.close();
@@ -67,6 +68,7 @@ public class Detail_UtilitiesDAO {
 
     public List<Utilities> getListUtilitiesByPostsId(int postsId) throws ParseException {
         List<Utilities> listUtilities = new ArrayList<>();
+        UtilitiesDAO utilitiesDAO = new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -86,7 +88,6 @@ public class Detail_UtilitiesDAO {
         while (cursor.moveToNext()) {
             @SuppressLint("Range") int utilitiesId = cursor.getInt(cursor.getColumnIndex("utilities_id"));
 
-            UtilitiesDAO utilitiesDAO = new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
             Utilities utilities = utilitiesDAO.getUtilitiesById(utilitiesId);
 
             listUtilities.add(utilities);
@@ -96,5 +97,88 @@ public class Detail_UtilitiesDAO {
         db.close();
 
         return listUtilities;
+    }
+
+    public List<Utilities> getAllUtilities() {
+        List<Utilities> utilitiesList = new ArrayList<>();
+        UtilitiesDAO utilitiesDAO = new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "price",
+                "unit",
+                "posts_id",
+                "utilities_id"
+        };
+
+
+        Cursor cursor = db.query("detail_utilities", columns, null, null,
+                null, null, null);
+
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") int utilitiesId = cursor.getInt(cursor.getColumnIndex("utilities_id"));
+
+            Utilities utilities = utilitiesDAO.getUtilitiesById(utilitiesId);
+
+            utilitiesList.add(utilities);
+        }
+
+        cursor.close();
+        db.close();
+
+        return utilitiesList;
+    }
+
+    public long addADetailUtilities(Detail_Utilities detail_utilities) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("price", detail_utilities.getPrice());
+        values.put("unit", detail_utilities.getUnit());
+        values.put("posts_id",detail_utilities.getPosts().getId());
+        values.put("utilities_id",detail_utilities.getUtilities().getId());
+
+        long id = db.insert("detail_utilities", null, values);
+        if(id > 1){
+            id = getIdOfLastInsertedRow();
+        }
+        db.close();
+
+        return id;
+    }
+
+    public void deleteAllDetailUtilities() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("detail_utilities", null, null);
+
+        db.close();
+    }
+
+    public void resetDetailUtilitiesAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='detail_utilities'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "detail_utilities";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }

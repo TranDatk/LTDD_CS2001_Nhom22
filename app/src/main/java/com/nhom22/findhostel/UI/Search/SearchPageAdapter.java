@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
@@ -55,11 +57,12 @@ public class SearchPageAdapter extends BaseAdapter {
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         TextView tvType = view.findViewById(R.id.tvType);
         TextView tvAddress = view.findViewById(R.id.tvAddress);
+        ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
 
         Detail_ImageService detail_imageService = new Detail_ImageService();
         List<Images> images = null;
         try {
-            images = detail_imageService.getListImageByPostsId(1);
+            images = detail_imageService.getListImageByPostsId(items.get(i).getId());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -71,11 +74,13 @@ public class SearchPageAdapter extends BaseAdapter {
 //        }
 
         if (images != null && !images.isEmpty()) {
-            byte[] image = images.get(0).getImage();
-            if (image != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                imgMain.setImageBitmap(bitmap);
-            }
+            ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(fragment.getContext(), images);
+            imageViewPager.setAdapter(imageSliderAdapter);
+//            byte[] image = images.get(0).getImage();
+//            if (image != null) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+//                imgMain.setImageBitmap(bitmap);
+//            }
         } else {
             // Handle the case when no images are available
             // For example, you can set a default image or hide the ImageView

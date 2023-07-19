@@ -15,6 +15,14 @@ public class Detail_Utilities {
         this.utilities = utilities;
     }
 
+    public Detail_Utilities() {
+        this.id = 1;
+        this.price = 0;
+        this.unit = "";
+        this.posts = null;
+        this.utilities = null;
+    }
+
     public int getId() {
         return id;
     }
@@ -47,11 +55,11 @@ public class Detail_Utilities {
         this.posts = posts;
     }
 
-    public Utilities getService() {
+    public Utilities getUtilities() {
         return utilities;
     }
 
-    public void setService(Utilities utilities) {
+    public void setUtilities(Utilities utilities) {
         this.utilities = utilities;
     }
 }

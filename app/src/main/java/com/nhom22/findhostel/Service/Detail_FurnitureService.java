@@ -26,10 +26,9 @@ public class Detail_FurnitureService {
     }
 
     public Detail_Furniture getADetailFurnitureById(int detailFurnitureId) throws ParseException {
-        if(detailFurnitureId >= 0){
+        if (detailFurnitureId >= 0) {
             return DETAIL_FURNITURE_DAO.getADetailFurnitureById(detailFurnitureId); // -1 Unsuccessful, >0 Successful
-        }
-        else {
+        } else {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null detailFurnitureId", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
@@ -37,10 +36,9 @@ public class Detail_FurnitureService {
     }
 
     public List<Furniture> getListFurnitureByPostsId(int postsId) throws ParseException {
-        if(postsId >= 0){
+        if (postsId >= 0) {
             return DETAIL_FURNITURE_DAO.getListFurnitureByPostsId(postsId); // -1 Unsuccessful, >0 Successful
-        }
-        else {
+        } else {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null postsId", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
@@ -51,24 +49,24 @@ public class Detail_FurnitureService {
         PostsService postsService = new PostsService();
         FurnitureService furnitureService = new FurnitureService();
 
-        if(detailFurniture == null){
+        if (detailFurniture == null) {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null detailFurniture", Toast.LENGTH_SHORT).show();
             return -1; // Return -1 to indicate unsuccessful operation
-        }else if(detailFurniture.getQuantity() < 0){
+        } else if (detailFurniture.getQuantity() < 0) {
             Log.e("addADetailFurniture", "getQuantity() < 0");
             return -1;
-        }else if(postsService.getPostById(detailFurniture.getPosts().getId()) == null){
+        } else if (postsService.getPostById(detailFurniture.getPosts().getId()) == null) {
             Log.e("addADetailFurniture", "detailFurniture.getIdPost() not in Database");
             return -1;
-        }else if(furnitureService.getFurnitureById(detailFurniture.getFurniture().getId()) == null){
+        } else if (furnitureService.getFurnitureById(detailFurniture.getFurniture().getId()) == null) {
             Log.e("addADetailFurniture", "detailFurniture.getIdFurniture() not in Database");
             return -1;
-        }else{
+        } else {
             long result = DETAIL_FURNITURE_DAO.addADetailFurniture(detailFurniture);
-            if(result < 1){
+            if (result < 1) {
                 Log.d("AddDetailFurniture", "Detail furniture uploaded failed");
-            }else{
+            } else {
                 Detail_Furniture detail_furnitureFirebase = new Detail_Furniture();
                 detail_furnitureFirebase.setId(Integer.parseInt(String.valueOf(result)));
                 detail_furnitureFirebase.setQuantity(detailFurniture.getQuantity());
@@ -90,5 +88,9 @@ public class Detail_FurnitureService {
 
     public void resetDetailFurnitureAutoIncrement() {
         DETAIL_FURNITURE_DAO.resetDetailFurnitureAutoIncrement();
+    }
+
+    public List<Furniture> getAllFurniture() {
+        return DETAIL_FURNITURE_DAO.getAllFurniture();
     }
 }
