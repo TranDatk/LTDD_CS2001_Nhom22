@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.Images;
-import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+
 
 import java.text.ParseException;
 import java.util.List;
@@ -92,7 +92,6 @@ public class ItemPostsHostelAdapter extends BaseAdapter {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
         if (images != null && !images.isEmpty()) {
             byte[] image = images.get(0).getImage();
             if (image != null) {

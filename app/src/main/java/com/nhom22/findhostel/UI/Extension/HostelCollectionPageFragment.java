@@ -18,22 +18,28 @@ import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.HostelCollection;
 import com.nhom22.findhostel.Model.PostDecor;
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.HotelCollectionService;
+import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentHostelCollectionPageAddBinding;
 import com.nhom22.findhostel.databinding.FragmentHostelCollectionPageBinding;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HostelCollectionPageFragment extends Fragment {
     public static DatabaseHelper dataBase;
     ListView lsvItem;
-    ArrayList<HostelCollection> arrItem;
+    List<HostelCollection> arrItem;
     ItemHotelCollectionAdapter itemAdapter;
     private final AddressService addressService = new AddressService();
+
+    private final HotelCollectionService hotelCollectionService = new HotelCollectionService();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,19 +55,10 @@ public class HostelCollectionPageFragment extends Fragment {
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
         lsvItem = binding.lvHotelCollection;
-        arrItem = new ArrayList<>();
+        arrItem = hotelCollectionService.getAllHostelCollection();
         itemAdapter = new ItemHotelCollectionAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_hostel_collection_layout, arrItem);
         lsvItem.setAdapter(itemAdapter);
 
-        Cursor cursor = dataBase.GetData("Select * From hostel_collection");
-        while(cursor.moveToNext()){
-            arrItem.add(new HostelCollection(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getBlob(2),
-                    cursor.getInt(3)
-            ));
-        }
         itemAdapter.notifyDataSetChanged();
 
         binding.btnAddHotelCollection.setOnClickListener(new View.OnClickListener() {
@@ -82,13 +79,17 @@ public class HostelCollectionPageFragment extends Fragment {
                 int itemDistrict = item.getAddress();
                 Address address = addressService.getAddressById(itemDistrict);
 
-                int itemSubDistrict = address.getSubDistrics().getId();
-                String text = String.valueOf(itemSubDistrict);
+                dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
+
+
+//                int itemSubDistrict = address.getSubDistrics().getId();
+//                String text = String.valueOf(itemSubDistrict);
+//                Toast.makeText(getContext(), String.valueOf(text), Toast.LENGTH_SHORT).show();
 
                 ListPostsFragement fragment = new ListPostsFragement();
                 Bundle bundle = new Bundle();
-                bundle.putString("key", text);
+                bundle.putString("key", "6");
                 fragment.setArguments(bundle);
 
                 replaceFragment(fragment);

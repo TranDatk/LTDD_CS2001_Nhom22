@@ -20,24 +20,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.PostDecorService;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentAccountPageBinding;
 import com.nhom22.findhostel.databinding.FragmentListDecorPostBinding;
 import com.nhom22.findhostel.databinding.FragmentSecondRegisterFragmentBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListDecorPostFragement#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListDecorPostFragement extends Fragment {
 
     public static DatabaseHelper dataBase;
     ListView lsvItem;
-    ArrayList<PostDecor> arrItem;
+    List<PostDecor> arrItem;
     ItemPostAdapter itemAdapter;
+
+    PostDecorService postDecorService = new PostDecorService();
     private int userId = 0 ;
 
     @Override
@@ -69,21 +68,10 @@ public class ListDecorPostFragement extends Fragment {
 
 
         lsvItem = binding.lvItemDecoPost;
-        arrItem = new ArrayList<>();
+        arrItem = postDecorService.getAllPostDecor();
         itemAdapter = new ItemPostAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_post_decor_layout, arrItem);
         lsvItem.setAdapter(itemAdapter);
 
-        Cursor cursor = dataBase.GetData("Select * From posts_extension Order By created_date DESC LIMIT 20");
-        while(cursor.moveToNext()){
-            arrItem.add(new PostDecor(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getBlob(2),
-                    cursor.getString(3),
-                    cursor.getInt(4),
-                    cursor.getInt(5)
-            ));
-        }
         itemAdapter.notifyDataSetChanged();
 
        binding.imgBtnBackExtension.setOnClickListener(new View.OnClickListener() {
