@@ -111,7 +111,13 @@ public class SavedPostAdapter extends BaseAdapter {
                         Posts p = items.get(i);
                         int postID = p.getId();
                         Save_PostService save_postService = new Save_PostService();
-                        save_postService.deleteASavePostByUserIdAndPostId(1, postID);
+
+                        try {
+                            save_postService.deleteASavePostByUserIdAndPostId(1, postID);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         Toast.makeText(view.getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
 
                         items.remove(i);

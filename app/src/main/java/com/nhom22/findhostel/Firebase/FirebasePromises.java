@@ -9,6 +9,7 @@ import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
@@ -283,5 +284,24 @@ public class FirebasePromises {
         });
 
         return detail_utilities;
+    }
+
+    public static CompletableFuture<List<Save_Post>> getSavePost() {
+        CompletableFuture<List<Save_Post>> future = new CompletableFuture<>();
+
+        Save_PostFirebase save_postFirebase = new Save_PostFirebase();
+        save_postFirebase.getSavePost(new Save_PostFirebase.SavePostCallback() {
+            @Override
+            public void onSavePostLoaded(List<Save_Post> savePostList) {
+                future.complete(savePostList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                future.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return future;
     }
 }
