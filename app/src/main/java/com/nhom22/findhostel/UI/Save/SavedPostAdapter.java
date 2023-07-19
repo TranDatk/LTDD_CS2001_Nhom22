@@ -77,16 +77,8 @@ public class SavedPostAdapter extends BaseAdapter {
                 imgMain.setImageBitmap(bitmap);
             }
         } else {
-            // Handle the case when no images are available
-            // For example, you can set a default image or hide the ImageView
-            imgMain.setImageDrawable(null); // Set a default image or hide the ImageView
+            imgMain.setImageDrawable(null);
         }
-//
-//        if (!images.isEmpty()) {
-//            byte[] image = images.get(0).getImage();
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-//            imgMain.setImageBitmap(bitmap);
-//        }
 
         tvAddress.setText(items.get(i).getAddress().getHouseNumber() + ", " +
                 items.get(i).getAddress().getStreets().getName() + ", " +
@@ -110,22 +102,23 @@ public class SavedPostAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Confirm Unsave");
-                builder.setMessage("Are you sure you want to unsave this post?");
+                builder.setTitle("Xác nhận");
+                builder.setMessage("Bạn có muốn xóa không ?");
 
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Xóa bài đăng đã lưu và thực hiện các hành động khác tùy ý
                         Posts p = items.get(i);
                         int postID = p.getId();
                         Save_PostService save_postService = new Save_PostService();
+
                         try {
                             save_postService.deleteASavePostByUserIdAndPostId(1, postID);
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
-                        Toast.makeText(view.getContext(), "Unsaved successfully", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(view.getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
 
                         items.remove(i);
                         notifyDataSetChanged();
@@ -134,10 +127,9 @@ public class SavedPostAdapter extends BaseAdapter {
                     }
                 });
 
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Không thực hiện bất kỳ hành động nào và đóng hộp thoại
                         dialog.dismiss();
                     }
                 });
@@ -146,10 +138,6 @@ public class SavedPostAdapter extends BaseAdapter {
                 dialog.show();
             }
         });
-
-        /*TextView tvItem = view.findViewById(R.id.tvItem);*/
-
-        /*tvItem.setText(items[i]);*/
 
         return view;
     }

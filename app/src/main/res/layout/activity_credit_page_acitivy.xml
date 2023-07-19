@@ -4,19 +4,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.HomeSecond.CreditPageAcitivy"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".UI.HomeSecond.CreditPageAcitivy">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
+        app:title="Credits của tôi"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Credit card"
-        android:textSize="50sp"/>
+        android:text="0 Credits"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:textColor="@color/green"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Có thể rút: 0"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_marginBottom="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btnRut"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/baseline_credit_card_24" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nạp Credit"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 Credit = 1,000đ"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/baseline_credit_card_24" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Your fragment container -->
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/navigationTop" />
+
+        <!-- Bottom navigation view -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigationTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@null"
+            app:itemTextAppearance="@style/BottomNavigationTextAppearance"
+            app:itemTextColor="@null"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/top_navigation_menu" />
+    </RelativeLayout>
 
 </LinearLayout>

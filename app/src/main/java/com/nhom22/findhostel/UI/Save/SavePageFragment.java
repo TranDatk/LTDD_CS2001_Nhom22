@@ -3,15 +3,19 @@ package com.nhom22.findhostel.UI.Save;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Save_PostService;
+import com.nhom22.findhostel.UI.Search.PostDetailFragment;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 import com.nhom22.findhostel.databinding.FragmentSavePageBinding;
 
@@ -24,6 +28,10 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class SavePageFragment extends Fragment {
+
+    ListView lvItems;
+
+    List<Posts> items = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,11 +77,10 @@ public class SavePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         FragmentSavePageBinding binding = FragmentSavePageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        lvItems = view.findViewById(R.id.lvSavedPost);
         Save_PostService save_postService = new Save_PostService();
-        List<Posts> items = null;
         try {
             items = save_postService.getListPostsByUserAccountId(1);
         } catch (ParseException e) {
@@ -81,9 +88,33 @@ public class SavePageFragment extends Fragment {
         }
         if (!items.isEmpty()) {
             SavedPostAdapter adapter = new SavedPostAdapter(this, items);
-            ListView lvItems = view.findViewById(R.id.lvSavedPost);
             lvItems.setAdapter(adapter);
         }
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle dataBundle = new Bundle();
+
+                dataBundle.putInt("id", items.get(i).getId());
+
+
+                PostDetailFragment postDetailFragment = new PostDetailFragment();
+                postDetailFragment.setArguments(dataBundle);
+
+                replaceFragment(postDetailFragment);
+            }
+        });
+
         return view;
     }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }

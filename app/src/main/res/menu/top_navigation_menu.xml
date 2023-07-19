@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_giaodich"
+        android:icon="@null"
+        android:title="Giao dịch" />
+    <item
+        android:id="@+id/action_dadung"
+        android:icon="@null"
+        android:title="Đã dùng" />
+    <item
+        android:id="@+id/action_dangdung"
+        android:icon="@null"
+        android:title="Đang dùng" />
+</menu>

@@ -19,9 +19,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.nhom22.findhostel.MainActivity;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 
@@ -29,6 +33,7 @@ public class HomeSecondActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Toolbar toolbar;
+    private Button btnPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class HomeSecondActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        btnPost = findViewById(R.id.postBtn);
 
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,7 +89,7 @@ public class HomeSecondActivity extends AppCompatActivity {
                     Intent intent = new Intent(HomeSecondActivity.this, HelperActivity.class);
                     startActivity(intent);
                 }else if (itemId == R.id.item5) {
-                    Intent intent = new Intent(HomeSecondActivity.this, SearchPageFragment.class);
+                    Intent intent = new Intent(HomeSecondActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else if (itemId == R.id.menu_logout) {
 
@@ -94,6 +100,20 @@ public class HomeSecondActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        btnPost.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeSecondActivity.this, PostOwnerActivity.class);
+            startActivity(intent);
+        });
+
+
+
+        ImageView gifImageView = findViewById(R.id.imageView);
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.profile)
+                .override(400, 400)
+                .into(gifImageView);
     }
 
 
