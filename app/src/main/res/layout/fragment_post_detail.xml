@@ -5,7 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".UI.Search.PostDetailFragment"
     android:orientation="vertical"
+    android:background="#f2f2f2"
     android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#f2f2f2">
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/baseline_arrow_back_24"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/postLayout"
@@ -13,13 +27,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/imageViewPager"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@drawable/border_background"
             android:contentDescription="Image Slider"
-            android:clickable="false" />
+            android:clickable="false"/>
 
 
         <!--        <androidx.viewpager.widget.ViewPager-->
@@ -43,7 +58,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:background="@drawable/border_background"
-            android:padding="5dp">
+            android:padding="10dp">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,7 +123,7 @@
             android:text="gò vấp gò vấp gò vấp gò vấp gò vấp"
             android:layout_marginTop="5dp"
             android:background="@drawable/border_background"
-            android:padding="5dp"/>
+            android:padding="10dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -125,7 +140,7 @@
             <ImageView
                 android:id="@+id/imgAvatar"
                 android:layout_width="45dp"
-                android:layout_height="45dp"/>
+                android:layout_height="45dp" />
             <TextView
                 android:id="@+id/tvPhoneNumber"
                 android:layout_width="match_parent"
@@ -133,7 +148,8 @@
                 android:text="0123456789"
                 android:textSize="20sp"
                 android:gravity="start"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -148,7 +164,7 @@
                 android:layout_height="45dp"
                 android:background="@drawable/baseline_local_phone_24"
                 android:text="call"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck"/>
 
             <Button
                 android:id="@+id/btnSms"
@@ -157,7 +173,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/baseline_sms_24"
                 android:text="sms"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="TouchTargetSizeCheck"/>
         </LinearLayout>
     </LinearLayout>
 

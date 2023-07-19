@@ -1,11 +1,8 @@
 package com.nhom22.findhostel;
 
 
-import android.app.Notification;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -39,7 +36,6 @@ import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
-import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
@@ -73,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
 
-//        Save_PostService save_postService = new Save_PostService();
-//        save_postService.addASavePost(1, 1);
-//        save_postService.addASavePost(2, 1);
         binding.navigation.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override
             public void onTabSelected(int lastIndex, AnimatedBottomBar.Tab lastTab, int newIndex, AnimatedBottomBar.Tab newTab) {
@@ -195,12 +188,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    public void onError(String errorMessage) {
-        Toast.makeText(MainActivity.this, "Thực hiện truy vấn firebase thất bại", Toast.LENGTH_LONG).show();
-        Log.d("FirebaseLog", errorMessage);
-    }
-
 
     public void onCityLoaded(List<Cities> cities) {
         CitiesService citiesService = new CitiesService();
@@ -351,6 +338,11 @@ public class MainActivity extends AppCompatActivity {
         for (Detail_Utilities detail_utilities : detail_utilitiesList) {
             detail_utilitiesService.addADetailUtilities(detail_utilities);
         }
+    }
+
+    public void onError(String errorMessage) {
+        Toast.makeText(MainActivity.this, "Thực hiện truy vấn firebase thất bại", Toast.LENGTH_LONG).show();
+        Log.d("FirebaseLog", errorMessage);
     }
 }
 

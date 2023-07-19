@@ -45,11 +45,14 @@
                 android:layout_marginTop="10dp"
                 android:background="#f0f0f0">
                 <EditText
+                    android:id="@+id/edtKeyword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="25dp"
-                    android:layout_weight="9"/>
+                    android:layout_weight="9"
+                    android:hint="địa chỉ, loại, mô tả"/>
                 <ImageButton
+                    android:id="@+id/btnSearch"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_search"

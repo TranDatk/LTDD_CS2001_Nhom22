@@ -6,10 +6,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -138,11 +141,6 @@ public class PostDetailFragment extends Fragment {
             if (images != null && !images.isEmpty()) {
                 ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(getContext(), images);
                 imageViewPager.setAdapter(imageSliderAdapter);
-//            byte[] image = images.get(0).getImage();
-//            if (image != null) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-//                imgMain.setImageBitmap(bitmap);
-//            }
             }
             byte[] avatar = p.getUserAccount().getImage();
             if (avatar != null) {
@@ -152,6 +150,15 @@ public class PostDetailFragment extends Fragment {
 
         }
 
+        TextView btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
         return view;
     }
+
 }
