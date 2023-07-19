@@ -22,6 +22,7 @@ import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
@@ -36,6 +37,7 @@ import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
@@ -148,6 +150,14 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .thenCompose(posts -> {
                     onPostsLoaded(posts);
+                    return FirebasePromises.getSavePost();
+                })
+                .thenCompose(savePosts -> {
+                    try {
+                        onSavePostLoaded(savePosts);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     return FirebasePromises.getDetailFurniture();
                 })
                 .thenCompose(detail_furnitures -> {
@@ -337,6 +347,15 @@ public class MainActivity extends AppCompatActivity {
         detail_utilitiesService.resetDetailUtilitiesAutoIncrement();
         for (Detail_Utilities detail_utilities : detail_utilitiesList) {
             detail_utilitiesService.addADetailUtilities(detail_utilities);
+        }
+    }
+
+    public void onSavePostLoaded(List<Save_Post> save_postList) throws ParseException {
+        Save_PostService save_postService = new Save_PostService();
+        save_postService.deleteAllSavePost();
+        save_postService.resetSavePostAutoIncrement();
+        for (Save_Post savePost : save_postList) {
+            save_postService.addASavePost(savePost.getPosts().getId(), savePost.getUserAccount().getId());
         }
     }
 

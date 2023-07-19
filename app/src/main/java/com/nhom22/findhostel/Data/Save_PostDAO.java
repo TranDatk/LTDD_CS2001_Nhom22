@@ -69,7 +69,7 @@ public class Save_PostDAO {
                 "user_id"
         };
 
-        String selection = "post_id = ? AND user_id = ?";
+        String selection = "posts_id = ? AND user_id = ?";
         String[] selectionArgs = {String.valueOf(postId), String.valueOf(userAccountId)};
 
         Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
