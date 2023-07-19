@@ -151,8 +151,7 @@ public class HomeSecondActivity extends AppCompatActivity {
                     Intent intent = new Intent(HomeSecondActivity.this, HelperActivity.class);
                     startActivity(intent);
                 } else if (itemId == R.id.item5) {
-                    Intent intent = new Intent(HomeSecondActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    showConfirmationDialog();
                 } else if (itemId == R.id.menu_logout) {
                     if (userId < 0) {
                         Toast.makeText(getApplicationContext(), "Bạn chưa đăng nhập !! Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
@@ -191,6 +190,25 @@ public class HomeSecondActivity extends AppCompatActivity {
         editor.clear();
         editor.apply();
     }
-
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeSecondActivity.this);
+        builder.setTitle("Bạn có muốn đổi vai trò người thuê không?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(HomeSecondActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }
