@@ -26,5 +26,9 @@
         android:id="@+id/menu_logout"
         android:title="Đăng xuất"
         android:icon="@drawable/baseline_logout_24"/>
+    <item
+        android:id="@+id/menu_login"
+        android:title="Đăng nhập"
+        android:icon="@drawable/baseline_logout_24"/>
 
 </menu>
