@@ -93,4 +93,14 @@ public class Detail_FurnitureService {
     public List<Furniture> getAllFurniture() {
         return DETAIL_FURNITURE_DAO.getAllFurniture();
     }
+
+    public List<Furniture> getListDetailFurnitureByPostId(int postsId) throws ParseException {
+        if (postsId >= 0) {
+            return DETAIL_FURNITURE_DAO.getListDetailFurnitureByPostId(postsId); // -1 Unsuccessful, >0 Successful
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null postsId", Toast.LENGTH_SHORT).show();
+            return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
 }
