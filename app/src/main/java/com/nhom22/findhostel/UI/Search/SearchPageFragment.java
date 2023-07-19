@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class SearchPageFragment extends Fragment {
 
+    List<Posts> items = null;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -88,7 +90,6 @@ public class SearchPageFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, itemsSpinner);
         snOptions.setAdapter(adapterSpinner);
         PostsService postsService = new PostsService();
-        List<Posts> items = null;
         try {
             items = postsService.getAllPost();
         } catch (ParseException e) {
@@ -100,34 +101,22 @@ public class SearchPageFragment extends Fragment {
             lvPost.setAdapter(adapter);
         }
 
-//        List<Posts> finalItems = items;
-//        lvPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                // Tạo Bundle và chuyển dữ liệu cần truyền vào
-//                Bundle dataBundle = new Bundle();
-//
-//                Posts p = finalItems.get(i);
-//
-//                dataBundle.putString("description", p.getDescription());
-//                dataBundle.putString("type", p.getType().getName());
-//                dataBundle.putString("price", String.valueOf(p.getPrice()));
-//                dataBundle.putString("address", p.getAddress().getHouseNumber() + ", " +
-//                        p.getAddress().getStreets().getName() + ", " +
-//                        p.getAddress().getSubDistrics().getName() + ", " +
-//                        p.getAddress().getDistricts().getName() + ", " +
-//                        p.getAddress().getCities().getName());
-//                dataBundle.putString("phoneNumber", p.getUserAccount().getPhone());
-////                dataBundle.putByteArray("avatar", p.getUserAccount().getImage());
-//
-//                // Tạo Fragment mới và gắn Bundle vào Fragment
-//                PostDetail postDetailFragment = new PostDetail();
-//                postDetailFragment.setArguments(dataBundle);
-//
-//                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
-//                replaceFragment(postDetailFragment);
-//            }
-//        });
+        lvPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Tạo Bundle và chuyển dữ liệu cần truyền vào
+                Bundle dataBundle = new Bundle();
+
+                dataBundle.putInt("id", items.get(i).getId());
+
+                // Tạo Fragment mới và gắn Bundle vào Fragment
+                PostDetailFragment postDetailFragment = new PostDetailFragment();
+                postDetailFragment.setArguments(dataBundle);
+
+                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
+                replaceFragment(postDetailFragment);
+            }
+        });
 
         snOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
