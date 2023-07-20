@@ -54,7 +54,6 @@ public class SecondRegisterFragment extends Fragment {
     private final StreetsService streetsService = new StreetsService();
 
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSecondRegisterFragmentBinding.inflate(inflater, container, false);
@@ -76,7 +75,6 @@ public class SecondRegisterFragment extends Fragment {
         autoDistrictField.setEnabled(false);
         autoSubDistrictField.setEnabled(false);
         autoStreetField.setEnabled(false);
-
 
 
         autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
@@ -104,70 +102,101 @@ public class SecondRegisterFragment extends Fragment {
         });
 
         nextButton.setOnClickListener(v -> {
-            ThirdRegisterFragment thirdRegisterFragment = new ThirdRegisterFragment();
-            Bundle dataBundle = new Bundle();
+            String city = autoCitiesField.getText().toString();
+            String district = autoDistrictField.getText().toString();
+            String subdistrict = autoSubDistrictField.getText().toString();
+            String street = autoStreetField.getText().toString();
+            String housenum = houseNumberEditText.getText().toString();
+            boolean isDataValid = true;
+            if (TextUtils.isEmpty(city)) {
+                isDataValid = false;
+                autoCitiesField.setError("Chưa chọn thành phố");
+            }
 
-            ClipData clipData = clipboardManager.getPrimaryClip();
-            if (clipData != null && clipData.getItemCount() > 0) {
-                ClipData.Item item = clipData.getItemAt(0);
-                String clipboardData = item.getText().toString();
-                String[] userData = clipboardData.split("\\|");
+            if (TextUtils.isEmpty(district)) {
+                isDataValid = false;
+                autoDistrictField.setError("Chưa chọn quận");
+            }
 
-                String selectedCityName = autoCitiesField.getText().toString();
-                if (!TextUtils.isEmpty(selectedCityName)) {
-                    int cityID = getCitiesIdByName(selectedCityName);
-                    dataBundle.putInt("citiesId", cityID);
+            if (TextUtils.isEmpty(subdistrict)) {
+                isDataValid = false;
+                autoSubDistrictField.setError("Chưa chọn phường");
+            }
+
+            if (TextUtils.isEmpty(street)) {
+                isDataValid = false;
+                autoStreetField.setError("Chưa chọn tên đường");
+            }
+
+            if (TextUtils.isEmpty(housenum)) {
+                isDataValid = false;
+                houseNumberEditText.setError("Chưa nhập số nhà");
+            }
+            if (isDataValid) {
+                ThirdRegisterFragment thirdRegisterFragment = new ThirdRegisterFragment();
+                Bundle dataBundle = new Bundle();
+
+                ClipData clipData = clipboardManager.getPrimaryClip();
+                if (clipData != null && clipData.getItemCount() > 0) {
+                    ClipData.Item item = clipData.getItemAt(0);
+                    String clipboardData = item.getText().toString();
+                    String[] userData = clipboardData.split("\\|");
+
+                    String selectedCityName = autoCitiesField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedCityName)) {
+                        int cityID = getCitiesIdByName(selectedCityName);
+                        dataBundle.putInt("citiesId", cityID);
+                    }
+
+                    String selectedDistrictName = autoDistrictField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedDistrictName)) {
+                        int districtId = getDistrictByName(selectedDistrictName);
+                        dataBundle.putInt("districtId", districtId);
+                        dataBundle.putString("selectedDistrictName", selectedDistrictName);
+                    }
+
+                    String selectedSubDistrictName = autoSubDistrictField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedSubDistrictName)) {
+                        int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
+                        dataBundle.putInt("subDistrictId", subDistrictId);
+                        dataBundle.putString("selectedSubDistrictName", selectedSubDistrictName);
+                    }
+
+                    String selectedStreetName = autoStreetField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedStreetName)) {
+                        int streetId = getStreetIdByName(selectedStreetName);
+                        dataBundle.putInt("streetId", streetId);
+                        dataBundle.putString("selectedStreetName", selectedStreetName);
+                    }
+
+                    String email = userData[0];
+                    String username = userData[1];
+                    String password = userData[2];
+                    String phone = userData[3];
+                    String houseNumber = houseNumberEditText.getText().toString();
+
+                    dataBundle.putString("email", email);
+                    dataBundle.putString("username", username);
+                    dataBundle.putString("password", password);
+                    dataBundle.putString("phone", phone);
+                    dataBundle.putString("houseNumber", houseNumber);
+
+                    thirdRegisterFragment.setArguments(dataBundle);
+
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_container, thirdRegisterFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
-
-                String selectedDistrictName = autoDistrictField.getText().toString();
-                if (!TextUtils.isEmpty(selectedDistrictName)) {
-                    int districtId = getDistrictByName(selectedDistrictName);
-                    dataBundle.putInt("districtId", districtId);
-                    dataBundle.putString("selectedDistrictName", selectedDistrictName);
-                }
-
-                String selectedSubDistrictName = autoSubDistrictField.getText().toString();
-                if (!TextUtils.isEmpty(selectedSubDistrictName)) {
-                    int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
-                    dataBundle.putInt("subDistrictId", subDistrictId);
-                    dataBundle.putString("selectedSubDistrictName", selectedSubDistrictName);
-                }
-
-                String selectedStreetName = autoStreetField.getText().toString();
-                if (!TextUtils.isEmpty(selectedStreetName)) {
-                    int streetId = getStreetIdByName(selectedStreetName);
-                    dataBundle.putInt("streetId", streetId);
-                    dataBundle.putString("selectedStreetName", selectedStreetName);
-                }
-
-                String email = userData[0];
-                String username = userData[1];
-                String password = userData[2];
-                String phone = userData[3];
-                String houseNumber = houseNumberEditText.getText().toString();
-
-                dataBundle.putString("email", email);
-                dataBundle.putString("username", username);
-                dataBundle.putString("password", password);
-                dataBundle.putString("phone", phone);
-                dataBundle.putString("houseNumber", houseNumber);
-
-                thirdRegisterFragment.setArguments(dataBundle);
-
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame_container, thirdRegisterFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
             }
         });
-
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                goBackToPreviousFragment();
             }
         });
 
@@ -272,10 +301,19 @@ public class SecondRegisterFragment extends Fragment {
         return -1;
     }
 
+    private void goBackToPreviousFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.popBackStackImmediate();
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

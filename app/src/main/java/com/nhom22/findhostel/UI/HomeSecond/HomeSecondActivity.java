@@ -117,7 +117,6 @@ public class HomeSecondActivity extends AppCompatActivity {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(avt, 0, avt.length);
                     imgAvatar.setImageBitmap(bitmap);
                 } else {
-
 //                    imgAvatar.setImageResource(R.drawable.placeholder_image);
                 }
             }
@@ -159,9 +158,12 @@ public class HomeSecondActivity extends AppCompatActivity {
                         performLogout();
                     }
                 } else if (itemId == R.id.menu_login) {
-
-                    Intent intent = new Intent(HomeSecondActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    if (userId > 0) {
+                        Toast.makeText(getApplicationContext(), "Bạn đã đăng nhập rồi !!!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(HomeSecondActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
