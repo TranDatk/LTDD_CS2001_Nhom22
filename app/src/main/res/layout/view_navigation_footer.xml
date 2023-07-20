@@ -4,18 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!-- Your footer view content here -->
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- Your footer view content here -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="left"
         android:padding="15dp">
 
         <TextView
@@ -27,15 +24,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:textSize="14sp"
             android:textColor="#665481"
             android:text="Điều khoản và Điều kiện" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginLeft="10dp"
+            android:textSize="13sp"
+            android:layout_marginStart="6dp"
             android:text="Chính sách" />
     </LinearLayout>
 

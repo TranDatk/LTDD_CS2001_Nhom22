@@ -11,6 +11,12 @@ public class Save_Post {
         this.userAccount = userAccount;
     }
 
+    public Save_Post() {
+        this.id = 1;
+        this.posts = null;
+        this.userAccount = null;
+    }
+
     public int getId() {
         return id;
     }

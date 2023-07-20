@@ -3,8 +3,6 @@ package com.nhom22.findhostel;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,6 +22,7 @@ import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
@@ -72,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
 
-//        Save_PostService save_postService = new Save_PostService();
-//        save_postService.addASavePost(1, 1);
-//        save_postService.addASavePost(2, 1);
         binding.navigation.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override
             public void onTabSelected(int lastIndex, AnimatedBottomBar.Tab lastTab, int newIndex, AnimatedBottomBar.Tab newTab) {
@@ -154,6 +150,14 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .thenCompose(posts -> {
                     onPostsLoaded(posts);
+                    return FirebasePromises.getSavePost();
+                })
+                .thenCompose(savePosts -> {
+                    try {
+                        onSavePostLoaded(savePosts);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     return FirebasePromises.getDetailFurniture();
                 })
                 .thenCompose(detail_furnitures -> {
@@ -194,12 +198,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    public void onError(String errorMessage) {
-        Toast.makeText(MainActivity.this, "Thực hiện truy vấn firebase thất bại", Toast.LENGTH_LONG).show();
-        Log.d("FirebaseLog", errorMessage);
-    }
-
 
     public void onCityLoaded(List<Cities> cities) {
         CitiesService citiesService = new CitiesService();
@@ -350,6 +348,20 @@ public class MainActivity extends AppCompatActivity {
         for (Detail_Utilities detail_utilities : detail_utilitiesList) {
             detail_utilitiesService.addADetailUtilities(detail_utilities);
         }
+    }
+
+    public void onSavePostLoaded(List<Save_Post> save_postList) throws ParseException {
+        Save_PostService save_postService = new Save_PostService();
+        save_postService.deleteAllSavePost();
+        save_postService.resetSavePostAutoIncrement();
+        for (Save_Post savePost : save_postList) {
+            save_postService.addASavePost(savePost.getPosts().getId(), savePost.getUserAccount().getId());
+        }
+    }
+
+    public void onError(String errorMessage) {
+        Toast.makeText(MainActivity.this, "Thực hiện truy vấn firebase thất bại", Toast.LENGTH_LONG).show();
+        Log.d("FirebaseLog", errorMessage);
     }
 }
 

@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 
 import java.text.ParseException;
@@ -26,6 +28,8 @@ import java.util.logging.SimpleFormatter;
 public class SearchPageAdapter extends BaseAdapter {
 
     private List<Posts> items;
+
+    private List<Furniture> furs;
 
     private SearchPageFragment fragment;
 
@@ -58,6 +62,8 @@ public class SearchPageAdapter extends BaseAdapter {
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         TextView tvType = view.findViewById(R.id.tvType);
         TextView tvAddress = view.findViewById(R.id.tvAddress);
+        TextView tvBed = view.findViewById(R.id.tvBed);
+        TextView tvShower = view.findViewById(R.id.tvShower);
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
 
 
@@ -70,24 +76,22 @@ public class SearchPageAdapter extends BaseAdapter {
             throw new RuntimeException(e);
         }
 
-//        if (!images.isEmpty()) {
-//            byte[] image = images.get(0).getImage();
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-//            imgMain.setImageBitmap(bitmap);
-//        }
-
         if (images != null && !images.isEmpty()) {
             ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(fragment.getContext(), images);
             imageViewPager.setAdapter(imageSliderAdapter);
-//            byte[] image = images.get(0).getImage();
-//            if (image != null) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-//                imgMain.setImageBitmap(bitmap);
 //            }
         } else {
-            // Handle the case when no images are available
-            // For example, you can set a default image or hide the ImageView
-            imgMain.setImageDrawable(null); // Set a default image or hide the ImageView
+            imgMain.setImageDrawable(null);
+        }
+
+        Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+        try {
+            furs = detail_furnitureService.getListFurnitureByPostsId(items.get(i).getId());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (furs != null && !furs.isEmpty()) {
         }
 
         tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");

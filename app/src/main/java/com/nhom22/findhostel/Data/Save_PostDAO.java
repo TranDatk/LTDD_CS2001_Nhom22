@@ -69,7 +69,7 @@ public class Save_PostDAO {
                 "user_id"
         };
 
-        String selection = "post_id = ? AND user_id = ?";
+        String selection = "posts_id = ? AND user_id = ?";
         String[] selectionArgs = {String.valueOf(postId), String.valueOf(userAccountId)};
 
         Cursor cursor = db.query("save_post", columns, selection, selectionArgs, null, null, null);
@@ -104,6 +104,9 @@ public class Save_PostDAO {
         values.put("user_id", userAccountId);
 
         long id = db.insert("save_post", null, values);
+        if(id > 0){
+            id = getIdOfLastInsertedRow();
+        }
         db.close();
 
         return id;
@@ -201,5 +204,38 @@ public class Save_PostDAO {
         db.close();
 
         return listPosts;
+    }
+
+    public void deleteAllSavePost() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("save_post", null, null);
+
+        db.close();
+    }
+
+    public void resetSavePostAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='save_post'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "save_post";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }
