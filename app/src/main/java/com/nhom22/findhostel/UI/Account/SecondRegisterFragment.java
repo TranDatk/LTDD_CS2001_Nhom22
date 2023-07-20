@@ -218,7 +218,7 @@ public class SecondRegisterFragment extends Fragment {
             cityNameList.add(city.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, cityNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, cityNameList);
         autoCitiesField.setAdapter(adapter);
     }
 
@@ -230,7 +230,7 @@ public class SecondRegisterFragment extends Fragment {
             districtNameList.add(district.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, districtNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, districtNameList);
         autoDistrictField.setAdapter(adapter);
     }
 
@@ -242,7 +242,7 @@ public class SecondRegisterFragment extends Fragment {
             subDistrictNameList.add(subDistrict.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, subDistrictNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, subDistrictNameList);
         autoSubDistrictField.setAdapter(adapter);
     }
 
@@ -254,7 +254,7 @@ public class SecondRegisterFragment extends Fragment {
             streetNameList.add(street.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, streetNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_dropdown_item, streetNameList);
         autoStreetField.setAdapter(adapter);
     }
 

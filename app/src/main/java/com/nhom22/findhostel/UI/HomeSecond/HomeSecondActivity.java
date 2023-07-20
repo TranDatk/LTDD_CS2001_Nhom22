@@ -96,18 +96,18 @@ public class HomeSecondActivity extends AppCompatActivity {
             ImageView imgAvatar = headerView.findViewById(R.id.AvatarImage);
             TextView txtUsername = headerView.findViewById(R.id.userNameSecond);
             TextView txtPhone = headerView.findViewById(R.id.phoneSecond);
-            TextView test = headerView.findViewById(R.id.test);
             if (userId < 0) {
-                screenNot.setVisibility(View.VISIBLE);
-                screenHavePost.setVisibility(View.GONE);
+//                screenNot.setVisibility(View.VISIBLE);
+//                screenHavePost.setVisibility(View.GONE);
+
+
+            } else {
                 btnPost.setOnClickListener(v -> {
                     Intent intent = new Intent(HomeSecondActivity.this, PostOwnerActivity.class);
                     startActivity(intent);
                 });
-
-            } else {
-                screenNot.setVisibility(View.GONE);
-                screenHavePost.setVisibility(View.VISIBLE);
+//                screenNot.setVisibility(View.GONE);
+//                screenHavePost.setVisibility(View.VISIBLE);
                 if (txtUsername != null && txtPhone != null) {
                     txtUsername.setText(user.getUsername());
                     txtPhone.setText(user.getPhone());

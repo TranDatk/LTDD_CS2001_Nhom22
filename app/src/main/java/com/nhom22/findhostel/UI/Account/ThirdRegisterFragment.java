@@ -143,6 +143,7 @@ public class ThirdRegisterFragment extends Fragment {
                 userAccount.setUsername(username);
                 userAccount.setPassword(password);
                 userAccount.setImage(hinhAnh);
+                userAccount.setDigital_money(15.205);
 
                 long addUser = userAccountService.addUserAccount(userAccount);
 

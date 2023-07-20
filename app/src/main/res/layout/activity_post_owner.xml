@@ -100,6 +100,27 @@
                 android:background="@drawable/lavender_border"
                 android:completionThreshold="1"
                 android:hint="Nhập thành phố"
+                android:theme="@style/AutoCompleteTextStyle"
+                android:padding="10dp" />
+            <AutoCompleteTextView
+                android:id="@+id/autoDistrictField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:completionThreshold="1"
+                android:hint="Nhập quận"
+                android:textColor="@color/black"
+                android:padding="10dp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoSubDistrictField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/lavender_border"
+                android:completionThreshold="1"
+                android:hint="Nhập phường"
                 android:textColor="@color/black"
                 android:padding="10dp" />
             <LinearLayout
@@ -125,6 +146,7 @@
                 android:background="@drawable/lavender_border"
                 android:completionThreshold="1"
                 android:hint="Nhập tên đường"
+
                 android:textColor="@color/black"
                 android:padding="10dp" />
             </LinearLayout>
@@ -133,6 +155,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
+                android:textColor="@color/black"
                 android:text="Ghi chú: Chúng tôi chỉ sử dụng số nhà để xác thực vị trí và sẽ bảo mật nó giúp bạn"
                 />
 
@@ -146,23 +169,29 @@
                     android:id="@+id/spinnerLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:padding="10dp"/>
+                    android:textColor="@color/black"
+                    />
 
                 <EditText
                     android:id="@+id/editTextLanguage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:hint="Mô tả thêm về Nhà cho thuê ( Tối đa 1000 ký tự )"
                     android:textSize="18sp"
-                    android:inputType="none"
-                    android:focusable="false" />
+                    android:textColor="@color/black"
+                    />
 
             </LinearLayout>
 
 
-
+            <Button
+                android:id="@+id/btnPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Yêu cầu đăng tin"
+                android:textAllCaps="true"
+                />
         </LinearLayout>
     </ScrollView>
 
