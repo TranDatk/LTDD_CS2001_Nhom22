@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
  * create an instance of this fragment.
  */
 public class SearchPageFragment extends Fragment {
-
     List<Posts> items = null;
 
     SearchPageAdapter adapter;

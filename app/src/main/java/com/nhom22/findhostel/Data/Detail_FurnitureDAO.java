@@ -144,8 +144,8 @@ public class Detail_FurnitureDAO {
         return id;
     }
 
-    public List<Furniture> getAllFurniture() {
-        List<Furniture> listFurniture = new ArrayList<>();
+    public List<Detail_Furniture> getAllDetailFurniture() throws ParseException {
+        List<Detail_Furniture> detail_furnitureList = new ArrayList<>();
         FurnitureDAO furnitureDAO= new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -162,22 +162,31 @@ public class Detail_FurnitureDAO {
 
         Cursor cursor = db.query("detail_furniture", columns, null, null, null, null, null);
 
-        while (cursor.moveToNext()) {
+         while (cursor.moveToNext()) {
+            @SuppressLint("Range") int detailFurnitureId = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
             @SuppressLint("Range") int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
+
+            // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
+            PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            Posts post = postsDAO.getPostById(postId);
 
             Furniture furniture = furnitureDAO.getFurnitureById(furnitureId);
 
-            listFurniture.add(furniture);
+            // Tạo đối tượng Detail_Furniture từ các cột trong Cursor và các đối tượng Posts, Furniture
+            Detail_Furniture detailFurniture = new Detail_Furniture(detailFurnitureId, quantity, post, furniture);
+            detail_furnitureList.add(detailFurniture);
         }
 
         cursor.close();
         db.close();
 
-        return listFurniture;
+        return detail_furnitureList;
     }
 
-    public List<Furniture> getListDetailFurnitureByPostId(int postsId) throws ParseException {
-        List<Furniture> listFurniture = new ArrayList<>();
+    public List<Detail_Furniture> getListDetailFurnitureByPostId(int postsId) throws ParseException {
+        List<Detail_Furniture> detail_furnitureList = new ArrayList<>();
         FurnitureDAO furnitureDAO = new FurnitureDAO(YourApplication.getInstance().getApplicationContext());
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -195,14 +204,27 @@ public class Detail_FurnitureDAO {
         Cursor cursor = db.query("detail_furniture", columns, selection, selectionArgs, null, null, null);
 
         while (cursor.moveToNext()) {
+            @SuppressLint("Range") int detailFurnitureId = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("posts_id"));
             @SuppressLint("Range") int furnitureId = cursor.getInt(cursor.getColumnIndex("furniture_id"));
+
+            // Lấy thông tin Posts từ cơ sở dữ liệu dựa trên postId
+            PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            Posts post = postsDAO.getPostById(postId);
+
             Furniture furniture = furnitureDAO.getFurnitureById(furnitureId);
-            listFurniture.add(furniture);
+
+            // Tạo đối tượng Detail_Furniture từ các cột trong Cursor và các đối tượng Posts, Furniture
+            Detail_Furniture detailFurniture = new Detail_Furniture(detailFurnitureId, quantity, post, furniture);
+            detail_furnitureList.add(detailFurniture);
         }
 
         cursor.close();
         db.close();
 
-        return listFurniture;
+        return detail_furnitureList;
     }
+
+
 }

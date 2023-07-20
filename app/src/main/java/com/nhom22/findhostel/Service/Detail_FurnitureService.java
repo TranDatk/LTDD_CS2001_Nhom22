@@ -90,11 +90,11 @@ public class Detail_FurnitureService {
         DETAIL_FURNITURE_DAO.resetDetailFurnitureAutoIncrement();
     }
 
-    public List<Furniture> getAllFurniture() {
-        return DETAIL_FURNITURE_DAO.getAllFurniture();
+    public List<Detail_Furniture> getAllDetailFurniture() throws ParseException {
+        return DETAIL_FURNITURE_DAO.getAllDetailFurniture();
     }
 
-    public List<Furniture> getListDetailFurnitureByPostId(int postsId) throws ParseException {
+    public List<Detail_Furniture> getListDetailFurnitureByPostId(int postsId) throws ParseException {
         if (postsId >= 0) {
             return DETAIL_FURNITURE_DAO.getListDetailFurnitureByPostId(postsId); // -1 Unsuccessful, >0 Successful
         } else {

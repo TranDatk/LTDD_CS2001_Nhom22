@@ -1,8 +1,11 @@
 package com.nhom22.findhostel.Service;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.CitiesDAO;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.YourApplication;
@@ -12,6 +15,9 @@ import java.util.List;
 
 public class CitiesService {
     private final static CitiesDAO CITIES_DAO;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference citiesRef = database.getReference("cities");
+
 
     static {
         Context appContext = YourApplication.getInstance().getApplicationContext();
@@ -46,7 +52,18 @@ public class CitiesService {
 
     public long addCities(Cities city) {
         if(city != null){
-            return CITIES_DAO.addCities(city); // -1 Unsuccessful, >0 Successful
+            long result = CITIES_DAO.addCities(city);
+            if(result < 1){
+                Log.d("AddCities", "cities uploaded failed");
+            }else{
+                Cities citiesFirebase = new Cities();
+                citiesFirebase.setId(Integer.parseInt(String.valueOf(result)));
+                citiesFirebase.setName(city.getName());
+                citiesFirebase.setIsActive(city.getIsActive());
+
+                citiesRef.child(String.valueOf(citiesFirebase.getId())).setValue(citiesFirebase);
+            }
+            return result; // -1 Unsuccessful, >0 Successful
         }
         else {
             Context context = YourApplication.getInstance().getApplicationContext();
