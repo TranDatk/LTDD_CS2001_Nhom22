@@ -205,4 +205,6 @@ public class Detail_FurnitureDAO {
 
         return listFurniture;
     }
+
+
 }

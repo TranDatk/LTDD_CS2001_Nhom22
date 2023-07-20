@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        
 
         createFirebase();
     }
