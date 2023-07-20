@@ -53,9 +53,7 @@ public class ImageSliderAdapter extends PagerAdapter {
                 imageView.setImageBitmap(bitmap);
             }
         } else {
-            // Handle the case when no images are available
-            // For example, you can set a default image or hide the ImageView
-            imageView.setImageDrawable(null); // Set a default image or hide the ImageView
+            imageView.setImageDrawable(null);
         }
 
         imageIndexText.setText((position + 1) + "/" + images.size());

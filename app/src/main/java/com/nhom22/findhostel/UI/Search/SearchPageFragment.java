@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nhom22.findhostel.Model.Images;
@@ -26,7 +29,9 @@ import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
 
 import java.text.ParseException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +41,16 @@ import java.util.List;
 public class SearchPageFragment extends Fragment {
 
     List<Posts> items = null;
+
+    SearchPageAdapter adapter;
+
+    ListView lvPost;
+
+    ImageButton btnSearch;
+
+    TextView edtKeyWord;
+
+    int counter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,9 +98,11 @@ public class SearchPageFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentSearchPageBinding binding = FragmentSearchPageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        ListView lvPost = view.findViewById(R.id.lvPost);
-        String[] itemsSpinner = {"Mặc định", "Mới nhất", "Giá thấp đến cao", "Giá cao đến thấp"};
+        lvPost = view.findViewById(R.id.lvPost);
+        String[] itemsSpinner = {"Mới nhất", "Giá thấp đến cao", "Giá cao đến thấp"};
         Spinner snOptions = view.findViewById(R.id.snOptions);
+        edtKeyWord = view.findViewById(R.id.edtKeyword);
+        btnSearch = view.findViewById(R.id.btnSearch);
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, itemsSpinner);
         snOptions.setAdapter(adapterSpinner);
@@ -97,23 +114,50 @@ public class SearchPageFragment extends Fragment {
         }
 
         if (!items.isEmpty()) {
-            SearchPageAdapter adapter = new SearchPageAdapter(this, items);
+            counter = items.size();
+            adapter = new SearchPageAdapter(this, items);
             lvPost.setAdapter(adapter);
         }
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String keyword = edtKeyWord.getText().toString().trim();
+                if(!keyword.isEmpty()) {
+                    List<Posts> backUpItems;
+                    backUpItems = items.stream().filter(post -> (post.getAddress().getCities().getName()
+                            + post.getAddress().getDistricts().getName()
+                            + post.getAddress().getSubDistrics().getName()
+                            + post.getAddress().getStreets().getName()
+                            + post.getAddress().getHouseNumber()).toLowerCase().contains(keyword.toLowerCase()) ||
+                                    post.getType().getName().toLowerCase()
+                                            .contains(keyword.toLowerCase()) || post.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                            .collect(Collectors.toList());
+                    if (backUpItems.isEmpty()) {
+                        Toast.makeText(getContext(), "Không có dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        items = backUpItems;
+                    }
+                    updateListView(items);
+                    edtKeyWord.setText(null);
+                }
+                else {
+                    Toast.makeText(getContext(), "Hãy nhập từ khóa", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         lvPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Tạo Bundle và chuyển dữ liệu cần truyền vào
                 Bundle dataBundle = new Bundle();
 
                 dataBundle.putInt("id", items.get(i).getId());
 
-                // Tạo Fragment mới và gắn Bundle vào Fragment
                 PostDetailFragment postDetailFragment = new PostDetailFragment();
                 postDetailFragment.setArguments(dataBundle);
 
-                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
                 replaceFragment(postDetailFragment);
             }
         });
@@ -123,15 +167,83 @@ public class SearchPageFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 if (itemsSpinner[i].equals("Mới nhất")) {
-                    Toast.makeText(getContext(), "moi nhat", Toast.LENGTH_SHORT).show();
+//                    List<Posts> itemss;
+//                    PostsService postsService = new PostsService();
+//                    try {
+//                        itemss = postsService.getAllPost();
+//                    } catch (ParseException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//
+//                    if (!itemss.isEmpty()) {
+//                        Collections.reverse(itemss);
+//                        updateListView(itemss);
+//                    }
+                    if (items.size() != counter) {
+                        try {
+                            items = postsService.getAllPost();
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    Collections.reverse(items);
+                    updateListView(items);
                 }
 
                 if (itemsSpinner[i].equals("Giá thấp đến cao")) {
-                    Toast.makeText(getContext(), "gia thap den cao", Toast.LENGTH_SHORT).show();
+//                    List<Posts> itemss;
+//                    PostsService postsService = new PostsService();
+//                    try {
+//                        itemss = postsService.getAllPost();
+//                    } catch (ParseException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//
+//                    if (!itemss.isEmpty()) {
+//                        itemss = itemss.stream().filter(post -> String.valueOf(post.getPrice()) != null)
+//                                .sorted(Comparator.comparingDouble(Posts::getPrice))
+//                                .collect(Collectors.toList());
+//                        updateListView(itemss);
+//                    }
+                    if (items.size() != counter) {
+                        try {
+                            items = postsService.getAllPost();
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    items = items.stream().filter(post -> String.valueOf(post.getPrice()) != null)
+                            .sorted(Comparator.comparingDouble(Posts::getPrice))
+                            .collect(Collectors.toList());
+                    updateListView(items);
                 }
 
                 if (itemsSpinner[i].equals("Giá cao đến thấp")) {
-                    Toast.makeText(getContext(), "gia cao den thap", Toast.LENGTH_SHORT).show();
+//                    List<Posts> itemss;
+//                    PostsService postsService = new PostsService();
+//                    try {
+//                        itemss = postsService.getAllPost();
+//                    } catch (ParseException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//
+//                    if (!itemss.isEmpty()) {
+//                        itemss = itemss.stream().filter(post -> String.valueOf(post.getPrice()) != null)
+//                                .sorted(Comparator.comparingDouble(Posts::getPrice).reversed())
+//                                .collect(Collectors.toList());
+//                        updateListView(itemss);
+//                    }
+                    if (items.size() != counter) {
+                        try {
+                            items = postsService.getAllPost();
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    items = items.stream().filter(post -> String.valueOf(post.getPrice()) != null)
+                            .sorted(Comparator.comparingDouble(Posts::getPrice).reversed())
+                            .collect(Collectors.toList());
+                    updateListView(items);
                 }
 
             }
@@ -153,4 +265,23 @@ public class SearchPageFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    private void updateListView(List<Posts> itemss) {
+            adapter = new SearchPageAdapter(SearchPageFragment.this, itemss);
+            lvPost.setAdapter(adapter);
+    }
+
+
+    private void filterByKeyword(String keyword) {
+        items = items.stream().filter(post -> (post.getAddress().getCities().getName()
+                        + post.getAddress().getDistricts().getName()
+                        + post.getAddress().getSubDistrics().getName()
+                        + post.getAddress().getStreets().getName()
+                        + post.getAddress().getHouseNumber()).toLowerCase().contains(keyword.toLowerCase()) ||
+                        post.getType().getName().toLowerCase().contains(keyword.toLowerCase()) ||
+                        post.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+
 }
