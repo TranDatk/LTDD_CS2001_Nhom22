@@ -34,7 +34,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class SearchPageFragment extends Fragment {
-
     List<Posts> items = null;
 
     // TODO: Rename parameter arguments, choose names that match

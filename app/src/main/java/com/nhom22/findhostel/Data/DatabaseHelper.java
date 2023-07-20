@@ -187,6 +187,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "image BLOB," +
                 "address_id INTEGER" +
                 ")");
+
+        db.execSQL("CREATE TABLE notification (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "id_posts INTEGER," +
+                "time_to DATETIME," +
+                "description TEXT," +
+                "created_date DATETIME" +
+                ")");
     }
 
 

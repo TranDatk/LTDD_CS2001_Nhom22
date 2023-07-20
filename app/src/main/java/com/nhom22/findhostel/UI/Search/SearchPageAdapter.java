@@ -2,6 +2,7 @@ package com.nhom22.findhostel.UI.Search;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,8 @@ public class SearchPageAdapter extends BaseAdapter {
         TextView tvType = view.findViewById(R.id.tvType);
         TextView tvAddress = view.findViewById(R.id.tvAddress);
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
+
+
 
         Detail_ImageService detail_imageService = new Detail_ImageService();
         List<Images> images = null;

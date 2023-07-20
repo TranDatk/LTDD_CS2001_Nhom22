@@ -1,7 +1,6 @@
 package com.nhom22.findhostel;
 
 
-import android.app.Notification;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
