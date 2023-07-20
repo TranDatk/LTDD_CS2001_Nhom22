@@ -9,4 +9,8 @@
     <string name="login_text">Đăng nhập để có trải nghiệm tốt nhất &amp; đồng bộ hóa tài khoản tài khoản củạ bạn trên mọi thiết bị</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="channel_name">Chanel 1</string>
+    <string name="channel_description">This is Chanel 1</string>
+
+
 </resources>

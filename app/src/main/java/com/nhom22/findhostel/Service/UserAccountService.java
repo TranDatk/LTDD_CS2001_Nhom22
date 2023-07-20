@@ -12,6 +12,8 @@ import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
+import java.util.List;
+
 
 public class UserAccountService {
     private final static UserAccountDAO USER_ACCOUNT_DAO;
@@ -91,6 +93,16 @@ public class UserAccountService {
     public UserAccount checkLoginUser(String email, String password) {
         if (email != null && password != null) {
             return USER_ACCOUNT_DAO.checkUserLogin(email, password); // -1 Unsuccessful, >0 Successful
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Email or password is null", Toast.LENGTH_SHORT).show();
+            return null; // Return null to indicate unsuccessful operation
+        }
+    }
+
+    public List<UserAccount> getAllUserAccountByDistrictId(Integer districs_id){
+        if (districs_id != null) {
+            return USER_ACCOUNT_DAO.getAllUserAccountByDistrictId(districs_id); // -1 Unsuccessful, >0 Successful
         } else {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Email or password is null", Toast.LENGTH_SHORT).show();
