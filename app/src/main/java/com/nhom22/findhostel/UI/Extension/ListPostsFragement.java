@@ -4,10 +4,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.HotelCollectionService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.UI.Search.PostDetailFragment;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 import com.nhom22.findhostel.databinding.FragmentListPostsBinding;
@@ -78,6 +82,32 @@ public class ListPostsFragement extends Fragment {
         itemAdapter.notifyDataSetChanged();
 
 
+        lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Tạo Bundle và chuyển dữ liệu cần truyền vào
+                Bundle dataBundle = new Bundle();
+
+                dataBundle.putInt("id", arrItem.get(i).getId());
+
+                // Tạo Fragment mới và gắn Bundle vào Fragment
+                PostDetailFragment postDetailFragment = new PostDetailFragment();
+                postDetailFragment.setArguments(dataBundle);
+
+                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
+                replaceFragment(postDetailFragment);
+            }
+        });
+
+
         return view;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

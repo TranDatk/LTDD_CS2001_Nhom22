@@ -2,6 +2,7 @@ package com.nhom22.findhostel.UI.Account;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -75,9 +77,25 @@ public class AccountPageFragment extends Fragment {
             }
 
         binding.changeMode.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), HomeSecondActivity.class);
-            startActivity(intent);
-            requireActivity().finish(); // Optional: Finish the current activity if needed
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+            builder.setTitle("Bạn có muốn đổi vai trò chủ nhà không?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(requireActivity(), HomeSecondActivity.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
 
         binding.btnLogin.setOnClickListener(v -> {

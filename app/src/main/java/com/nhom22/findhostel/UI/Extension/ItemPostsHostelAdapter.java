@@ -10,12 +10,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
 
 
 import java.text.ParseException;
@@ -53,7 +56,7 @@ public class ItemPostsHostelAdapter extends BaseAdapter {
 
     private class ViewHolder{
         TextView tvPrice, tvType, tvAddress;
-        ImageView imgItemHostelPost;
+        ViewPager imageViewPager;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ItemPostsHostelAdapter extends BaseAdapter {
             holder.tvPrice = (TextView) convertView.findViewById(R.id.tvPrice);
             holder.tvType = (TextView) convertView.findViewById(R.id.tvType);
             holder.tvAddress = (TextView) convertView.findViewById(R.id.tvAddress) ;
-            holder.imgItemHostelPost = (ImageView) convertView.findViewById(R.id.imgMain);
+            holder.imageViewPager = (ViewPager) convertView.findViewById(R.id.imageViewPager);
 
             convertView.setTag(holder);
         }
@@ -88,20 +91,22 @@ public class ItemPostsHostelAdapter extends BaseAdapter {
         Detail_ImageService detail_imageService = new Detail_ImageService();
         List<Images> images = null;
         try {
-            images = detail_imageService.getListImageByPostsId(1);
+            images = detail_imageService.getListImageByPostsId(posts.getId());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         if (images != null && !images.isEmpty()) {
-            byte[] image = images.get(0).getImage();
-            if (image != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                holder.imgItemHostelPost.setImageBitmap(bitmap);
-            }
+            ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, images);
+            holder.imageViewPager.setAdapter(imageSliderAdapter);
+//            byte[] image = images.get(0).getImage();
+//            if (image != null) {
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+//                imgMain.setImageBitmap(bitmap);
+//            }
         } else {
             // Handle the case when no images are available
             // For example, you can set a default image or hide the ImageView
-            holder.imgItemHostelPost.setImageDrawable(null); // Set a default image or hide the ImageView
+//            imgMain.setImageDrawable(null); // Set a default image or hide the ImageView
         }
 
         return convertView;

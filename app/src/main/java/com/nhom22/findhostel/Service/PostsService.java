@@ -80,4 +80,15 @@ public class PostsService {
             return null;
         }
     }
+
+    public List<Posts> getPostsByOwnerId(int ownerId) throws ParseException {
+        if(ownerId >= 0){
+            return POSTS_DAO.getPostsByOwnerId(ownerId);
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null posts", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 }

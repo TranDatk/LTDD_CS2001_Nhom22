@@ -74,7 +74,7 @@ public class ListDecorPostFragement extends Fragment {
 
         itemAdapter.notifyDataSetChanged();
 
-       binding.imgBtnBackExtension.setOnClickListener(new View.OnClickListener() {
+       binding.imgBtnBackExtensionFromListDecor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new ExtensionPageFragment());

@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <ImageButton
-            android:id="@+id/img_btn_back"
+            android:id="@+id/img_btn_back_extension_from_hostel_collection_page"
             android:layout_width="48sp"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_arrow_back_24"
