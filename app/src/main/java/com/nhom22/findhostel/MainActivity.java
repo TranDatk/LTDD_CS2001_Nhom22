@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (newTab.getId() == R.id.navigation_info) {
                     selectedFragment = new SavePageFragment();
                 } else if (newTab.getId() == R.id.navigation_account) {
-
                     selectedFragment = new AccountPageFragment();
                 }
 
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        
 
         createFirebase();
     }
