@@ -1,9 +1,6 @@
 package com.nhom22.findhostel.UI.Search;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.util.Log;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +18,7 @@ import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 public class SearchPageAdapter extends BaseAdapter {
 
@@ -53,6 +48,7 @@ public class SearchPageAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint({"ViewHolder", "SetTextI18n"})
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = fragment.getLayoutInflater();

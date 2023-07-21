@@ -289,7 +289,10 @@ public class PostsDAO {
                 "type_id"
         };
 
-        Cursor cursor = db.query("posts", columns, null, null, null, null, null);
+        String selection = "owner_id = ?";
+        String[] selectionArgs = {String.valueOf(ownerId)};
+
+        Cursor cursor = db.query("posts", columns, selection, selectionArgs, null, null, null);
 
         List<Posts> postList = new ArrayList<>();
 
@@ -321,7 +324,7 @@ public class PostsDAO {
 
             // Tạo đối tượng Posts và thêm vào danh sách
             Posts post = new Posts(id, timeFrom, timeTo, postName, price, description, activePost, address, userAccount, type);
-            if (ownerIdFromDb == ownerId) {
+            if (userAccount.getId() == ownerId) {
                 postList.add(post);
             }
         }
