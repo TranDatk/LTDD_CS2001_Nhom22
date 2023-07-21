@@ -56,7 +56,7 @@ public class PostsDAO {
 
             // Định dạng của cột "time_from" và "time_to" trong SQLite là "YYYY-MM-DD HH:MM:SS"
             // Để chuyển đổi thành đối tượng Timestamp, sử dụng SimpleDateFormat
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
             Date timeFromDate = sdf.parse(timeFromStr);
             Date timeToDate = sdf.parse(timeToStr);
 
@@ -180,7 +180,7 @@ public class PostsDAO {
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
             // Create SimpleDateFormat with the correct pattern
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
 
             // Parse the date strings using the SimpleDateFormat
             Date timeFrom;
@@ -247,7 +247,7 @@ public class PostsDAO {
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
             // Chuyển đổi chuỗi thời gian thành đối tượng Date
-            SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy",Locale.getDefault());
+            SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
             Date timeFrom = formatter.parse(timeFromStr);
             Date timeTo = formatter.parse(timeToStr);
 
@@ -306,7 +306,7 @@ public class PostsDAO {
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
             // Chuyển đổi chuỗi thời gian thành đối tượng Date
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
             Date timeFrom = dateFormat.parse(timeFromStr);
             Date timeTo = dateFormat.parse(timeToStr);
 
