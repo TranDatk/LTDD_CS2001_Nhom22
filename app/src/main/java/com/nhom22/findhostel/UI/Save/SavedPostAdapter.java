@@ -121,17 +121,22 @@ public class SavedPostAdapter extends BaseAdapter {
                         int userId = sharedPreferences.getInt("userId", -1);
 
 
+                        long check;
                         try {
-                            long test = save_postService.deleteASavePostByUserIdAndPostId(userId, postID);
-                            Toast.makeText(view.getContext(), String.valueOf(test), Toast.LENGTH_SHORT).show();
+                            check = save_postService.deleteASavePostByUserIdAndPostId(userId, postID);
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
 
+                        if (check > 0) {
+                            Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            items.remove(i);
+                            notifyDataSetChanged();
+                        }
+                        else {
+                            Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                        }
 
-
-                        items.remove(i);
-                        notifyDataSetChanged();
 
                         dialog.dismiss();
                     }

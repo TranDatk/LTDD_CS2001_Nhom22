@@ -139,10 +139,19 @@ android:padding="10dp">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/imgAvatar"
+            <FrameLayout
                 android:layout_width="45dp"
-                android:layout_height="45dp" />
+
+                android:layout_height="45dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
+            </FrameLayout>
+
             <TextView
                 android:id="@+id/tvPhoneNumber"
                 android:layout_width="match_parent"
