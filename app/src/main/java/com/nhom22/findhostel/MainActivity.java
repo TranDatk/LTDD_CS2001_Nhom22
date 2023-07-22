@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 } else if (newTab.getId() == R.id.navigation_info) {
                     selectedFragment = new SavePageFragment();
                 } else if (newTab.getId() == R.id.navigation_account) {
-
                     selectedFragment = new AccountPageFragment();
                 }
 
@@ -115,24 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-//        Date created_date;
-//        Notification notification;
-//        try {
-//           created_date  = sdf.parse("2023-07-18 15:00:00");
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        try {
-//           notification = new Notification(1, postsDAO.getPostById(1),
-//                    userAccountDAO.getUserAccountById(1),"Phòng trọ rẻ", created_date);
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        notificationService.addNotification(notification);
 
 
         createFirebase();
@@ -243,6 +224,9 @@ public class MainActivity extends AppCompatActivity {
         subDistrictsService.resetSubDistrictsAutoIncrement();
         for (SubDistricts subDistricts : subDistrictsList) {
             subDistrictsService.addSubDistricts(subDistricts);
+            if (subDistricts.getId() == 10) {
+                return;
+            }
             // Thực hiện các xử lý khác với citiesService
         }
     }

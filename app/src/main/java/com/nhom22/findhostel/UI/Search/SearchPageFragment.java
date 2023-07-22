@@ -113,8 +113,8 @@ public class SearchPageFragment extends Fragment {
 
         if (!items.isEmpty()) {
             counter = items.size();
-            adapter = new SearchPageAdapter(this, items);
-            lvPost.setAdapter(adapter);
+//            adapter = new SearchPageAdapter(this, items);
+//            lvPost.setAdapter(adapter);
         }
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -184,8 +184,13 @@ public class SearchPageFragment extends Fragment {
                             throw new RuntimeException(e);
                         }
                     }
-                    Collections.reverse(items);
-                    updateListView(items);
+                    if (!items.isEmpty()) {
+                        Collections.reverse(items);
+                        updateListView(items);
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Không có dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 if (itemsSpinner[i].equals("Giá thấp đến cao")) {
@@ -210,10 +215,15 @@ public class SearchPageFragment extends Fragment {
                             throw new RuntimeException(e);
                         }
                     }
-                    items = items.stream().filter(post -> String.valueOf(post.getPrice()) != null)
-                            .sorted(Comparator.comparingDouble(Posts::getPrice))
-                            .collect(Collectors.toList());
-                    updateListView(items);
+                    if (!items.isEmpty()) {
+                        items = items.stream().filter(post -> String.valueOf(post.getPrice()) != null)
+                                .sorted(Comparator.comparingDouble(Posts::getPrice))
+                                .collect(Collectors.toList());
+                        updateListView(items);
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Không có dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 if (itemsSpinner[i].equals("Giá cao đến thấp")) {
@@ -238,10 +248,15 @@ public class SearchPageFragment extends Fragment {
                             throw new RuntimeException(e);
                         }
                     }
-                    items = items.stream().filter(post -> String.valueOf(post.getPrice()) != null)
-                            .sorted(Comparator.comparingDouble(Posts::getPrice).reversed())
-                            .collect(Collectors.toList());
-                    updateListView(items);
+                    if (!items.isEmpty()) {
+                        items = items.stream().filter(post -> String.valueOf(post.getPrice()) != null)
+                                .sorted(Comparator.comparingDouble(Posts::getPrice).reversed())
+                                .collect(Collectors.toList());
+                        updateListView(items);
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Không có dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

@@ -56,7 +56,7 @@ public class PostsDAO {
 
             // Định dạng của cột "time_from" và "time_to" trong SQLite là "YYYY-MM-DD HH:MM:SS"
             // Để chuyển đổi thành đối tượng Timestamp, sử dụng SimpleDateFormat
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
             Date timeFromDate = sdf.parse(timeFromStr);
             Date timeToDate = sdf.parse(timeToStr);
 
@@ -180,7 +180,7 @@ public class PostsDAO {
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
             // Create SimpleDateFormat with the correct pattern
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
 
             // Parse the date strings using the SimpleDateFormat
             Date timeFrom;
@@ -230,7 +230,6 @@ public class PostsDAO {
                 "type_id"
         };
 
-
         Cursor cursor = db.query("posts", columns, null, null, null, null, null);
 
         List<Posts> postList = new ArrayList<>();
@@ -248,9 +247,9 @@ public class PostsDAO {
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
             // Chuyển đổi chuỗi thời gian thành đối tượng Date
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault());
-            Date timeFrom = dateFormat.parse(timeFromStr);
-            Date timeTo = dateFormat.parse(timeToStr);
+            SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+            Date timeFrom = formatter.parse(timeFromStr);
+            Date timeTo = formatter.parse(timeToStr);
 
             // Tạo các đối tượng liên quan
             AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
@@ -263,7 +262,7 @@ public class PostsDAO {
 
             // Tạo đối tượng Posts và thêm vào danh sách
             Posts post = new Posts(id, timeFrom, timeTo, postName, price, description, activePost, address, userAccount, type);
-            if(address.getSubDistrics().getId() == subDistrics){
+            if (address.getSubDistrics().getId() == subDistrics) {
                 postList.add(post);
             }
         }
@@ -272,6 +271,7 @@ public class PostsDAO {
 
         return postList;
     }
+
     @SuppressLint("Range")
     public List<Posts> getPostsByOwnerId(int ownerId) throws ParseException {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -289,7 +289,10 @@ public class PostsDAO {
                 "type_id"
         };
 
-        Cursor cursor = db.query("posts", columns, null, null, null, null, null);
+        String selection = "owner_id = ?";
+        String[] selectionArgs = {String.valueOf(ownerId)};
+
+        Cursor cursor = db.query("posts", columns, selection, selectionArgs, null, null, null);
 
         List<Posts> postList = new ArrayList<>();
 
@@ -306,7 +309,7 @@ public class PostsDAO {
             int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
 
             // Chuyển đổi chuỗi thời gian thành đối tượng Date
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
             Date timeFrom = dateFormat.parse(timeFromStr);
             Date timeTo = dateFormat.parse(timeToStr);
 
@@ -321,7 +324,7 @@ public class PostsDAO {
 
             // Tạo đối tượng Posts và thêm vào danh sách
             Posts post = new Posts(id, timeFrom, timeTo, postName, price, description, activePost, address, userAccount, type);
-            if (ownerIdFromDb == ownerId) {
+            if (userAccount.getId() == ownerId) {
                 postList.add(post);
             }
         }

@@ -7,24 +7,40 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.ActionBar;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.UserAccountService;
+
+import java.util.Objects;
 
 public class CreditPageAcitivy extends AppCompatActivity {
 
+    private final UserAccountService userAccountService = new UserAccountService();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_page_acitivy);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        int userId = sharedPreferences.getInt("userId", -1);
+        UserAccount user = userAccountService.getUserAccountById(userId);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView txtCredit =  (TextView)  findViewById(R.id.creditCount);
+        TextView txtCreditCanWithdraw = (TextView) findViewById(R.id.creditCountWithdraw);
+
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationTop);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -45,6 +61,10 @@ public class CreditPageAcitivy extends AppCompatActivity {
         });
         loadFragment(new GiaoDichFragment());
 
+
+
+        txtCredit.setText(String.valueOf(user.getDigital_money()));
+        txtCreditCanWithdraw.setText("Có thể rút: " + String.valueOf(user.getDigital_money()));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

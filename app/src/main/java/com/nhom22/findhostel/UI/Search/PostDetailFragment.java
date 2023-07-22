@@ -1,30 +1,34 @@
 package com.nhom22.findhostel.UI.Search;
 
+import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.Service.Save_PostService;
 
 import java.text.ParseException;
 import java.util.List;
@@ -36,6 +40,10 @@ import java.util.List;
  */
 public class PostDetailFragment extends Fragment {
     Posts p;
+
+    List<Save_Post> l;
+
+    private List<Detail_Furniture> furs;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,6 +85,7 @@ public class PostDetailFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,10 +97,15 @@ public class PostDetailFragment extends Fragment {
         TextView tvAddress = view.findViewById(R.id.tvAddress);
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         TextView tvPhoneNumber = view.findViewById(R.id.tvPhoneNumber);
+        TextView tvBed = view.findViewById(R.id.tvBed);
+        TextView tvShower = view.findViewById(R.id.tvShower);
+        TextView tvPostName = view.findViewById(R.id.tvPostName);
+        Button btnSave = view.findViewById(R.id.btnSave);
         Button btnCall = view.findViewById(R.id.btnCall);
         Button btnSms = view.findViewById(R.id.btnSms);
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
         ImageView imgAvatar = view.findViewById(R.id.imgAvatar);
+        GridView gvFurniture = view.findViewById(R.id.gvFurniture);
 
         Bundle dataBundle = getArguments();
         if (dataBundle != null) {
@@ -102,6 +116,7 @@ public class PostDetailFragment extends Fragment {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
+            tvPostName.setText(p.getPostName());
             tvDescription.setText(p.getDescription());
             tvType.setText(p.getType().getName());
             tvAddress.setText(p.getAddress().getHouseNumber() + ", " +
@@ -111,6 +126,74 @@ public class PostDetailFragment extends Fragment {
                     p.getAddress().getCities().getName());
             tvPrice.setText(String.valueOf(p.getPrice()));
             tvPhoneNumber.setText(p.getUserAccount().getPhone());
+
+            Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+            try {
+                furs = detail_furnitureService.getListDetailFurnitureByPostId(id);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (furs != null && !furs.isEmpty()) {
+                for (int x = 0; x < furs.size(); x++) {
+                    if(furs.get(x).getFurniture().getName().equals("Giường")) {
+                        tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
+                        tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
+                    }
+                }
+                FurnitureAdapter adapter = new FurnitureAdapter(this, furs);
+                gvFurniture.setAdapter(adapter);
+            }
+
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                    int userId = sharedPreferences.getInt("userId", -1);
+                    boolean checkSavedPost = false;
+                    if (userId > 0) {
+                        Save_PostService save_postService = new Save_PostService();
+                        try {
+                            l = save_postService.getListSavePostByUserAccountId(userId);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (l != null && !l.isEmpty()) {
+                            for (int x = 0; x < l.size(); x++) {
+                                if (l.get(x).getPosts().getId() == id) {
+                                    checkSavedPost = true;
+                                    break;
+                                }
+                            }
+                            if (checkSavedPost == true) {
+                                Toast.makeText(getContext(), "Bạn đã lưu bài viết này", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                try {
+                                    save_postService.addASavePost(id, userId);
+                                    Toast.makeText(getContext(), "Lưu thành công", Toast.LENGTH_SHORT).show();
+                                    btnSave.setClickable(false);
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+                        else {
+                            try {
+                                save_postService.addASavePost(id, userId);
+                                Toast.makeText(getContext(), "Lưu thành công", Toast.LENGTH_SHORT).show();
+                                btnSave.setClickable(false);
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Hãy đăng nhập để lưu bài viết", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
             btnCall.setOnClickListener(new View.OnClickListener() {
                 @Override

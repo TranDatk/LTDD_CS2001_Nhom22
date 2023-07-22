@@ -153,6 +153,9 @@ public class DistricsDAO {
         values.put("cities_id", district.getCities().getId());
 
         long id = db.insert("districts", null, values);
+        if(id > 0){
+            id = getIdOfLastInsertedRow();
+        }
         db.close();
 
         return id;
@@ -173,5 +176,21 @@ public class DistricsDAO {
         db.execSQL(query);
 
         db.close();
+    }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "districts";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }

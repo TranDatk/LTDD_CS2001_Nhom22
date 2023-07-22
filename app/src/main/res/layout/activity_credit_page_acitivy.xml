@@ -13,25 +13,27 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        app:title="Credits của tôi"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="Credits của tôi" />
 
     <TextView
+        android:id="@+id/creditCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="0 Credits"
-        android:textSize="30sp"
         android:textAlignment="center"
         android:textColor="@color/green"
-        android:layout_marginTop="15dp" />
+        android:textSize="30sp" />
 
     <TextView
+        android:id="@+id/creditCountWithdraw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:text="Có thể rút: 0"
-        android:textSize="18sp"
         android:textAlignment="center"
-        android:layout_marginBottom="15dp" />
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,31 +48,43 @@
             android:background="@drawable/baseline_credit_card_24" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/btnNap"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:background="#D4E2D4"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Nạp Credit"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:layout_weight="1"
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1 Credit = 1,000đ"
-                android:textColor="@color/white" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nạp Credit"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 Credit = 1,000đ"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/baseline_credit_card_24" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/baseline_credit_card_24" />
 
     </LinearLayout>
 

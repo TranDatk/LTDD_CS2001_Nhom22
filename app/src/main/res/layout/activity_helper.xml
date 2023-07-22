@@ -12,11 +12,106 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
+        app:title="Trung tâm hỗ trợ"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
-    <TextView
-        android:layout_width="wrap_content"
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Kết nối với chúng tôi"
+       android:textStyle="bold"
+       android:padding="15dp"
+       android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Helper"
-        android:textSize="50sp"/>
+        android:padding="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hotline"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            />
+        <TextView
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(+84) 0961414817"
+            android:gravity="end"
+            android:paddingEnd="10dp"
+            app:drawableRightCompat="@drawable/baseline_phone_24" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            />
+        <TextView
+
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="tandatpro@gmail.com"
+            android:gravity="end"
+            android:paddingEnd="10dp"
+            app:drawableRightCompat="@drawable/baseline_email_24" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="Thời gian làm việc từ 8:30 - 17:30, Thứ 2 đến Thứ 6"/>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FAQ"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:drawableRightCompat="@drawable/baseline_keyboard_arrow_right_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Báo cáo lỗi ứng dụng"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:drawableRightCompat="@drawable/baseline_keyboard_arrow_right_24" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

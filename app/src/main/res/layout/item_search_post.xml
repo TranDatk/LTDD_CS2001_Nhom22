@@ -79,7 +79,7 @@
                         android:id="@+id/tvBed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
+                        android:text="0"
                         android:textSize="25dp"
                         android:layout_gravity="center"/>
                 </LinearLayout>
@@ -95,7 +95,7 @@
                         android:id="@+id/tvShower"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
+                        android:text="0"
                         android:textSize="25dp"
                         android:layout_gravity="center"/>
                 </LinearLayout>
