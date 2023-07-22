@@ -20,7 +20,6 @@
             android:contentDescription="Image Slider"
             android:clickable="false" />
 
-
         <!--                <androidx.viewpager.widget.ViewPager-->
         <!--            android:id="@+id/imageViewPager"-->
         <!--            android:layout_width="match_parent"-->
