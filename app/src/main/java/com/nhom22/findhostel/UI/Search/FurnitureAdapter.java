@@ -50,67 +50,67 @@ public class FurnitureAdapter extends BaseAdapter {
         switch (items.get(i).getFurniture().getName()) {
             case "Wifi":
                 imgIcon.setImageResource(R.drawable.wifi);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Tủ quần áo":
                 imgIcon.setImageResource(R.drawable.closet);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Giường":
                 imgIcon.setImageResource(R.drawable.bed);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Giá phơi đồ":
                 imgIcon.setImageResource(R.drawable.tshirt);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Bàn":
                 imgIcon.setImageResource(R.drawable.table);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Ghế":
                 imgIcon.setImageResource(R.drawable.chair);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Điều hòa":
                 imgIcon.setImageResource(R.drawable.airconditioner);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Ban công":
                 imgIcon.setImageResource(R.drawable.balcony);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Gác lửng":
                 imgIcon.setImageResource(R.drawable.stairs);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Cửa sổ":
                 imgIcon.setImageResource(R.drawable.window);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Bếp":
                 imgIcon.setImageResource(R.drawable.kitchen);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Camera an ninh":
                 imgIcon.setImageResource(R.drawable.camera);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Chỗ giữ xe":
                 imgIcon.setImageResource(R.drawable.motorcycleparking);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Thang máy":
                 imgIcon.setImageResource(R.drawable.elevator);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Khóa từ, vân tay":
                 imgIcon.setImageResource(R.drawable.doorhandle);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             case "Sân thượng":
                 imgIcon.setImageResource(R.drawable.rooftop);
-                tvQuantity.setText(String.valueOf(items.get(i).getQuantity()));
+                tvQuantity.setText(String.valueOf(items.get(i).getFurniture().getName()));
                 break;
             default:
                 System.out.println("...");

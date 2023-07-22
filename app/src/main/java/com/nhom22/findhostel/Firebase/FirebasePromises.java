@@ -8,6 +8,7 @@ import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.Model.Streets;
@@ -303,5 +304,24 @@ public class FirebasePromises {
         });
 
         return future;
+    }
+
+    public static CompletableFuture<List<PostDecor>> getPostDecor() {
+        CompletableFuture<List<PostDecor>> postDecor = new CompletableFuture<>();
+
+        PostDecorFirebase postDecorFirebase = new PostDecorFirebase();
+        postDecorFirebase.getPostDecor(new PostDecorFirebase.PostDecorCallback() {
+            @Override
+            public void onPostDecorLoaded(List<PostDecor> postDecorList) {
+                postDecor.complete(postDecorList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                postDecor.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return postDecor;
     }
 }
