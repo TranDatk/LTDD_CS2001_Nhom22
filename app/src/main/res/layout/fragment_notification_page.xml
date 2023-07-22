@@ -15,6 +15,11 @@
         android:text="Click"
         android:textSize="20dp"
         android:id="@+id/btn_add_notify"/>
+
+     <ListView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/lv_notification"/>
  </LinearLayout>
 
 </FrameLayout>

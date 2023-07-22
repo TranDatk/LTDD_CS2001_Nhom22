@@ -1,14 +1,30 @@
 package com.nhom22.findhostel.Data;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.HostelCollection;
 import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Type;
+import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.YourApplication;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class NotificationDAO {
     private DatabaseHelper dbHelper;
+
 
     public NotificationDAO(Context context){dbHelper = new DatabaseHelper(context);}
 
@@ -16,7 +32,8 @@ public class NotificationDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("posts_id", notification.getPosts().getId());
+        values.put("id_posts", notification.getPosts().getId());
+        values.put("id_user", notification.getPosts().getId());
         values.put("created_date", notification.getCreated_date().toString());
         values.put("description", notification.getDescription());
 
@@ -24,5 +41,58 @@ public class NotificationDAO {
         long id = db.insert("notification", null, values);
         db.close();
         return id;
+    }
+
+    @SuppressLint("Range")
+    public List<Notification> getAllNotification() throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "id_posts",
+                "id_user",
+                "description",
+                "created_date"
+        };
+
+        Cursor cursor = db.query("notification", columns, null, null, null, null, null);
+
+        List<Notification> notifications = new ArrayList<>();
+
+        while (cursor != null && cursor.moveToNext())
+        {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int id_posts = cursor.getInt( cursor.getColumnIndex("id_posts"));
+            int id_user = cursor.getInt(cursor.getColumnIndex("id_user"));
+            String description = cursor.getString( cursor.getColumnIndex("description"));
+            String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
+
+            // Create SimpleDateFormat with the correct pattern
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+
+            // Parse the date strings using the SimpleDateFormat
+            Date createdDate;
+            try {
+                createdDate = dateFormat.parse(created_date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                // Handle the parsing exception as needed
+                continue; // Skip this iteration and proceed with the next iteration
+            }
+
+            PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
+            UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
+
+            Posts posts = postsDAO.getPostById(id_posts);
+            UserAccount userAccount = userAccountDAO.getUserAccountById(id_user);
+
+            Notification notification = new Notification(id, posts, userAccount, description, createdDate);
+            notifications.add(notification);
+        }
+        cursor.close();
+        db.close();
+
+
+        return notifications;
     }
 }

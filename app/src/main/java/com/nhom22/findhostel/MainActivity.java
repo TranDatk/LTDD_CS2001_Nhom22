@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
+import com.nhom22.findhostel.Data.PostsDAO;
+import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
 import com.nhom22.findhostel.Model.Address;
@@ -21,6 +23,7 @@ import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.Model.Streets;
@@ -36,6 +39,7 @@ import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
+import com.nhom22.findhostel.Service.NotificationService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.Service.StreetsService;
@@ -51,7 +55,10 @@ import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
@@ -59,7 +66,9 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
+    private PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
+    private UserAccountDAO userAccountDAO= new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
+    private NotificationService notificationService = new NotificationService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +115,25 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//        Date created_date;
+//        Notification notification;
+//        try {
+//           created_date  = sdf.parse("2023-07-18 15:00:00");
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        try {
+//           notification = new Notification(1, postsDAO.getPostById(1),
+//                    userAccountDAO.getUserAccountById(1),"Phòng trọ rẻ", created_date);
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        notificationService.addNotification(notification);
+
 
         createFirebase();
     }
