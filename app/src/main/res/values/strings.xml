@@ -11,6 +11,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="channel_name">Chanel 1</string>
     <string name="channel_description">This is Chanel 1</string>
+    <string name="title_confirmation_dialog">Enter Confirmation Code</string>
 
 
 </resources>

@@ -2,33 +2,44 @@ package com.nhom22.findhostel.UI.HomeSecond;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
+import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
+import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
+import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
+import com.nhom22.findhostel.Service.TypeService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostOwnerActivity extends AppCompatActivity {
 
-    private EditText houseNumberEditText;
     private AutoCompleteTextView autoCitiesField;
     private AutoCompleteTextView autoDistrictField;
     private AutoCompleteTextView autoSubDistrictField;
@@ -38,6 +49,8 @@ public class PostOwnerActivity extends AppCompatActivity {
     private final DistrictsService districtsService = new DistrictsService();
     private final SubDistrictsService subDistrictsService = new SubDistrictsService();
     private final StreetsService streetsService = new StreetsService();
+    private final FurnitureService furnitureService = new FurnitureService();
+    private final TypeService typeService = new TypeService();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +59,59 @@ public class PostOwnerActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        houseNumberEditText = findViewById(R.id.houseNumberEditText);
+        EditText houseNumberEditText = findViewById(R.id.houseNumberEditText);
         autoCitiesField = findViewById(R.id.autoCitiesField);
         autoDistrictField = findViewById(R.id.autoDistrictField);
         autoSubDistrictField =findViewById(R.id.autoSubDistrictField);
         autoStreetField = findViewById(R.id.autoStreetField);
+
+        FlexboxLayout boxFurni = findViewById(R.id.boxFurni);
+
+        // Assume you have a List<Furniture> furnitureList obtained from your data source
+        List<Furniture> furnitureList = furnitureService.getAllFurniture();
+
+        if (furnitureList != null && !furnitureList.isEmpty()) {
+            for (Furniture furniture : furnitureList) {
+                CheckBox newCheckBox = new CheckBox(this);
+                newCheckBox.setText(furniture.getName());
+                newCheckBox.setTextColor(ContextCompat.getColor(this, R.color.black));
+                FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
+                        0,
+                        FlexboxLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setFlexBasisPercent(0.33f);
+                newCheckBox.setLayoutParams(params);
+
+                boxFurni.addView(newCheckBox);
+            }
+        } else {
+            Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
+        }
+
+        FlexboxLayout boxType = findViewById(R.id.boxType);
+
+
+        List<Type> typeList = typeService.getAllType();
+
+        if (typeList != null && !typeList.isEmpty()) {
+            for (Type type : typeList) {
+                CheckBox newCheckBox = new CheckBox(this);
+                newCheckBox.setText(type.getName());
+                newCheckBox.setTextColor(ContextCompat.getColor(this, R.color.black));
+                FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
+                        0,
+                        FlexboxLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setFlexBasisPercent(0.33f);
+                newCheckBox.setLayoutParams(params);
+
+                boxType.addView(newCheckBox);
+            }
+        } else {
+            Button btn = new Button(this);
+            btn.setText("Thêm loại phòng");
+            boxType.addView(btn); //
+        }
 
         addCities();
 

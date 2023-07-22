@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.Type;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TypeDAO {
     private DatabaseHelper dbHelper;
 
@@ -45,6 +48,37 @@ public class TypeDAO {
         return type;
     }
 
+    public List<Type> getAllType() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "is_active"
+        };
+
+        Cursor cursor = db.query("type", columns, null, null, null, null, null);
+
+        List<Type> typeList = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int typeId = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
+
+                // Create a Type object from the columns in the Cursor
+                Type type = new Type(typeId, name, isActive);
+
+                typeList.add(type);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return typeList;
+    }
     public long addType(Type type) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 

@@ -9,6 +9,8 @@ import com.nhom22.findhostel.Data.TypeDAO;
 import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.YourApplication;
 
+import java.util.List;
+
 public class TypeService {
     private final static TypeDAO TYPE_DAO;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -31,6 +33,16 @@ public class TypeService {
         }
     }
 
+    public List<Type> getAllType() {
+        List<Type> typeList = TYPE_DAO.getAllType();
+        if (typeList != null && !typeList.isEmpty()) {
+            return typeList;
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "No types found", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
     public long addType(Type type) {
         if(type != null){
             typeRef.child(String.valueOf(type.getId())).setValue(type);

@@ -10,6 +10,8 @@ import com.nhom22.findhostel.Data.FurnitureDAO;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.YourApplication;
 
+import java.util.List;
+
 public class FurnitureService {
     private final static FurnitureDAO FURNITURE_DAO;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -29,6 +31,17 @@ public class FurnitureService {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null furnitureId", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public List<Furniture> getAllFurniture() {
+        List<Furniture> furnitureList = FURNITURE_DAO.getAllFurniture();
+        if (furnitureList != null && !furnitureList.isEmpty()) {
+            return furnitureList;
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "No furniture items found", Toast.LENGTH_SHORT).show();
+            return null;
         }
     }
 

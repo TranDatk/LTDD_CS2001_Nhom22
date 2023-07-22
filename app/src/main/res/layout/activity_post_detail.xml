@@ -3,192 +3,237 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Search.PostDetailFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="#f2f2f2"
-    >
+    android:orientation="vertical"
+    tools:context=".UI.Search.PostDetailFragment">
+
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Chi tiết bài viết"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimary"
+        app:title="Chi tiết bài viết" />
 
+    <!-- Scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <LinearLayout
-        android:id="@+id/postLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/imageViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/border_background"
-            android:contentDescription="Image Slider"
-            android:clickable="false"/>
-
-
-        <!--        <androidx.viewpager.widget.ViewPager-->
-        <!--            android:id="@+id/imageViewPager"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="200dp"-->
-        <!--            android:background="@drawable/border_background"-->
-        <!--            android:contentDescription="Image Slider" />-->
-
-
-
-        <!--    <ImageView-->
-        <!--        android:id="@+id/imgMain"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="200dp"-->
-        <!--        android:src="@drawable/ic_launcher_background"-->
-        <!--        android:scaleType="centerCrop"/>-->
+        <!-- Post layout -->
         <LinearLayout
+            android:id="@+id/postLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/border_background"
-            android:padding="10dp">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2,000,000đ"
-                    android:textSize="25dp"/>
-                <TextView
-                    android:id="@+id/tvType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Căn hộ"
-                    android:textSize="25dp"/>
-            </LinearLayout>
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Image slider -->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/imageViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/border_background"
+                android:clickable="false"
+                android:contentDescription="Image Slider" />
+
+            <!-- Price and type layout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_background"
                 android:orientation="horizontal"
-                android:gravity="end">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="10dp">
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/baseline_bed_24" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textSize="25sp"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
+                android:padding="16dp">
+
+                <!-- Price and type -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/baseline_bathroom_24"/>
+
                     <TextView
+                        android:id="@+id/tvPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textSize="25sp"
-                        android:layout_gravity="center"/>
+                        android:text="2,000,000đ"
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:id="@+id/tvType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Căn hộ"
+                        android:textSize="25sp" />
+                </LinearLayout>
+
+                <!-- Bed and bathroom layout -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <!-- Bed layout -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/baseline_bed_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="1"
+                            android:textSize="25sp" />
+                    </LinearLayout>
+
+                    <!-- Bathroom layout -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/baseline_bathroom_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="1"
+                            android:textSize="25sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/tvAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:text="gò vấp gò vấp gò vấp gò vấp gò vấp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/border_background"
-            android:padding="10dp"/>
-    </LinearLayout>
 
+            <!-- Address -->
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/border_background"
+                android:padding="16dp"
+                android:text="gò vấp gò vấp gò vấp gò vấp gò vấp"
+                android:textSize="25sp" />
+
+            <!-- Contact layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_background"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <!-- Avatar and phone number -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgAvatar"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp" />
+
+                    <TextView
+                        android:id="@+id/tvPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="5dp"
+                        android:gravity="start"
+                        android:text="0123456789"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- Call and SMS buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnCall"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/baseline_local_phone_24"
+                        android:text="call"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <Button
+                        android:id="@+id/btnSms"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/baseline_sms_24"
+                        android:text="sms"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Description layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_background"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mô tả"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Update and delete buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/border_background">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/imgAvatar"
-                android:layout_width="45dp"
-                android:layout_height="45dp" />
-            <TextView
-                android:id="@+id/tvPhoneNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0123456789"
-                android:textSize="20sp"
-                android:gravity="start"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"/>
-        </LinearLayout>
+        android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnUpdatePost"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end">
+            android:layout_weight="1"
+            android:text="Sửa bài đăng" />
 
-            <Button
-                android:id="@+id/btnCall"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/baseline_local_phone_24"
-                android:text="call"
-                tools:ignore="TouchTargetSizeCheck"/>
-
-            <Button
-                android:id="@+id/btnSms"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/baseline_sms_24"
-                android:text="sms"
-                tools:ignore="TouchTargetSizeCheck"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/border_background"
-        android:layout_marginTop="20dp"
-        android:padding="10dp">
-        <TextView
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnDeletePost"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="Mô tả"/>
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"/>
+            android:layout_weight="1"
+            android:text="Xóa bài đăng" />
+
     </LinearLayout>
 
 </LinearLayout>
