@@ -1,7 +1,5 @@
 package com.nhom22.findhostel.Model;
 
-import java.util.Date;
-
 public class PostDecor {
     private int id;
     private String text;
@@ -17,6 +15,15 @@ public class PostDecor {
         this.created_date = created_date;
         this.user_id = user_id;
         this.isActive = isActive;
+    }
+
+    public PostDecor() {
+        this.id = 1;
+        this.text = "";
+        this.image = null;
+        this.created_date = null;
+        this.user_id = 1;
+        this.isActive = 1;
     }
 
     public int getId() {

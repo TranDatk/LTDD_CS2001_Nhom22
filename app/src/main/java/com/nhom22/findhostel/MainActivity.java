@@ -15,6 +15,7 @@ import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
+import com.nhom22.findhostel.Firebase.Save_PostFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
@@ -23,7 +24,7 @@ import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
-import com.nhom22.findhostel.Model.Notification;
+import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.Model.Streets;
@@ -40,6 +41,7 @@ import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.NotificationService;
+import com.nhom22.findhostel.Service.PostDecorService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.Save_PostService;
 import com.nhom22.findhostel.Service.StreetsService;
@@ -55,10 +57,7 @@ import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
@@ -115,11 +114,41 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date created_date;
+        Notification notification;
+        try {
+           created_date  = sdf.parse("2023-07-5 15:00:00");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+           notification = new Notification(15, postsDAO.getPostById(1),
+                    userAccountDAO.getUserAccountById(7),"Phòng trọ rẻ", created_date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        notificationService.addNotification(notification);
+
 
         createFirebase();
     }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
     private void createFirebase() {
+        Save_PostFirebase save_postFirebase = new Save_PostFirebase();
+        String[] tables = new String[]{"save_post"};
+        for (String table : tables){
+            save_postFirebase.resetFirebaseIds(table);
+        }
+
         FirebasePromises.getCities()
                 .thenCompose(cities -> {
                     onCityLoaded(cities);
@@ -167,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
+                    return FirebasePromises.getPostDecor();
+                }).thenCompose(postDecorList -> {
+                    onPostDecorLoaded(postDecorList);
                     return FirebasePromises.getDetailFurniture();
                 })
                 .thenCompose(detail_furnitures -> {
@@ -374,6 +406,29 @@ public class MainActivity extends AppCompatActivity {
     public void onError(String errorMessage) {
         Toast.makeText(MainActivity.this, "Thực hiện truy vấn firebase thất bại", Toast.LENGTH_LONG).show();
         Log.d("FirebaseLog", errorMessage);
+    }
+
+    private void onPostDecorLoaded(List<PostDecor> postDecorList) {
+        PostDecorService postDecorService = new PostDecorService();
+        postDecorService.deleteAllPostDecor();
+        postDecorService.resetPostDecorAutoIncrement();
+
+        for (PostDecor postDecor : postDecorList) {
+            postDecorService.addPostDecor(postDecor);
+            ImageUserAccountFirebase.getPostDecorImage(String.valueOf(postDecor.getId()) + ".png",
+                    new ImageUserAccountFirebase.ImageDownloadListener() {
+                        @Override
+                        public void onImageDownloaded(byte[] imageData) {
+                            postDecorService.insertImagePostDecor(postDecor.getId(), imageData);
+                        }
+
+                        @Override
+                        public void onImageDownloadFailed(String errorMessage) {
+                            // Xử lý khi có lỗi tải xuống ảnh
+                            Log.e("ErrorDowloadImage", "Failed to download image: " + errorMessage);
+                        }
+                    });
+        }
     }
 }
 

@@ -60,7 +60,7 @@ public class ItemNotificationAdapter extends BaseAdapter {
     }
 
     private class ViewHolder{
-        TextView tvDistrict, tvAuthorName, tvNotiTitle, tvPostsPrice, tvTime;
+        TextView tvDistrict, tvAuthorName, tvNotiTitle, tvTime;
         ImageView imgAvatar;
     }
 
@@ -75,7 +75,6 @@ public class ItemNotificationAdapter extends BaseAdapter {
             holder.tvDistrict = (TextView) convertView.findViewById(R.id.tv_noti_district_posts);
             holder.tvAuthorName = (TextView) convertView.findViewById(R.id.tv_author_name);
             holder.tvNotiTitle = (TextView) convertView.findViewById(R.id.tv_noti_title);
-            holder.tvPostsPrice = (TextView) convertView.findViewById(R.id.tv_noti_price_post);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tv_noti_time);
             holder.imgAvatar = (ImageView) convertView.findViewById(R.id.img_avatar_author);
 
@@ -91,26 +90,71 @@ public class ItemNotificationAdapter extends BaseAdapter {
         String districts_posts = address.getHouseNumber() + " " + address.getStreets().getName() + ", " +
                 address.getSubDistrics().getName() + ", " + address.getDistricts().getName() + ", " + address.getCities().getName();
         String author_name = notification.getUserAccount().getUsername();
-        String posts_price = String.valueOf(notification.getPosts().getPrice());
         String posts_type = notification.getPosts().getType().getName();
 
         String title = author_name + " " + "đã đăng bài viết cho thuê " + posts_type + " " + "gần địa chỉ của bạn";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//
+//        String createdDate = sdf.format(notification.getCreated_date());
 
-        String createdDate = sdf.format(notification.getCreated_date());
+        String timeSince = timeSince(notification.getCreated_date());
 
-        holder.tvTime.setText(createdDate);
-        holder.tvNotiTitle.setText(title);
-        holder.tvPostsPrice.setText(posts_price);
-        holder.tvDistrict.setText(districts_posts);
+        holder.tvTime.setText(" " + timeSince);
+        holder.tvNotiTitle.setText(" " + title);
+        holder.tvDistrict.setText(" Địa chỉ: " + districts_posts);
         holder.tvAuthorName.setText(author_name);
 
+
+        byte[] avatar = notification.getUserAccount().getImage();
+        try {
+            if (avatar != null && avatar.length > 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(avatar,0,avatar.length);
+                holder.imgAvatar.setImageBitmap(bitmap);
+            } else {
+                // Handle the case where the image array is null or empty
+            }
+        } catch (Exception e) {
+            // Handle the exception appropriately (e.g., log the error, show an error message, etc.)
+        }
+
         //chuyen byte -> bitmap
-        byte[] image = notification.getUserAccount().getImage();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(image,0,image.length);
-        holder.imgAvatar.setImageBitmap(bitmap);
+
 
         return convertView;
+    }
+
+    private String timeSince(Date date){
+        Date now = new Date();
+        Date date_since = date;
+
+        double seconds = Math.floor((now.getTime() - date_since.getTime()) / 1000 );
+        double timer = seconds / 2678400;
+
+        if(timer > 1)
+            return (int) Math.floor(timer) + " tháng trước";
+
+        timer = seconds / 604800;
+
+        if (timer > 1)
+            return (int)Math.floor(timer) + " tuần trước";
+
+        timer = seconds / 86400;
+
+        if (timer > 1)
+            return (int) Math.floor(timer) + " ngày trước";
+
+
+        timer = seconds / 3600;
+
+        if (timer > 1)
+            return (int)Math.floor(timer) + " giờ trước";
+
+        timer = seconds / 60;
+
+        if (timer > 1)
+            return (int)Math.floor(timer) + " phút trước";
+
+        return (int)Math.floor(timer) + " giây trước";
     }
 }

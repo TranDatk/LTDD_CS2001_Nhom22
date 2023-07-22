@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
@@ -47,21 +49,21 @@ public class NotificationPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         FragmentNotificationPageBinding binding = FragmentNotificationPageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        binding.btnAddNotify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Posts posts = null;
-                try {
-                     posts = postsService.getPostById(1);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-
-                String address = posts.getAddress().getDistricts().getName();
-
-                sendNotification(address);
-            }
-        });
+//        binding.btnAddNotify.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Posts posts = null;
+//                try {
+//                     posts = postsService.getPostById(1);
+//                } catch (ParseException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                String address = posts.getAddress().getDistricts().getName();
+//
+//                sendNotification(address);
+//            }
+//        });
 
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
@@ -79,6 +81,16 @@ public class NotificationPageFragment extends Fragment {
 
         itemAdapter.notifyDataSetChanged();
 
+        if(arrItem.size() > 0){
+            binding.gifImgNoti.setVisibility(View.GONE);
+        }else {
+            ImageView gifImageView = binding.gifImgNoti;
+            Glide.with(this)
+                    .asGif()
+                    .load(R.drawable.no_notification)
+                    .into(gifImageView);
+            binding.gifImgNoti.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }
@@ -100,4 +112,7 @@ public class NotificationPageFragment extends Fragment {
     private int getNotificationId(){
         return (int) new Date().getTime();
     }
+
+
+
 }
