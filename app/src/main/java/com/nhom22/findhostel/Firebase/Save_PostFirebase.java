@@ -1,5 +1,7 @@
 package com.nhom22.findhostel.Firebase;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -8,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nhom22.findhostel.Model.Save_Post;
+import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -73,14 +76,19 @@ public class Save_PostFirebase {
                 // Cập nhật lại giá trị ID cho mỗi nút theo số thứ tự mới
                 int newId = 1;
                 for (DataSnapshot snapshot : snapshotList) {
-                    String oldId = snapshot.getKey();
                     savePostsRef.child(String.valueOf(newId)).setValue(snapshot.getValue());
                     newId++;
                 }
-                if (snapshotList.size() > 0) {
-                    String lastId = snapshotList.get(snapshotList.size() - 1).getKey();
-                    savePostsRef.child(lastId).removeValue();
+                Toast.makeText(YourApplication.getInstance().getApplicationContext(),String.valueOf(newId),Toast.LENGTH_LONG);
+
+                // Xóa giá trị cuối cùng nếu cần thiết
+                if(!snapshotList.isEmpty()){
+                    int lastId = Integer.parseInt(snapshotList.get(snapshotList.size() - 1).getKey());
+                    if (lastId > snapshotList.size()) {
+                        savePostsRef.child(String.valueOf(lastId)).removeValue();
+                    }
                 }
+
             }
 
             @Override
