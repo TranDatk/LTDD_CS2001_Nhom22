@@ -86,14 +86,14 @@ public class SearchPageAdapter extends BaseAdapter {
             throw new RuntimeException(e);
         }
 
-        if (furs != null && !furs.isEmpty()) {
-            for (int x = 0; x < furs.size(); x++) {
-                if(furs.get(x).getFurniture().getName().contains("Giường")) {
-                    tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
-                    tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
-                }
-            }
-        }
+//        if (furs != null && !furs.isEmpty()) {
+//            for (int x = 0; x < furs.size(); x++) {
+//                if(furs.get(x).getFurniture().getName().contains("Giường")) {
+//                    tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
+//                    tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
+//                }
+//            }
+//        }
 
         if (items != null && !items.isEmpty()) {
             tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");

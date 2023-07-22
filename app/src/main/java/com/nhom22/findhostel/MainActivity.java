@@ -115,6 +115,24 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date created_date;
+        Notification notification;
+        try {
+           created_date  = sdf.parse("2023-07-5 15:00:00");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+           notification = new Notification(15, postsDAO.getPostById(1),
+                    userAccountDAO.getUserAccountById(7),"Phòng trọ rẻ", created_date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        notificationService.addNotification(notification);
+
 
         createFirebase();
     }

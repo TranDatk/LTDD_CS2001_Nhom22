@@ -33,7 +33,7 @@ public class NotificationDAO {
 
         ContentValues values = new ContentValues();
         values.put("id_posts", notification.getPosts().getId());
-        values.put("id_user", notification.getPosts().getId());
+        values.put("id_user", notification.getUserAccount().getId());
         values.put("created_date", notification.getCreated_date().toString());
         values.put("description", notification.getDescription());
 
