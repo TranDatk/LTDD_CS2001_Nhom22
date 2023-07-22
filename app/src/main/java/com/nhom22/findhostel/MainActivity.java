@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
+import com.nhom22.findhostel.Firebase.Save_PostFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
@@ -106,10 +107,23 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
+
         createFirebase();
     }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
     private void createFirebase() {
+        Save_PostFirebase save_postFirebase = new Save_PostFirebase();
+        String[] tables = new String[]{"save_post"};
+        for (String table : tables){
+            save_postFirebase.resetFirebaseIds(table);
+        }
+
         FirebasePromises.getCities()
                 .thenCompose(cities -> {
                     onCityLoaded(cities);
