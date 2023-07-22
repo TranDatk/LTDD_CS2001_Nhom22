@@ -6,13 +6,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nhom22.findhostel.Model.Address;
-import com.nhom22.findhostel.Model.HostelCollection;
 import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.Posts;
-import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
-import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -39,6 +35,9 @@ public class NotificationDAO {
 
 
         long id = db.insert("notification", null, values);
+        if(id > 0){
+            id = getIdOfLastInsertedRow();
+        }
         db.close();
         return id;
     }
@@ -92,7 +91,39 @@ public class NotificationDAO {
         cursor.close();
         db.close();
 
-
         return notifications;
+    }
+
+    public void deleteAllNotification() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("notification", null, null);
+
+        db.close();
+    }
+
+    public void resetNotificationAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='notification'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "notification";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }
