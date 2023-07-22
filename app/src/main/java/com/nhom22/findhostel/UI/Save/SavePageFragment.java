@@ -1,5 +1,7 @@
 package com.nhom22.findhostel.UI.Save;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
@@ -80,15 +83,25 @@ public class SavePageFragment extends Fragment {
         FragmentSavePageBinding binding = FragmentSavePageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         lvItems = view.findViewById(R.id.lvSavedPost);
-        Save_PostService save_postService = new Save_PostService();
-        try {
-            items = save_postService.getListPostsByUserAccountId(1);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        if (!items.isEmpty()) {
-            SavedPostAdapter adapter = new SavedPostAdapter(this, items);
-            lvItems.setAdapter(adapter);
+
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        int userId = sharedPreferences.getInt("userId", -1);
+
+        if (userId > 0) {
+            Save_PostService save_postService = new Save_PostService();
+            try {
+                items = save_postService.getListPostsByUserAccountId(userId);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if (!items.isEmpty()) {
+                SavedPostAdapter adapter = new SavedPostAdapter(requireContext(), this, items);
+                lvItems.setAdapter(adapter);
+            }
+            else {
+                Toast.makeText(requireContext(), "Không có dữ liệu", Toast.LENGTH_SHORT).show();
+            }
         }
 
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {

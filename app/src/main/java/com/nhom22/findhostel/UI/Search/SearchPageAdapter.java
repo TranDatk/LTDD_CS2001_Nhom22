@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
@@ -29,7 +31,7 @@ public class SearchPageAdapter extends BaseAdapter {
 
     private List<Posts> items;
 
-    private List<Furniture> furs;
+    private List<Detail_Furniture> furs;
 
     private SearchPageFragment fragment;
 
@@ -79,28 +81,35 @@ public class SearchPageAdapter extends BaseAdapter {
         if (images != null && !images.isEmpty()) {
             ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(fragment.getContext(), images);
             imageViewPager.setAdapter(imageSliderAdapter);
-//            }
         } else {
             imgMain.setImageDrawable(null);
         }
 
         Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
         try {
-            furs = detail_furnitureService.getListFurnitureByPostsId(items.get(i).getId());
+            furs = detail_furnitureService.getListDetailFurnitureByPostId(items.get(i).getId());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         if (furs != null && !furs.isEmpty()) {
+            for (int x = 0; x < furs.size(); x++) {
+                if(furs.get(x).getFurniture().getName().contains("Giường")) {
+                    tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
+                    tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
+                }
+            }
         }
 
-        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");
-        tvType.setText(items.get(i).getType().getName());
-        tvAddress.setText(items.get(i).getAddress().getHouseNumber() + ", " +
-                items.get(i).getAddress().getStreets().getName() + ", " +
-                items.get(i).getAddress().getSubDistrics().getName() + ", " +
-                items.get(i).getAddress().getDistricts().getName() + ", " +
-                items.get(i).getAddress().getCities().getName());
+        if (items != null && !items.isEmpty()) {
+            tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");
+            tvType.setText(items.get(i).getType().getName());
+            tvAddress.setText(items.get(i).getAddress().getHouseNumber() + ", " +
+                    items.get(i).getAddress().getStreets().getName() + ", " +
+                    items.get(i).getAddress().getSubDistrics().getName() + ", " +
+                    items.get(i).getAddress().getDistricts().getName() + ", " +
+                    items.get(i).getAddress().getCities().getName());
+        }
 
         return view;
     }

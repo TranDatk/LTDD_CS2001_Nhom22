@@ -1,7 +1,9 @@
 package com.nhom22.findhostel.UI.Save;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,7 +32,10 @@ public class SavedPostAdapter extends BaseAdapter {
     private List<Posts> items;
     private SavePageFragment fragment;
 
-    public SavedPostAdapter(SavePageFragment fragment, List<Posts> items) {
+    private Context context;
+
+    public SavedPostAdapter(Context context, SavePageFragment fragment, List<Posts> items) {
+        this.context = context;
         this.fragment = fragment;
         this.items = items;
     }
@@ -111,9 +116,12 @@ public class SavedPostAdapter extends BaseAdapter {
                         Posts p = items.get(i);
                         int postID = p.getId();
                         Save_PostService save_postService = new Save_PostService();
+                        SharedPreferences sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                        int userId = sharedPreferences.getInt("userId", -1);
 
                         try {
-                            save_postService.deleteASavePostByUserIdAndPostId(1, postID);
+                            save_postService.deleteASavePostByUserIdAndPostId(userId, postID);
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
