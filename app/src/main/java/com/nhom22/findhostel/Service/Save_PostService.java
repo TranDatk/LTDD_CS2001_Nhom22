@@ -88,9 +88,9 @@ public class Save_PostService {
 
     public long deleteASavePostByUserIdAndPostId(int userId, int postId) throws ParseException {
         if (userId >= 0 && postId >= 0) {
-            if(getSavePostByPostIdAndUserAccountId(userId,postId) != null){
+            if(getSavePostByPostIdAndUserAccountId(postId,userId) != null){
                 DatabaseReference savePostRef = savePostsRef.child(
-                        String.valueOf(getSavePostByPostIdAndUserAccountId(userId,postId).getId()));
+                        String.valueOf(getSavePostByPostIdAndUserAccountId(postId,userId).getId()));
                 savePostRef.removeValue()
                         .addOnSuccessListener(aVoid -> {
 
@@ -108,6 +108,7 @@ public class Save_PostService {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null savePostId", Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(YourApplication.getInstance().getApplicationContext(), "Null savePostId", Toast.LENGTH_SHORT).show();
         return -1;  // Return -1 to indicate unsuccessful operation
     }
 

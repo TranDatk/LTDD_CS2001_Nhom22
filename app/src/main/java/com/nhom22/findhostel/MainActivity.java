@@ -214,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
         subDistrictsService.resetSubDistrictsAutoIncrement();
         for (SubDistricts subDistricts : subDistrictsList) {
             subDistrictsService.addSubDistricts(subDistricts);
+            if (subDistricts.getId() == 10) {
+                return;
+            }
             // Thực hiện các xử lý khác với citiesService
         }
     }

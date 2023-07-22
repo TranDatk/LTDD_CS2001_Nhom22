@@ -120,13 +120,15 @@ public class SavedPostAdapter extends BaseAdapter {
                         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
                         int userId = sharedPreferences.getInt("userId", -1);
 
+
                         try {
-                            save_postService.deleteASavePostByUserIdAndPostId(userId, postID);
+                            long test = save_postService.deleteASavePostByUserIdAndPostId(userId, postID);
+                            Toast.makeText(view.getContext(), String.valueOf(test), Toast.LENGTH_SHORT).show();
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
 
-                        Toast.makeText(view.getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+
 
                         items.remove(i);
                         notifyDataSetChanged();
