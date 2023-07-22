@@ -16,6 +16,8 @@ import android.Manifest;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -141,6 +143,7 @@ public class ThirdRegisterFragment extends Fragment {
                 userAccount.setUsername(username);
                 userAccount.setPassword(password);
                 userAccount.setImage(hinhAnh);
+                userAccount.setDigital_money(15.205);
 
                 long addUser = userAccountService.addUserAccount(userAccount);
 
@@ -152,6 +155,13 @@ public class ThirdRegisterFragment extends Fragment {
                 }
             } else {
                 Toast.makeText(getContext(), "Thông tin đăng ký đã bị thiếu", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBackToPreviousFragment();
             }
         });
 
@@ -212,7 +222,10 @@ public class ThirdRegisterFragment extends Fragment {
         }
     }
 
-
+    private void goBackToPreviousFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.popBackStackImmediate();
+    }
 }
 
 

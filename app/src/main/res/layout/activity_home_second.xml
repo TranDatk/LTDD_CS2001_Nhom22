@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".UI.HomeSecond.HomeSecondActivity">
 
@@ -21,6 +22,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:title="Bài đăng của tôi"
                 android:background="?attr/colorPrimary" />
 
             <LinearLayout
@@ -61,20 +63,32 @@
                     android:textAllCaps="true"/>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/screen_have_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/test"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:text="Có bài đăng" />
-            </LinearLayout>
+                    android:layout_height="match_parent">
+
+                    <ListView
+                        android:id="@+id/lvPost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/postBtn2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
+
+                        android:src="@drawable/baseline_add_24" />
+                </RelativeLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
@@ -84,7 +98,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="start">
 
-            <!-- Your navigation menu items go here -->
 
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>

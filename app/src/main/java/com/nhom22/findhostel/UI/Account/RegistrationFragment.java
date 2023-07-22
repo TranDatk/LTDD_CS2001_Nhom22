@@ -99,4 +99,9 @@ public class RegistrationFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
 }

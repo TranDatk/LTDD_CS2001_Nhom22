@@ -66,6 +66,15 @@
                     android:layout_marginTop="20dp"
                     android:text="Đăng ký" />
 
+                <Button
+                    android:id="@+id/backButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="Trở về" />
+
             </LinearLayout>
 
     </ScrollView>

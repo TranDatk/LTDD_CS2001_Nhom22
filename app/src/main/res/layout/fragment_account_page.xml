@@ -79,6 +79,7 @@
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -89,7 +90,7 @@
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textAlignment="textStart"
-                android:drawableRight="@drawable/baseline_keyboard_arrow_right_24"
+                android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"
                 android:drawablePadding="8dp"/>
 
             <androidx.appcompat.widget.AppCompatButton

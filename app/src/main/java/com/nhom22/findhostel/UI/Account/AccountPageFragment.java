@@ -20,10 +20,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.UserAccountService;
@@ -82,9 +84,14 @@ public class AccountPageFragment extends Fragment {
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(requireActivity(), HomeSecondActivity.class);
-                    startActivity(intent);
-                    requireActivity().finish();
+                    if(userId < 0) {
+                        Toast.makeText(requireContext(), "Bạn chưa đăng nhập!! vui lòng đăng nhập trước", Toast.LENGTH_SHORT).show();
+                        replaceFragment(new LoginFragment());
+                    } else {
+                        Intent intent = new Intent(requireActivity(), HomeSecondActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+                    }
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -107,6 +114,14 @@ public class AccountPageFragment extends Fragment {
         binding.btnLogout.setOnClickListener(view1 -> {
             clearUserSession();
            replaceFragment(new AccountPageFragment());
+        });
+
+        binding.btnSettings.setOnClickListener(v -> {
+            LinearLayout bottomSheetView = (LinearLayout) getLayoutInflater().inflate(R.layout.screenlayout_notication, null);
+
+            final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(v.getContext());
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
         });
 
         ImageView gifImageView = binding.imageView;

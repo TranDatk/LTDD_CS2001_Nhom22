@@ -155,6 +155,9 @@ public class SubDistrictsDAO {
         values.put("districts_id", subDistricts.getDistricts().getId());
 
         long id = db.insert("sub_districts", null, values);
+        if(id > 0){
+            id = getIdOfLastInsertedRow();
+        }
         db.close();
 
         return id;
@@ -175,5 +178,21 @@ public class SubDistrictsDAO {
         db.execSQL(query);
 
         db.close();
+    }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "sub_districts";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
     }
 }
