@@ -15,22 +15,32 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.NotificationService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.UI.Extension.ItemPostsHostelAdapter;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentNotificationPageBinding;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 
 public class NotificationPageFragment extends Fragment {
 
     FragmentNotificationPageBinding binding;
     public PostsService postsService = new PostsService();
+
+    public static DatabaseHelper dataBase;
+    ListView lsvItem;
+    List<com.nhom22.findhostel.Model.Notification> arrItem;
+    ItemNotificationAdapter itemAdapter;
+    private final NotificationService notificationService = new NotificationService();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +62,23 @@ public class NotificationPageFragment extends Fragment {
                 sendNotification(address);
             }
         });
+
+        dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
+
+        lsvItem = binding.lvNotification;
+
+        try {
+            arrItem = notificationService.getAllNotification();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        itemAdapter = new ItemNotificationAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_noti_layout, arrItem);
+        lsvItem.setAdapter(itemAdapter);
+
+
+        itemAdapter.notifyDataSetChanged();
+
 
         return view;
     }

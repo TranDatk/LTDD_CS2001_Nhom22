@@ -191,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE notification (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "id_posts INTEGER," +
-                "time_to DATETIME," +
+                "id_user INTEGER ," +
                 "description TEXT," +
                 "created_date DATETIME" +
                 ")");
