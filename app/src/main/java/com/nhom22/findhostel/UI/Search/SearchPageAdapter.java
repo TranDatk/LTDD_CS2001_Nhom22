@@ -56,7 +56,7 @@ public class SearchPageAdapter extends BaseAdapter {
         LayoutInflater inflater = fragment.getLayoutInflater();
 
         view = inflater.inflate(R.layout.item_search_post, null);
-        ImageView imgMain = view.findViewById(R.id.imgMain);
+//        ImageView imgMain = view.findViewById(R.id.imgMain);
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         TextView tvType = view.findViewById(R.id.tvType);
         TextView tvAddress = view.findViewById(R.id.tvAddress);
@@ -77,8 +77,6 @@ public class SearchPageAdapter extends BaseAdapter {
         if (images != null && !images.isEmpty()) {
             ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(fragment.getContext(), images);
             imageViewPager.setAdapter(imageSliderAdapter);
-        } else {
-            imgMain.setImageDrawable(null);
         }
 
         Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();

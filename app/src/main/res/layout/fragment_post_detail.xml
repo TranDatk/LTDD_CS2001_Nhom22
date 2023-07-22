@@ -142,7 +142,7 @@ android:padding="10dp">
             <ImageView
                 android:id="@+id/imgAvatar"
                 android:layout_width="45dp"
-                android:layout_height="45dp" />
+                android:layout_height="45dp"/>
             <TextView
                 android:id="@+id/tvPhoneNumber"
                 android:layout_width="match_parent"

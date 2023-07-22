@@ -3,32 +3,59 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="horizontal">
-    <ImageView
-        android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/baseline_info_24"/>
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_gravity="center"
+            android:layout_width="60dp"
+            android:layout_height="60dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_avatar_author"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_view" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_author_name"
+            android:textSize="18dp"
+            android:text="name"/>
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tv_noti_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thông báo có 1 phòng trọ mới"
             android:textSize="20dp"
             android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tv_noti_price_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hiện đang có 1 phòng trọ xung quanh khu vực "
+            android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/tv_district_posts"
+            android:id="@+id/tv_noti_district_posts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hiện đang có 1 phòng trọ xung quanh khu vực "
             android:textSize="18dp" />
         <TextView
+            android:id="@+id/tv_noti_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Xem chi tiết -->"/>
