@@ -24,6 +24,7 @@ import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
@@ -57,7 +58,10 @@ import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
