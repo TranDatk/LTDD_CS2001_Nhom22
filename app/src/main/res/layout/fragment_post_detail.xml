@@ -246,8 +246,8 @@
                     <GridView
                         android:id="@+id/gvFurniture"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:numColumns="4"
+                        android:layout_height="300dp"
+                        android:numColumns="3"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
 

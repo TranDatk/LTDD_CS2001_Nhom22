@@ -28,7 +28,7 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_save" />
+                    android:src="@drawable/savepost" />
 
                 <TextView
                     android:layout_width="match_parent"
