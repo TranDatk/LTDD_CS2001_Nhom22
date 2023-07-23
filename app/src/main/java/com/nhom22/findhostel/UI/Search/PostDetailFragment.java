@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,10 +100,10 @@ public class PostDetailFragment extends Fragment {
         TextView tvPhoneNumber = view.findViewById(R.id.tvPhoneNumber);
         TextView tvBed = view.findViewById(R.id.tvBed);
         TextView tvShower = view.findViewById(R.id.tvShower);
-        TextView tvPostName = view.findViewById(R.id.tvPostName);
-        Button btnSave = view.findViewById(R.id.btnSave);
-        Button btnCall = view.findViewById(R.id.btnCall);
-        Button btnSms = view.findViewById(R.id.btnSms);
+        ImageButton btnBack = view.findViewById(R.id.btnBack);
+        ImageButton btnSave = view.findViewById(R.id.btnSave);
+        ImageButton btnCall = view.findViewById(R.id.btnCall);
+        ImageButton btnSms = view.findViewById(R.id.btnSms);
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
         ImageView imgAvatar = view.findViewById(R.id.imgAvatar);
         GridView gvFurniture = view.findViewById(R.id.gvFurniture);
@@ -116,7 +117,6 @@ public class PostDetailFragment extends Fragment {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            tvPostName.setText(p.getPostName());
             tvDescription.setText(p.getDescription());
             tvType.setText(p.getType().getName());
             tvAddress.setText(p.getAddress().getHouseNumber() + ", " +
@@ -124,7 +124,7 @@ public class PostDetailFragment extends Fragment {
                     p.getAddress().getSubDistrics().getName() + ", " +
                     p.getAddress().getDistricts().getName() + ", " +
                     p.getAddress().getCities().getName());
-            tvPrice.setText(String.valueOf(p.getPrice()));
+            tvPrice.setText(String.valueOf(p.getPrice()) + "đ");
             tvPhoneNumber.setText(p.getUserAccount().getPhone());
 
             Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
@@ -233,7 +233,6 @@ public class PostDetailFragment extends Fragment {
 
         }
 
-        TextView btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

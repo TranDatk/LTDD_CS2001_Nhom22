@@ -5,33 +5,41 @@
     android:layout_height="match_parent"
     tools:context=".UI.Search.SearchPageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:background="#f2f2f2">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="10dp">
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="@color/white">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="35dp"
                 android:text="Tên ứng dụng"
+                android:textStyle="bold"
+                android:textColor="#00FD9E"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:textSize="30dp"
+                android:text="Thuê nhà"
+                android:gravity="center"
                 android:textStyle="bold"/>
         </LinearLayout>
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:textSize="30dp"
-            android:text="Thuê nhà"
-            android:gravity="center" />
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,21 +51,27 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:layout_marginTop="10dp"
-                android:background="#f0f0f0">
+                android:background="#f2f2f2">
                 <EditText
                     android:id="@+id/edtKeyword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="25dp"
                     android:layout_weight="9"
-                    android:hint="địa chỉ, loại, mô tả"/>
+                    android:hint="địa chỉ, loại, mô tả"
+                    android:background="@drawable/border_background"
+                    android:padding="5dp"
+                    android:layout_marginLeft="5dp"/>
                 <ImageButton
                     android:id="@+id/btnSearch"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="43.5dp"
+                    android:layout_height="43.5dp"
                     android:src="@drawable/ic_search"
                     android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="5dp"
+                    android:layout_marginLeft="5dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,23 +80,57 @@
                 android:gravity="center"
                 android:background="#f0f0f0"
                 android:paddingRight="20dp"
-                android:paddingLeft="20dp">
-                <TextView
-                    android:layout_width="wrap_content"
+                android:paddingLeft="20dp"
+                android:layout_marginTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Xếp theo:"/>
-                <Spinner
-                    android:id="@+id/snOptions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Xem bản đồ"/>
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xếp theo:"
+                            android:textSize="20sp"/>
+
+                        <Spinner
+                            android:id="@+id/snOptions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem bản đồ"
+                        android:textSize="20sp"
+                        android:textColor="#49454F"
+                        android:backgroundTint="#00FD9E"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:layout_gravity="center_vertical"/>
+
+                </LinearLayout>
+
+
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
             <ListView
                 android:id="@+id/lvPost"
                 android:layout_width="match_parent"
