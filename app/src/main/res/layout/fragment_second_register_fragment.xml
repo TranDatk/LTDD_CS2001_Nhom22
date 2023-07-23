@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/my_frame_layout"
     tools:context=".UI.Account.SecondRegisterFragment">
 
     <ScrollView
