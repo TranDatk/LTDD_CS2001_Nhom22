@@ -216,7 +216,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="25sp"
-                        android:text="Mô tả"/>
+                        android:text="Mô tả"
+                        android:textColor="@color/black"/>
                     <TextView
                         android:id="@+id/tvDescription"
                         android:layout_width="match_parent"
@@ -242,11 +243,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="25sp"
-                        android:text="Cơ sở vật chất, tiện nghi" />
+                        android:text="Cơ sở vật chất"
+                        android:textColor="@color/black"/>
                     <GridView
                         android:id="@+id/gvFurniture"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="160dp"
+                        android:numColumns="3"
+                        android:layout_marginTop="10dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:text="Tiện ích"
+                        android:textColor="@color/black"/>
+                    <GridView
+                        android:id="@+id/gvUtilities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:numColumns="3"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>

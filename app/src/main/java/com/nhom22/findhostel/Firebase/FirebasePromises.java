@@ -8,6 +8,7 @@ import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
+import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
@@ -324,4 +325,24 @@ public class FirebasePromises {
 
         return postDecor;
     }
+
+    public static CompletableFuture<List<Notification>> getNotification() {
+        CompletableFuture<List<Notification>> future = new CompletableFuture<>();
+
+        NotificationFirebase notificationFirebase = new NotificationFirebase();
+        notificationFirebase.getNotification(new NotificationFirebase.NotificationCallback() {
+            @Override
+            public void onNotificationLoaded(List<Notification> notificationList) {
+                future.complete(notificationList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                future.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return future;
+    }
+
 }

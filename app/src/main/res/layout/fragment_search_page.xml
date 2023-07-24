@@ -32,7 +32,8 @@
                 android:textSize="30dp"
                 android:text="Thuê nhà"
                 android:gravity="center"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <View
