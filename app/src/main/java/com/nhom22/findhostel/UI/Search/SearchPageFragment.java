@@ -2,29 +2,26 @@ package com.nhom22.findhostel.UI.Search;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nhom22.findhostel.Model.Images;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.nhom22.findhostel.MapsActivity;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.PostsService;
-import com.nhom22.findhostel.UI.Account.SecondRegisterFragment;
 import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
 
 import java.text.ParseException;
@@ -296,5 +293,21 @@ public class SearchPageFragment extends Fragment {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ImageButton mapSearchButton = view.findViewById(R.id.mapSearch);
+
+        mapSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Xử lý sự kiện khi button được click
+                // Chuyển đến MapActivity khi bấm vào button
+                Intent intent = new Intent(requireContext(), MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
 }
