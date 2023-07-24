@@ -284,10 +284,7 @@ public class RegistrationFragment extends Fragment {
 
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-            String code = credential.getSmsCode();
-            if (code != null) {
-                verifyCode(code);
-            }
+
         }
 
         @Override

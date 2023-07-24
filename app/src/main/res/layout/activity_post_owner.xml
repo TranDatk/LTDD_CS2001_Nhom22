@@ -32,6 +32,19 @@
                 android:text="Hình ảnh tin đăng*"
                 android:textAllCaps="true" />
 
+            <EditText
+                android:id="@+id/txtNamePost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_1"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hình ảnh tin đăng*"
+                android:textAllCaps="true" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -69,16 +82,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tiện tích của phòng" />
+
             <com.google.android.flexbox.FlexboxLayout
-                android:layout_marginBottom="15dp"
                 android:id="@+id/boxFurni"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="flex_start"
+                android:layout_marginBottom="15dp"
                 app:alignContent="flex_start"
-                app:justifyContent="space_evenly">
-            </com.google.android.flexbox.FlexboxLayout>
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
+                app:justifyContent="space_evenly"></com.google.android.flexbox.FlexboxLayout>
+
             <EditText
                 android:id="@+id/countFurni"
                 android:layout_width="200dp"
@@ -86,18 +100,20 @@
                 android:background="@drawable/border_1"
                 android:hint="Nhập số lượng"
                 android:inputType="number" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Loại phòng: " />
+
             <com.google.android.flexbox.FlexboxLayout
-                android:layout_marginBottom="15dp"
                 android:id="@+id/boxType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="flex_start"
+                android:layout_marginBottom="15dp"
                 app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
                 app:justifyContent="space_evenly">
 
             </com.google.android.flexbox.FlexboxLayout>
@@ -229,7 +245,7 @@
 
 
             <Button
-                android:id="@+id/btnPost"
+                android:id="@+id/btnAddPost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Yêu cầu đăng tin"

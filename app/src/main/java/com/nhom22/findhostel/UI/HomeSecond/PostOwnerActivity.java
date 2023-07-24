@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -21,22 +24,33 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
+import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
+import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
+import com.nhom22.findhostel.Service.UserAccountService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PostOwnerActivity extends AppCompatActivity {
 
@@ -50,7 +64,11 @@ public class PostOwnerActivity extends AppCompatActivity {
     private final SubDistrictsService subDistrictsService = new SubDistrictsService();
     private final StreetsService streetsService = new StreetsService();
     private final FurnitureService furnitureService = new FurnitureService();
+
+    private final UserAccountService userAccountService = new UserAccountService();
     private final TypeService typeService = new TypeService();
+
+    private final PostsService postsService = new PostsService();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +76,23 @@ public class PostOwnerActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        int userId = sharedPreferences.getInt("userId", -1);
+        UserAccount user = userAccountService.getUserAccountById(userId);
 
         EditText houseNumberEditText = findViewById(R.id.houseNumberEditText);
         autoCitiesField = findViewById(R.id.autoCitiesField);
         autoDistrictField = findViewById(R.id.autoDistrictField);
         autoSubDistrictField =findViewById(R.id.autoSubDistrictField);
         autoStreetField = findViewById(R.id.autoStreetField);
+        EditText namePostEditText = findViewById(R.id.txtNamePost);
+        EditText pricePost = findViewById(R.id.txtPrice);
+        EditText desPost = findViewById(R.id.editTextLanguage);
 
         FlexboxLayout boxFurni = findViewById(R.id.boxFurni);
-
-        // Assume you have a List<Furniture> furnitureList obtained from your data source
         List<Furniture> furnitureList = furnitureService.getAllFurniture();
 
         if (furnitureList != null && !furnitureList.isEmpty()) {
@@ -88,30 +113,7 @@ public class PostOwnerActivity extends AppCompatActivity {
             Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
         }
 
-        FlexboxLayout boxType = findViewById(R.id.boxType);
 
-
-        List<Type> typeList = typeService.getAllType();
-
-        if (typeList != null && !typeList.isEmpty()) {
-            for (Type type : typeList) {
-                CheckBox newCheckBox = new CheckBox(this);
-                newCheckBox.setText(type.getName());
-                newCheckBox.setTextColor(ContextCompat.getColor(this, R.color.black));
-                FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
-                        0,
-                        FlexboxLayout.LayoutParams.WRAP_CONTENT
-                );
-                params.setFlexBasisPercent(0.33f);
-                newCheckBox.setLayoutParams(params);
-
-                boxType.addView(newCheckBox);
-            }
-        } else {
-            Button btn = new Button(this);
-            btn.setText("Thêm loại phòng");
-            boxType.addView(btn); //
-        }
 
         addCities();
 
@@ -161,9 +163,118 @@ public class PostOwnerActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        Address address = new Address();
+        String selectedCityName = autoCitiesField.getText().toString();
+        if (!TextUtils.isEmpty(selectedCityName)) {
+            int cityID = getCitiesIdByName(selectedCityName);
+            Cities city = citiesService.getCityById(cityID);
+            address.setCities(city);
+        }
+
+        String selectedDistrictName = autoDistrictField.getText().toString();
+        if (!TextUtils.isEmpty(selectedDistrictName)) {
+            int districtId = getDistrictByName(selectedDistrictName);
+            Districts districts = districtsService.getDistrictById(districtId);
+            address.setDistricts(districts);
+        }
+
+        String selectedSubDistrictName = autoSubDistrictField.getText().toString();
+        if (!TextUtils.isEmpty(selectedSubDistrictName)) {
+            int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
+            SubDistricts subDistricts = subDistrictsService.getSubDistrictById(subDistrictId);
+            address.setSubDistrics(subDistricts);
+        }
+
+        String selectedStreetName = autoStreetField.getText().toString();
+        if (!TextUtils.isEmpty(selectedStreetName)) {
+            int streetId = getStreetIdByName(selectedStreetName);
+            Streets streets = streetsService.getStreetsById(streetId);
+            address.setStreets(streets);
+        }
+
+        address.setHouseNumber(houseNumberEditText.getText().toString());
+        long currentTimeMillis = System.currentTimeMillis();
+        Date currentDate = new Date(currentTimeMillis);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.MONTH, 1);
+        Date futureDate = calendar.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+        String formattedCurrentDate = sdf.format(currentDate);
+        String formattedFutureDate = sdf.format(futureDate);
+
+        Posts posts = new Posts();
+        posts.setPostName(namePostEditText.getText().toString());
+        posts.setAddress(address);
+        String priceText = pricePost.getText().toString();
+        if (!priceText.isEmpty()) {
+            posts.setPrice(Float.parseFloat(priceText));
+        } else { }
+        posts.setDescription(desPost.getText().toString());
+
+        try {
+            Date parsedCurrentDate = sdf.parse(formattedCurrentDate);
+            Date parsedFutureDate = sdf.parse(formattedFutureDate);
+            posts.setTimeFrom(parsedCurrentDate);
+            posts.setTimeTo(parsedFutureDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        posts.setActivePost(1);
+        posts.setUserAccount(user);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FlexboxLayout boxType = findViewById(R.id.boxType);
+        List<Type> typeList = typeService.getAllType();
+
+        if (typeList != null && !typeList.isEmpty()) {
+            RadioGroup radioGroup = new RadioGroup(this);
+            radioGroup.setOrientation(RadioGroup.HORIZONTAL);
+
+            for (Type type : typeList) {
+                RadioButton newRadioButton = new RadioButton(this);
+                newRadioButton.setText(type.getName());
+                newRadioButton.setTextColor(ContextCompat.getColor(this, R.color.black));
+                newRadioButton.setLayoutParams(new RadioGroup.LayoutParams(
+                        RadioGroup.LayoutParams.MATCH_PARENT,
+                        RadioGroup.LayoutParams.WRAP_CONTENT
+                ));
+
+                newRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            Type selectedType = typeService.getTypeById(type.getId());
+                            posts.setType(selectedType);
+                        }
+                    }
+                });
+
+                radioGroup.addView(newRadioButton);
+            }
+
+            boxType.addView(radioGroup);
+        } else {
+            Button btn = new Button(this);
+            btn.setText("Thêm loại phòng");
+            boxType.addView(btn);
+        }
+
+
+        Button btnAddPost = findViewById(R.id.btnAddPost);
+        btnAddPost.setOnClickListener(v -> {
+            long checkAdd = postsService.addAPost(posts);
+            if (checkAdd > 0) {
+                Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
