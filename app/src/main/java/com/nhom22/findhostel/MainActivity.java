@@ -69,8 +69,8 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private PostsDAO postsDAO= new PostsDAO(YourApplication.getInstance().getApplicationContext());
-    private UserAccountDAO userAccountDAO= new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
+    private PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
+    private UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
     private NotificationService notificationService = new NotificationService();
 
     @Override
@@ -122,14 +122,14 @@ public class MainActivity extends AppCompatActivity {
         Date created_date;
         Notification notification;
         try {
-           created_date  = sdf.parse("2023-07-5 15:00:00");
+            created_date = sdf.parse("2023-07-5 15:00:00");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         try {
-           notification = new Notification(15, postsDAO.getPostById(1),
-                    userAccountDAO.getUserAccountById(7),"Phòng trọ rẻ", created_date);
+            notification = new Notification(15, postsDAO.getPostById(1),
+                    userAccountDAO.getUserAccountById(7), "Phòng trọ rẻ", created_date);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     private void createFirebase() {
         Save_PostFirebase save_postFirebase = new Save_PostFirebase();
         String[] tables = new String[]{"save_post"};
-        for (String table : tables){
+        for (String table : tables) {
             save_postFirebase.resetFirebaseIds(table);
         }
 
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     onAddressLoaded(addresses);
                     return FirebasePromises.getFurniture();
                 })
-                .thenCompose(furniture-> {
+                .thenCompose(furniture -> {
                     onFurnitureLoaded(furniture);
                     return FirebasePromises.getUtilities();
                 })
@@ -200,8 +200,17 @@ public class MainActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
+                    return FirebasePromises.getNotification();
+                })
+                .thenCompose(notification -> {
+                    try {
+                        onNotificationLoaded(notification);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     return FirebasePromises.getPostDecor();
-                }).thenCompose(postDecorList -> {
+                })
+                .thenCompose(postDecorList -> {
                     onPostDecorLoaded(postDecorList);
                     return FirebasePromises.getDetailFurniture();
                 })
@@ -432,6 +441,15 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("ErrorDowloadImage", "Failed to download image: " + errorMessage);
                         }
                     });
+        }
+    }
+
+    public void onNotificationLoaded(List<Notification> notificationList) throws ParseException {
+        NotificationService notificationService = new NotificationService();
+        notificationService.deleteAllNotification();
+        notificationService.resetNotificationAutoIncrement();
+        for (Notification notification : notificationList) {
+            notificationService.addNotification(notification);
         }
     }
 }
