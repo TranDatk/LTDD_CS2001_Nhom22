@@ -6,9 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Detail_Utilities;
-import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Utilities;
 import com.nhom22.findhostel.YourApplication;
@@ -19,6 +17,9 @@ import java.util.List;
 
 public class Detail_UtilitiesDAO {
     private DatabaseHelper dbHelper;
+
+    private UtilitiesDAO utilitiesDAO = new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
+    private PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
 
     public Detail_UtilitiesDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -99,7 +100,7 @@ public class Detail_UtilitiesDAO {
         return listUtilities;
     }
 
-    public List<Utilities> getAllUtilities() {
+    public List<Utilities> getAllDetailUtilities() {
         List<Utilities> utilitiesList = new ArrayList<>();
         UtilitiesDAO utilitiesDAO = new UtilitiesDAO(YourApplication.getInstance().getApplicationContext());
 
@@ -180,5 +181,44 @@ public class Detail_UtilitiesDAO {
         db.close();
 
         return id;
+    }
+
+    @SuppressLint("Range")
+    public List<Detail_Utilities> getListDetailUtilitiesByPostId(int postId) throws ParseException {
+        List<Detail_Utilities> listDetailUtilities = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "price",
+                "unit",
+                "posts_id",
+                "utilities_id"
+        };
+
+        String selection = "posts_id = ?";
+        String[] selectionArgs = {String.valueOf(postId)};
+
+        Cursor cursor = db.query("detail_utilities", columns, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            double price = cursor.getDouble(cursor.getColumnIndex("price"));
+            String unit = cursor.getString(cursor.getColumnIndex("unit"));
+            int utilitiesId = cursor.getInt(cursor.getColumnIndex("utilities_id"));
+
+            // Tạo đối tượng Utilities
+            Utilities utilities = utilitiesDAO.getUtilitiesById(utilitiesId);
+
+            // Tao doi tuong posts
+            Posts posts = postsDAO.getPostById(postId);
+
+            // Tạo đối tượng Detail_Utilities và thêm vào danh sách
+            Detail_Utilities detailUtilities = new Detail_Utilities(id, price, unit, posts, utilities);
+            listDetailUtilities.add(detailUtilities);
+        }
+
+        cursor.close();
+        return listDetailUtilities;
     }
 }
