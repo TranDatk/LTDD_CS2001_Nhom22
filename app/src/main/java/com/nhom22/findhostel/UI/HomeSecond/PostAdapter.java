@@ -1,6 +1,8 @@
 package com.nhom22.findhostel.UI.HomeSecond;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,19 +25,20 @@ import java.util.List;
 
 
 public class PostAdapter extends BaseAdapter {
-
-    private List<Posts> items;
+    private Context context;
+    private List<Posts> postsList;
     private List<Furniture> furs;
 
-    private HomeSecondActivity home;
 
-    public PostAdapter(HomeSecondActivity home, List<Posts> items) {
-        this.home = home;
-        this.items = items;
+    public PostAdapter(Context context, List<Posts> list) {
+        super();
+        this.context = context;
+        this.postsList = list;
     }
+
     @Override
     public int getCount() {
-        return items.size();
+        return postsList.size();
     }
 
     @Override
@@ -51,9 +54,10 @@ public class PostAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "SetTextI18n"})
     @Override
     public View getView(int i, View view, ViewGroup parent) {
-        LayoutInflater inflater = home.getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        view = inflater.inflate(R.layout.item_search_post_2, null);
 
-        view = inflater.inflate(R.layout.item_search_post, null);
+        // Find views
         ImageView imgMain = view.findViewById(R.id.imgMain);
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         TextView tvType = view.findViewById(R.id.tvType);
@@ -62,41 +66,43 @@ public class PostAdapter extends BaseAdapter {
         TextView tvShower = view.findViewById(R.id.tvShower);
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
 
+        // Get the current post
+        Posts currentPost = postsList.get(i);
 
+        // Set the background color based on the active status
+        if (currentPost.getActivePost() == 1) {
+            view.setBackgroundColor(Color.LTGRAY);
+        } else {
+            view.setBackgroundColor(Color.GRAY);
+            TextView tvExpired = view.findViewById(R.id.tvExpired);
+            tvExpired.setVisibility(View.VISIBLE);
+            tvExpired.setText("Expired");
+        }
 
+        // Set other views' data
+        tvPrice.setText(String.valueOf(currentPost.getPrice()) + "đ");
+        tvType.setText(currentPost.getType().getName());
+        tvAddress.setText(currentPost.getAddress().getHouseNumber() + ", " +
+                currentPost.getAddress().getStreets().getName() + ", " +
+                currentPost.getAddress().getSubDistrics().getName() + ", " +
+                currentPost.getAddress().getDistricts().getName() + ", " +
+                currentPost.getAddress().getCities().getName());
+
+        // Load and display images
         Detail_ImageService detail_imageService = new Detail_ImageService();
         List<Images> images = null;
         try {
-            images = detail_imageService.getListImageByPostsId(items.get(i).getId());
+            images = detail_imageService.getListImageByPostsId(currentPost.getId());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         if (images != null && !images.isEmpty()) {
-            ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(home.getApplicationContext(), images);
+            ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, images);
             imageViewPager.setAdapter(imageSliderAdapter);
-//            }
         } else {
             imgMain.setImageDrawable(null);
         }
-
-        Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
-        try {
-            furs = detail_furnitureService.getListFurnitureByPostsId(items.get(i).getId());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (furs != null && !furs.isEmpty()) {
-        }
-
-        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");
-        tvType.setText(items.get(i).getType().getName());
-        tvAddress.setText(items.get(i).getAddress().getHouseNumber() + ", " +
-                items.get(i).getAddress().getStreets().getName() + ", " +
-                items.get(i).getAddress().getSubDistrics().getName() + ", " +
-                items.get(i).getAddress().getDistricts().getName() + ", " +
-                items.get(i).getAddress().getCities().getName());
 
         return view;
     }
