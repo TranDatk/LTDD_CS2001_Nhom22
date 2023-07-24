@@ -248,7 +248,7 @@
                     <GridView
                         android:id="@+id/gvFurniture"
                         android:layout_width="match_parent"
-                        android:layout_height="160dp"
+                        android:layout_height="170dp"
                         android:numColumns="3"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
@@ -263,13 +263,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="25sp"
-                        android:text="Tiện ích"
+                        android:text="Dịch vụ"
                         android:textColor="@color/black"/>
                     <GridView
                         android:id="@+id/gvUtilities"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:numColumns="3"
+                        android:layout_height="280dp"
+                        android:numColumns="2"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
 
