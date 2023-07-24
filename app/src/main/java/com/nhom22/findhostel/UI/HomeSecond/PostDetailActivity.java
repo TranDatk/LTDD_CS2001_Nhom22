@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,11 +18,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.UI.Search.FurnitureAdapter;
 import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
 
 import java.text.ParseException;
@@ -30,6 +35,9 @@ import java.util.Objects;
 public class PostDetailActivity extends AppCompatActivity {
 
     public Posts p;
+
+    private List<Detail_Furniture> furs;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -42,10 +50,11 @@ public class PostDetailActivity extends AppCompatActivity {
         TextView tvAddress = findViewById(R.id.tvAddress);
         TextView tvPrice = findViewById(R.id.tvPrice);
         TextView tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
-        Button btnCall = findViewById(R.id.btnCall);
-        Button btnSms = findViewById(R.id.btnSms);
+        TextView tvBed = findViewById(R.id.tvBed);
+        TextView tvShower = findViewById(R.id.tvShower);
         ViewPager imageViewPager = findViewById(R.id.imageViewPager);
         ImageView imgAvatar = findViewById(R.id.imgAvatar);
+        GridView gvFurniture = findViewById(R.id.gvFurniture);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,7 +62,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         Bundle dataBundle = getIntent().getExtras();
         if (dataBundle != null) {
-            int id = dataBundle.getInt("id");
+            int id =dataBundle.getInt("id");
             PostsService postsService = new PostsService();
             try {
                 p = postsService.getPostById(id);
@@ -67,26 +76,26 @@ public class PostDetailActivity extends AppCompatActivity {
                     p.getAddress().getSubDistrics().getName() + ", " +
                     p.getAddress().getDistricts().getName() + ", " +
                     p.getAddress().getCities().getName());
-            tvPrice.setText(String.valueOf(p.getPrice()));
+            tvPrice.setText(String.valueOf(p.getPrice()) + "đ");
             tvPhoneNumber.setText(p.getUserAccount().getPhone());
 
-            btnCall.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:" + p.getUserAccount().getPhone()));
-                    startActivity(intent);
-                }
-            });
+            Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+            try {
+                furs = detail_furnitureService.getListDetailFurnitureByPostId(id);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
 
-            btnSms.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_SENDTO);
-                    intent.setData(Uri.parse("smsto:" + p.getUserAccount().getPhone()));
-                    startActivity(intent);
+            if (furs != null && !furs.isEmpty()) {
+                for (int x = 0; x < furs.size(); x++) {
+                    if(furs.get(x).getFurniture().getName().equals("Giường")) {
+                        tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
+                        tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
+                    }
                 }
-            });
+                FurnitureAdapterActivity adapter = new FurnitureAdapterActivity(this, furs);
+                gvFurniture.setAdapter(adapter);
+            }
 
             Detail_ImageService detail_imageService = new Detail_ImageService();
             List<Images> images = null;
