@@ -16,39 +16,38 @@
         android:background="?attr/colorPrimary"
         app:title="Chi tiết bài viết" />
 
-    <!-- Scrollable content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- Post layout -->
         <LinearLayout
-            android:id="@+id/postLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Image slider -->
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/imageViewPager"
+            <!-- Product Image with Overlaid Button -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/border_background"
-                android:clickable="false"
-                android:contentDescription="Image Slider" />
+                android:layout_height="200dp">
 
-            <!-- Price and type layout -->
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/imageViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/border_background"
+                    android:clickable="false"
+                    android:contentDescription="Image Slider" />
+
+            </FrameLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/border_background"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="10dp">
 
-                <!-- Price and type -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,30 +58,28 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2,000,000đ"
-                        android:textSize="25sp" />
+                        android:textSize="20sp"
+                        android:textColor="#00FD9E"/>
 
                     <TextView
                         android:id="@+id/tvType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Căn hộ"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
-                <!-- Bed and bathroom layout -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="end"
                     android:orientation="horizontal">
 
-                    <!-- Bed layout -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="10dp"
                         android:orientation="vertical">
 
                         <ImageView
@@ -91,14 +88,14 @@
                             android:src="@drawable/baseline_bed_24" />
 
                         <TextView
+                            android:id="@+id/tvBed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="1"
-                            android:textSize="25sp" />
+                            android:text="0"
+                            android:textSize="20sp" />
                     </LinearLayout>
 
-                    <!-- Bathroom layout -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -110,107 +107,113 @@
                             android:src="@drawable/baseline_bathroom_24" />
 
                         <TextView
+                            android:id="@+id/tvShower"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="1"
-                            android:textSize="25sp" />
+                            android:text="0"
+                            android:textSize="20sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Address -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@android:color/darker_gray" />
+
             <TextView
                 android:id="@+id/tvAddress"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/border_background"
-                android:padding="16dp"
-                android:text="gò vấp gò vấp gò vấp gò vấp gò vấp"
-                android:textSize="25sp" />
+                android:padding="10dp"
+                android:text="Địa chỉ: Số 123, Đường ABC, Quận XYZ, Thành phố HCM"
+                android:textSize="20sp"/>
 
-            <!-- Contact layout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/border_background"
                 android:orientation="horizontal"
-                android:padding="16dp">
-
-                <!-- Avatar and phone number -->
+                android:padding="10dp"
+                android:background="#f2f2f2">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/imgAvatar"
+                    <FrameLayout
                         android:layout_width="45dp"
-                        android:layout_height="45dp" />
+
+                        android:layout_height="45dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/imgAvatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"/>
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/tvPhoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="5dp"
-                        android:gravity="start"
                         android:text="0123456789"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <!-- Call and SMS buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btnCall"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:background="@drawable/baseline_local_phone_24"
-                        android:text="call"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                    <Button
-                        android:id="@+id/btnSms"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/baseline_sms_24"
-                        android:text="sms"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        android:textSize="20sp"
+                        android:gravity="start"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Description layout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_background"
-                android:layout_marginTop="20dp"
                 android:orientation="vertical"
-                android:padding="16dp">
-
+                android:padding="10dp"
+                android:layout_marginTop="5dp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Mô tả"
-                    android:textSize="30sp" />
-
+                    android:textSize="25sp"
+                    android:text="Mô tả"/>
                 <TextView
                     android:id="@+id/tvDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:text="Cơ sở vật chất, tiện nghi" />
+                <GridView
+                    android:id="@+id/gvFurniture"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:numColumns="3"
+                    android:layout_marginTop="10dp"/>
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
 
     <!-- Update and delete buttons -->
