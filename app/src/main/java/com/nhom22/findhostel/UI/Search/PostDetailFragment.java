@@ -22,12 +22,14 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.nhom22.findhostel.Model.Detail_Furniture;
+import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Save_Post;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.Save_PostService;
 
@@ -45,6 +47,8 @@ public class PostDetailFragment extends Fragment {
     List<Save_Post> l;
 
     private List<Detail_Furniture> furs;
+
+    List<Detail_Utilities> utis;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -107,6 +111,7 @@ public class PostDetailFragment extends Fragment {
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
         ImageView imgAvatar = view.findViewById(R.id.imgAvatar);
         GridView gvFurniture = view.findViewById(R.id.gvFurniture);
+        GridView gvUtilities = view.findViewById(R.id.gvUtilities);
 
         Bundle dataBundle = getArguments();
         if (dataBundle != null) {
@@ -143,6 +148,18 @@ public class PostDetailFragment extends Fragment {
                 }
                 FurnitureAdapter adapter = new FurnitureAdapter(this, furs);
                 gvFurniture.setAdapter(adapter);
+            }
+
+            Detail_UtilitiesService detail_utilitiesService = new Detail_UtilitiesService();
+            try {
+                utis = detail_utilitiesService.getListDetailUtilitiesByPostId(id);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (utis != null && !utis.isEmpty()) {
+                UtilitiesAdapter adapter = new UtilitiesAdapter(this, utis);
+                gvUtilities.setAdapter(adapter);
             }
 
             btnSave.setOnClickListener(new View.OnClickListener() {
