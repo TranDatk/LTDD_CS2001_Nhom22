@@ -48,7 +48,7 @@ public class Detail_UtilitiesService {
     }
 
     public List<Utilities> getAllUtilities() {
-        return DETAIL_UTILITIES_DAO.getAllUtilities();
+        return DETAIL_UTILITIES_DAO.getAllDetailUtilities();
     }
 
     public long addADetailUtilities(Detail_Utilities detail_utilities) {
@@ -86,5 +86,14 @@ public class Detail_UtilitiesService {
 
     public void resetDetailUtilitiesAutoIncrement() {
         DETAIL_UTILITIES_DAO.resetDetailUtilitiesAutoIncrement();
+    }
+
+    public List<Detail_Utilities> getListDetailUtilitiesByPostId(int postId) throws ParseException {
+        if(new PostsService().getPostById(postId) != null)
+            return DETAIL_UTILITIES_DAO.getListDetailUtilitiesByPostId(postId);
+        else{
+            Log.e("getListDetailUtilitiesByPostId" , "Null postId");
+            return null;
+        }
     }
 }

@@ -1,14 +1,17 @@
 package com.nhom22.findhostel.UI.Account;
 
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -75,6 +78,8 @@ public class SecondRegisterFragment extends Fragment {
         autoDistrictField.setEnabled(false);
         autoSubDistrictField.setEnabled(false);
         autoStreetField.setEnabled(false);
+        setupUI(binding.myFrameLayout);
+        setupKeyboardHiding();
 
 
         autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
@@ -310,6 +315,81 @@ public class SecondRegisterFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setupKeyboardHiding() {
+        binding.autoCitiesField.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    hideSoftKeyboard(activity);
+                }
+            }
+        });
+        binding.autoDistrictField.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    hideSoftKeyboard(activity);
+                }
+            }
+        });
+        binding.autoStreetField.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    hideSoftKeyboard(activity);
+                }
+            }
+        });
+        binding.autoSubDistrictField.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    hideSoftKeyboard(activity);
+                }
+            }
+        });
+        binding.houseNumberEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    hideSoftKeyboard(activity);
+                }
+            }
+        });
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        View currentFocus = activity.getCurrentFocus();
+        if(inputMethodManager.isAcceptingText() && currentFocus != null){
+            inputMethodManager.hideSoftInputFromWindow(
+                    currentFocus.getWindowToken(),
+                    0
+            );
+        }
+    }
+
+    public void setupUI(View view) {
+
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(requireActivity());
+                    return false;
+                }
+            });
+        }
+
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
     }
 
     @Override

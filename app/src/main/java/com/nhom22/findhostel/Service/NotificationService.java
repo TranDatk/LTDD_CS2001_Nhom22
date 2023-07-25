@@ -20,7 +20,9 @@ public class NotificationService {
 
     public long addNotification(Notification notification) {
         if(notification != null){
-            return NOTIFICATION_DAO.addNotification(notification); // -1 Unsuccessful, >0 Successful
+            long result = NOTIFICATION_DAO.addNotification(notification);
+
+            return result; // -1 Unsuccessful, >0 Successful
         }
         else {
             Context context = YourApplication.getInstance().getApplicationContext();
@@ -31,5 +33,13 @@ public class NotificationService {
 
     public List<Notification> getAllNotification() throws ParseException{
         return NOTIFICATION_DAO.getAllNotification();
+    }
+
+    public void deleteAllNotification(){
+        NOTIFICATION_DAO.deleteAllNotification();
+    }
+
+    public void resetNotificationAutoIncrement() {
+        NOTIFICATION_DAO.resetNotificationAutoIncrement();
     }
 }

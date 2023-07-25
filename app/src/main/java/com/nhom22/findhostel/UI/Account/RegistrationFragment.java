@@ -1,6 +1,5 @@
 package com.nhom22.findhostel.UI.Account;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -11,10 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
@@ -23,14 +19,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -43,8 +42,11 @@ public class RegistrationFragment extends Fragment {
 
     private FragmentRegistrationBinding binding;
     private FirebaseAuth mAuth;
+    private PhoneAuthProvider.ForceResendingToken resendingToken;
     private String verificationId;
     private ClipboardManager clipboardManager;
+
+    private BottomSheetDialog bottomSheetDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -131,19 +133,9 @@ public class RegistrationFragment extends Fragment {
 
 
     private void showPassword() {
-        binding.eyeshowPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePasswordVisibility(binding.passwordEditText, binding.eyeshowPass);
-            }
-        });
+        binding.eyeshowPass.setOnClickListener(v -> togglePasswordVisibility(binding.passwordEditText, binding.eyeshowPass));
 
-        binding.ReeyeshowPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePasswordVisibility(binding.repasswordEditText, binding.ReeyeshowPass);
-            }
-        });
+        binding.ReeyeshowPass.setOnClickListener(v -> togglePasswordVisibility(binding.repasswordEditText, binding.ReeyeshowPass));
     }
 
 
@@ -214,20 +206,16 @@ public class RegistrationFragment extends Fragment {
         clipboardManager.setPrimaryClip(clipData);
     }
 
-
-    private boolean isValidEmail(String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
     private boolean isValidPassword(String password) {
         String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
         return password.matches(passwordPattern);
     }
 
     private void sendConfirmationCode(String phoneNumber) {
+        String PhoneNumber = "+84" + phoneNumber;
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber("+84" + phoneNumber)
+                        .setPhoneNumber(PhoneNumber)
                         .setTimeout(60L, TimeUnit.SECONDS)
                         .setActivity(requireActivity())
                         .setCallbacks(mCallbacks)
@@ -235,23 +223,62 @@ public class RegistrationFragment extends Fragment {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
+    private void resendConfirmationCode(String phoneNumber) {
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(mAuth)
+                        .setPhoneNumber(phoneNumber)
+                        .setTimeout(60L, TimeUnit.SECONDS)
+                        .setActivity(requireActivity())
+                        .setCallbacks(mCallbacks)
+                        .setForceResendingToken(resendingToken)
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+
     private void showConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(getString(R.string.title_confirmation_dialog));
+        bottomSheetDialog = new BottomSheetDialog(requireContext());
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.opt_check_layout, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
 
-        final EditText input = new EditText(requireContext());
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
+        // Get the buttons
+        TextView resendOtp = bottomSheetView.findViewById(R.id.resendOtp);
+        Button confirmOtpButton = bottomSheetView.findViewById(R.id.verify_btn);
+        EditText otpEditText = bottomSheetView.findViewById(R.id.otpEditText);
+        Button cancelButton = bottomSheetView.findViewById(R.id.breakBtn);
 
-        builder.setPositiveButton("OK", (dialog, which) -> verifyCode(input.getText().toString()));
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
+        // Set up the listeners
+        resendOtp.setOnClickListener(v -> resendConfirmationCode( binding.phoneNumber.getText().toString()));
+        confirmOtpButton.setOnClickListener(v -> {
+            String otp = otpEditText.getText().toString().trim();
+            if (!otp.isEmpty()) {
+                verifyCode(otp);
+                bottomSheetDialog.cancel();
+            } else {
+                bottomSheetDialog.show();
+                Toast.makeText(requireContext(), "Vui lòng nhập mã OTP", Toast.LENGTH_SHORT).show();
+            }
+        });
+        cancelButton.setOnClickListener(v -> {
+            bottomSheetDialog.cancel();
+        });
     }
 
-    private void verifyCode(String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        signInByCredentials(credential);
+    private void verifyCode(String enteredCode) {
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, enteredCode);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                proceedToNextStep();
+            } else {
+                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                    Toast.makeText(requireContext(), "Incorrect OTP. Please try again.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Failed to verify OTP. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
 
     private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -265,25 +292,21 @@ public class RegistrationFragment extends Fragment {
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(requireContext(), "Verification Failed", Toast.LENGTH_SHORT).show();
+            if (e instanceof FirebaseAuthException) {
+                FirebaseAuthException authException = (FirebaseAuthException) e;
+                if ("ERROR_TOO_MANY_REQUESTS".equals(authException.getErrorCode())) {
+                    Toast.makeText(requireContext(), "Too many requests. Please try again later.", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
 
         @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken token) {
-            super.onCodeSent(s, token);
+        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+            super.onCodeSent(s, forceResendingToken);
             verificationId = s;
+            resendingToken = forceResendingToken;
         }
     };
-
-    private void signInByCredentials(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                proceedToNextStep();
-            } else {
-                // Handle failure
-            }
-        });
-    }
 
     private void proceedToNextStep() {
         replaceFragment(new SecondRegisterFragment());
@@ -307,7 +330,7 @@ public class RegistrationFragment extends Fragment {
         if (!(view instanceof EditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(getActivity());
+                    hideSoftKeyboard(requireActivity());
                     return false;
                 }
             });
