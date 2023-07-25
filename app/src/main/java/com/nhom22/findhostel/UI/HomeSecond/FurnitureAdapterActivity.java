@@ -53,47 +53,47 @@ public class FurnitureAdapterActivity extends BaseAdapter {
 
         switch (furnitureItem.getFurniture().getName()) {
             case "Wifi":
-                imgIcon.setImageResource(R.drawable.wifi);
+                imgIcon.setImageResource(R.drawable.colorwifi);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Tủ quần áo":
-                imgIcon.setImageResource(R.drawable.closet);
+                imgIcon.setImageResource(R.drawable.colorcloset);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Giường":
-                imgIcon.setImageResource(R.drawable.bed);
+                imgIcon.setImageResource(R.drawable.colorbed);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Giá phơi đồ":
-                imgIcon.setImageResource(R.drawable.tshirt);
+                imgIcon.setImageResource(R.drawable.clothesrack);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Bàn":
-                imgIcon.setImageResource(R.drawable.table);
+                imgIcon.setImageResource(R.drawable.colortable);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Ghế":
-                imgIcon.setImageResource(R.drawable.chair);
+                imgIcon.setImageResource(R.drawable.colorchair);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Điều hòa":
-                imgIcon.setImageResource(R.drawable.airconditioner);
+                imgIcon.setImageResource(R.drawable.colorairconditioner);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Ban công":
-                imgIcon.setImageResource(R.drawable.balcony);
+                imgIcon.setImageResource(R.drawable.colorbalcony);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Gác lửng":
-                imgIcon.setImageResource(R.drawable.stairs);
+                imgIcon.setImageResource(R.drawable.promotion);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Cửa sổ":
-                imgIcon.setImageResource(R.drawable.window);
+                imgIcon.setImageResource(R.drawable.colorwindow);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Bếp":
-                imgIcon.setImageResource(R.drawable.kitchen);
+                imgIcon.setImageResource(R.drawable.colorkitchen);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Camera an ninh":
@@ -101,19 +101,19 @@ public class FurnitureAdapterActivity extends BaseAdapter {
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Chỗ giữ xe":
-                imgIcon.setImageResource(R.drawable.motorcycleparking);
+                imgIcon.setImageResource(R.drawable.parking);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Thang máy":
-                imgIcon.setImageResource(R.drawable.elevator);
+                imgIcon.setImageResource(R.drawable.colorelevator);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Khóa từ, vân tay":
-                imgIcon.setImageResource(R.drawable.doorhandle);
+                imgIcon.setImageResource(R.drawable.colorlock);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             case "Sân thượng":
-                imgIcon.setImageResource(R.drawable.rooftop);
+                imgIcon.setImageResource(R.drawable.colorrooftop);
                 tvQuantity.setText(furnitureItem.getFurniture().getName());
                 break;
             default:

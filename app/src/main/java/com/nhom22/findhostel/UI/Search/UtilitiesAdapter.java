@@ -41,36 +41,32 @@ public class UtilitiesAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = fragment.getLayoutInflater();
-        view = inflater.inflate(R.layout.item_post_furniture, null);
+        view = inflater.inflate(R.layout.item_post_utilities, null);
 
         ImageView imgIcon = view.findViewById(R.id.imgIcon);
-        TextView tvQuantity = view.findViewById(R.id.tvQuantity);
+        TextView tvPrice = view.findViewById(R.id.tvPrice);
+        ImageView imgUnit = view.findViewById(R.id.imgUnit);
 
         switch (items.get(i).getUtilities().getName()) {
             case "Điện":
                 imgIcon.setImageResource(R.drawable.lightning);
-                tvQuantity.setText(
-                        String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
                 break;
             case "Nước":
                 imgIcon.setImageResource(R.drawable.watertap);
-                tvQuantity.setText(
-                        String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
                 break;
             case "Giữ xe":
                 imgIcon.setImageResource(R.drawable.parking);
-                tvQuantity.setText(
-                        String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
                 break;
             case "Rác":
                 imgIcon.setImageResource(R.drawable.trash);
-                tvQuantity.setText(
-                        String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
                 break;
             case "Mạng":
                 imgIcon.setImageResource(R.drawable.colorwifi);
-                tvQuantity.setText(
-                        String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
                 break;
             default:
                 System.out.println("...");
