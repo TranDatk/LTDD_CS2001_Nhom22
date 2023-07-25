@@ -306,6 +306,7 @@ public class SearchPageFragment extends Fragment {
                 // Chuyển đến MapActivity khi bấm vào button
                 Intent intent = new Intent(requireContext(), MapActivity.class);
                 startActivity(intent);
+
             }
         });
     }

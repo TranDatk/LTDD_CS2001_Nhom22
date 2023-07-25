@@ -28,10 +28,9 @@ public class NotificationDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("id_posts", notification.getPosts().getId());
-        values.put("id_user", notification.getUserAccount().getId());
+        values.put("id_posts", notification.getPosts());
+        values.put("id_user", notification.getUserAccount());
         values.put("created_date", notification.getCreated_date().toString());
-        values.put("description", notification.getDescription());
 
 
         long id = db.insert("notification", null, values);
@@ -50,7 +49,6 @@ public class NotificationDAO {
                 "id",
                 "id_posts",
                 "id_user",
-                "description",
                 "created_date"
         };
 
@@ -63,7 +61,6 @@ public class NotificationDAO {
             int id = cursor.getInt(cursor.getColumnIndex("id"));
             int id_posts = cursor.getInt( cursor.getColumnIndex("id_posts"));
             int id_user = cursor.getInt(cursor.getColumnIndex("id_user"));
-            String description = cursor.getString( cursor.getColumnIndex("description"));
             String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
 
             // Create SimpleDateFormat with the correct pattern
@@ -79,13 +76,8 @@ public class NotificationDAO {
                 continue; // Skip this iteration and proceed with the next iteration
             }
 
-            PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
-            UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
 
-            Posts posts = postsDAO.getPostById(id_posts);
-            UserAccount userAccount = userAccountDAO.getUserAccountById(id_user);
-
-            Notification notification = new Notification(id, posts, userAccount, description, createdDate);
+            Notification notification = new Notification(id, id_posts, id_user, createdDate);
             notifications.add(notification);
         }
         cursor.close();

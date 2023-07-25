@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
     private UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
-    private NotificationService notificationService = new NotificationService();
+    private final NotificationService notificationService = new NotificationService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,12 +127,9 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        try {
-            notification = new Notification(15, postsDAO.getPostById(1),
-                    userAccountDAO.getUserAccountById(7), "Phòng trọ rẻ", created_date);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+
+        notification = new Notification(15, 1, 7, created_date);
+
 
         notificationService.addNotification(notification);
 

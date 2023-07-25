@@ -39,22 +39,10 @@ public class PostDetailActivity extends AppCompatActivity {
     private List<Detail_Furniture> furs;
 
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-
-        TextView tvDescription = findViewById(R.id.tvDescription);
-        TextView tvType = findViewById(R.id.tvType);
-        TextView tvAddress = findViewById(R.id.tvAddress);
-        TextView tvPrice = findViewById(R.id.tvPrice);
-        TextView tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
-        TextView tvBed = findViewById(R.id.tvBed);
-        TextView tvShower = findViewById(R.id.tvShower);
-        ViewPager imageViewPager = findViewById(R.id.imageViewPager);
-        ImageView imgAvatar = findViewById(R.id.imgAvatar);
-        GridView gvFurniture = findViewById(R.id.gvFurniture);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,59 +50,94 @@ public class PostDetailActivity extends AppCompatActivity {
 
         Bundle dataBundle = getIntent().getExtras();
         if (dataBundle != null) {
-            int id =dataBundle.getInt("id");
+            int id = dataBundle.getInt("id");
             PostsService postsService = new PostsService();
             try {
                 p = postsService.getPostById(id);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            tvDescription.setText(p.getDescription());
-            tvType.setText(p.getType().getName());
-            tvAddress.setText(p.getAddress().getHouseNumber() + ", " +
-                    p.getAddress().getStreets().getName() + ", " +
-                    p.getAddress().getSubDistrics().getName() + ", " +
-                    p.getAddress().getDistricts().getName() + ", " +
-                    p.getAddress().getCities().getName());
-            tvPrice.setText(String.valueOf(p.getPrice()) + "đ");
-            tvPhoneNumber.setText(p.getUserAccount().getPhone());
 
-            Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
-            try {
-                furs = detail_furnitureService.getListDetailFurnitureByPostId(id);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            // Update the post details
+            updatePostDetails(p);
 
-            if (furs != null && !furs.isEmpty()) {
-                for (int x = 0; x < furs.size(); x++) {
-                    if(furs.get(x).getFurniture().getName().equals("Giường")) {
-                        tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
-                        tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
-                    }
+            // Update the furniture details
+            updateFurnitureDetails(id);
+
+            // Update the image details
+            updateImageDetails(id);
+
+            Button btnUpdate = (Button) findViewById(R.id.btnUpdatePost);
+            btnUpdate.setOnClickListener(v-> {
+                    Intent intent  = new Intent(PostDetailActivity.this, UpdatePostActivity.class);
+                    startActivity(intent);
+            });
+        }
+    }
+    @SuppressLint("SetTextI18n")
+    private void updatePostDetails(Posts post) {
+        TextView tvDescription = findViewById(R.id.tvDescription);
+        TextView tvType = findViewById(R.id.tvType);
+        TextView tvAddress = findViewById(R.id.tvAddress);
+        TextView tvPrice = findViewById(R.id.tvPrice);
+        TextView tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
+
+        tvDescription.setText(post.getDescription());
+        tvType.setText(post.getType().getName());
+        tvAddress.setText(post.getAddress().getHouseNumber() + ", " +
+                post.getAddress().getStreets().getName() + ", " +
+                post.getAddress().getSubDistrics().getName() + ", " +
+                post.getAddress().getDistricts().getName() + ", " +
+                post.getAddress().getCities().getName());
+        tvPrice.setText(String.valueOf(post.getPrice()) + "đ");
+        tvPhoneNumber.setText(post.getUserAccount().getPhone());
+    }
+
+    private void updateFurnitureDetails(int postId) {
+        TextView tvBed = findViewById(R.id.tvBed);
+        TextView tvShower = findViewById(R.id.tvShower);
+        GridView gvFurniture = findViewById(R.id.gvFurniture);
+
+        Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+        try {
+            furs = detail_furnitureService.getListDetailFurnitureByPostId(postId);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (furs != null && !furs.isEmpty()) {
+            for (int x = 0; x < furs.size(); x++) {
+                if (furs.get(x).getFurniture().getName().equals("Giường")) {
+                    tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
+                    tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
                 }
-                FurnitureAdapterActivity adapter = new FurnitureAdapterActivity(this, furs);
-                gvFurniture.setAdapter(adapter);
             }
+            FurnitureAdapterActivity adapter = new FurnitureAdapterActivity(this, furs);
+            gvFurniture.setAdapter(adapter);
+        }
+    }
 
-            Detail_ImageService detail_imageService = new Detail_ImageService();
-            List<Images> images = null;
-            try {
-                images = detail_imageService.getListImageByPostsId(id);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+    private void updateImageDetails(int postId) {
+        ViewPager imageViewPager = findViewById(R.id.imageViewPager);
+        ImageView imgAvatar = findViewById(R.id.imgAvatar);
 
-            if (images != null && !images.isEmpty()) {
-                ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(getApplicationContext(), images);
-                imageViewPager.setAdapter(imageSliderAdapter);
-            }
-            byte[] avatar = p.getUserAccount().getImage();
-            if (avatar != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(avatar, 0, avatar.length);
-                imgAvatar.setImageBitmap(bitmap);
-            }
+        Detail_ImageService detail_imageService = new Detail_ImageService();
+        List<Images> images = null;
+        try {
+            images = detail_imageService.getListImageByPostsId(postId);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
+        if (images != null && !images.isEmpty()) {
+            ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(getApplicationContext(), images);
+            imageViewPager.setAdapter(imageSliderAdapter);
+        }
+
+        byte[] avatar = p.getUserAccount().getImage();
+        if (avatar != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(avatar, 0, avatar.length);
+            imgAvatar.setImageBitmap(bitmap);
         }
     }
 
