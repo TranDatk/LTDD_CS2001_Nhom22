@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "242442911756",
-    "project_id": "fir-phoneauth-411d7",
-    "storage_bucket": "fir-phoneauth-411d7.appspot.com"
+    "project_number": "861675849175",
+    "firebase_url": "https://findhostel-5c3bc-default-rtdb.firebaseio.com",
+    "project_id": "findhostel-5c3bc",
+    "storage_bucket": "findhostel-5c3bc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:242442911756:android:83db524007b8bd1ec4ee29",
+        "mobilesdk_app_id": "1:861675849175:android:b9561f5c4682f60c0d3792",
         "android_client_info": {
           "package_name": "com.nhom22.findhostel"
         }
       },
       "oauth_client": [
         {
-          "client_id": "242442911756-r6542pirltkq4ikkio0tbc372a3d961d.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.nhom22.findhostel",
-            "certificate_hash": "2122ebcdc7ba2c4721d577f22b2f200e7b9b4024"
-          }
-        },
-        {
-          "client_id": "242442911756-0ifgfk1paktn2ldoltqtl2vpgif449lr.apps.googleusercontent.com",
+          "client_id": "861675849175-tbs7ment5ktb2k8ljcesogintpj9gu13.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCPKhsl8IJ0J0bBHzxj4T_3rS-iDsHAGAk"
+          "current_key": "AIzaSyCeDQu5BHbdjiS70TvgJi6cfrwxJsGtLXY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "242442911756-0ifgfk1paktn2ldoltqtl2vpgif449lr.apps.googleusercontent.com",
+              "client_id": "861675849175-tbs7ment5ktb2k8ljcesogintpj9gu13.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
