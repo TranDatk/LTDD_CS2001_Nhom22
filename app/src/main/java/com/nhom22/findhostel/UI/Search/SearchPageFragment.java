@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.nhom22.findhostel.MapsActivity;
+import com.nhom22.findhostel.UI.Map.MapActivity;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.PostsService;
@@ -304,10 +304,9 @@ public class SearchPageFragment extends Fragment {
             public void onClick(View v) {
                 // Xử lý sự kiện khi button được click
                 // Chuyển đến MapActivity khi bấm vào button
-                Intent intent = new Intent(requireContext(), MapsActivity.class);
+                Intent intent = new Intent(requireContext(), MapActivity.class);
                 startActivity(intent);
             }
         });
     }
-
 }
