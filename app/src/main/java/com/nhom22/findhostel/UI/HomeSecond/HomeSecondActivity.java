@@ -112,10 +112,8 @@ public class HomeSecondActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        if (!items.isEmpty()) {
-            adapter = new PostAdapter(this, items);
-            lvPost.setAdapter(adapter);
-        }
+        adapter = new PostAdapter(this, items);
+        lvPost.setAdapter(adapter);
 
 
         int countPost = 0;
