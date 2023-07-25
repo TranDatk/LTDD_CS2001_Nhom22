@@ -50,23 +50,78 @@ public class UtilitiesAdapter extends BaseAdapter {
         switch (items.get(i).getUtilities().getName()) {
             case "Điện":
                 imgIcon.setImageResource(R.drawable.lightning);
-                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                switch (items.get(i).getUnit()) {
+                    case "1 người":
+                        imgUnit.setImageResource(R.drawable.person);
+                        break;
+                    case "1 phòng":
+                        imgUnit.setImageResource(R.drawable.room);
+                        break;
+                    default:
+                        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                        break;
+                }
                 break;
             case "Nước":
                 imgIcon.setImageResource(R.drawable.watertap);
-                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                switch (items.get(i).getUnit()) {
+                    case "1 người":
+                        imgUnit.setImageResource(R.drawable.person);
+                        break;
+                    case "1 phòng":
+                        imgUnit.setImageResource(R.drawable.room);
+                        break;
+                    default:
+                        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                        break;
+                }
                 break;
             case "Giữ xe":
                 imgIcon.setImageResource(R.drawable.parking);
-                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                switch (items.get(i).getUnit()) {
+                    case "1 người":
+                        imgUnit.setImageResource(R.drawable.person);
+                        break;
+                    case "1 phòng":
+                        imgUnit.setImageResource(R.drawable.room);
+                        break;
+                    default:
+                        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                        break;
+                }
                 break;
             case "Rác":
                 imgIcon.setImageResource(R.drawable.trash);
-                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                switch (items.get(i).getUnit()) {
+                    case "1 người":
+                        imgUnit.setImageResource(R.drawable.person);
+                        break;
+                    case "1 phòng":
+                        imgUnit.setImageResource(R.drawable.room);
+                        break;
+                    default:
+                        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                        break;
+                }
                 break;
             case "Mạng":
                 imgIcon.setImageResource(R.drawable.colorwifi);
-                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/" + items.get(i).getUnit());
+                tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                switch (items.get(i).getUnit()) {
+                    case "1 người":
+                        imgUnit.setImageResource(R.drawable.person);
+                        break;
+                    case "1 phòng":
+                        imgUnit.setImageResource(R.drawable.room);
+                        break;
+                    default:
+                        tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ/");
+                        break;
+                }
                 break;
             default:
                 System.out.println("...");

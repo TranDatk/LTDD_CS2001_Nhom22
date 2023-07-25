@@ -268,7 +268,7 @@
                     <GridView
                         android:id="@+id/gvUtilities"
                         android:layout_width="match_parent"
-                        android:layout_height="280dp"
+                        android:layout_height="320dp"
                         android:numColumns="2"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
