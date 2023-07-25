@@ -49,21 +49,6 @@ public class NotificationPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         FragmentNotificationPageBinding binding = FragmentNotificationPageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-//        binding.btnAddNotify.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Posts posts = null;
-//                try {
-//                     posts = postsService.getPostById(1);
-//                } catch (ParseException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                String address = posts.getAddress().getDistricts().getName();
-//
-//                sendNotification(address);
-//            }
-//        });
 
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
