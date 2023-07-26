@@ -7,13 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.Notification;
-import com.nhom22.findhostel.Model.Posts;
-import com.nhom22.findhostel.Model.UserAccount;
-import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -28,10 +26,9 @@ public class NotificationDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("id_posts", notification.getPosts().getId());
-        values.put("id_user", notification.getUserAccount().getId());
+        values.put("id_posts", notification.getPostsId());
+        values.put("id_user", notification.getUserAccountId());
         values.put("created_date", notification.getCreated_date().toString());
-        values.put("description", notification.getDescription());
 
 
         long id = db.insert("notification", null, values);
@@ -50,7 +47,6 @@ public class NotificationDAO {
                 "id",
                 "id_posts",
                 "id_user",
-                "description",
                 "created_date"
         };
 
@@ -63,11 +59,10 @@ public class NotificationDAO {
             int id = cursor.getInt(cursor.getColumnIndex("id"));
             int id_posts = cursor.getInt( cursor.getColumnIndex("id_posts"));
             int id_user = cursor.getInt(cursor.getColumnIndex("id_user"));
-            String description = cursor.getString( cursor.getColumnIndex("description"));
             String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
 
             // Create SimpleDateFormat with the correct pattern
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
 
             // Parse the date strings using the SimpleDateFormat
             Date createdDate;
@@ -79,13 +74,8 @@ public class NotificationDAO {
                 continue; // Skip this iteration and proceed with the next iteration
             }
 
-            PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
-            UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
 
-            Posts posts = postsDAO.getPostById(id_posts);
-            UserAccount userAccount = userAccountDAO.getUserAccountById(id_user);
-
-            Notification notification = new Notification(id, posts, userAccount, description, createdDate);
+            Notification notification = new Notification(id, id_posts, id_user, createdDate);
             notifications.add(notification);
         }
         cursor.close();
@@ -125,5 +115,104 @@ public class NotificationDAO {
         db.close();
 
         return id;
+    }
+
+    @SuppressLint("Range")
+    public Notification getANotificationByPostsIdAndUserId(int postsId, int userId) throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "id_posts",
+                "id_user",
+                "created_date"
+        };
+
+        String selection = "id_posts = ? AND id_user = ?";
+        String[] selectionArgs = {String.valueOf(postsId), String.valueOf(userId)};
+
+        Cursor cursor = db.query("notification", columns, selection, selectionArgs, null, null, null);
+
+        Notification notification = null;
+        if (cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
+
+            // Create SimpleDateFormat with the correct pattern
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+
+            // Parse the date strings using the SimpleDateFormat
+            Date createdDate = null;
+            try {
+                createdDate = dateFormat.parse(created_date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                // Handle the parsing exception as needed
+            }
+
+            notification = new Notification(id, postsId, userId, createdDate);
+        }
+
+        cursor.close();
+        return notification;
+    }
+
+    @SuppressLint("Range")
+    public List<Notification> getNotificationOverThirtyDay() throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "id_posts",
+                "id_user",
+                "created_date"
+        };
+
+        // Lấy ngày hiện tại và tính ngày trước 30 ngày
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -30);
+        Date thirtyDaysAgo = calendar.getTime();
+
+
+        Cursor cursor = db.query("notification", columns, null, null, null, null, null);
+
+        List<Notification> notificationList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int postsId = cursor.getInt(cursor.getColumnIndex("id_posts"));
+            int userId = cursor.getInt(cursor.getColumnIndex("id_user"));
+            Date createdDate = parseDate(cursor.getString(cursor.getColumnIndex("created_date")));
+
+            if(createdDate.before(thirtyDaysAgo)){
+                Notification notification = new Notification(id, postsId, userId, createdDate);
+                notificationList.add(notification);
+            }
+        }
+
+        cursor.close();
+        return notificationList;
+    }
+
+    private Date parseDate(String dateString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        return dateFormat.parse(dateString);
+    }
+
+    private String formatDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        return dateFormat.format(date);
+    }
+
+    public void deleteNotificationById(int id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Chuỗi điều kiện để xóa thông báo có id tương ứng
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        // Thực hiện câu lệnh xóa thông báo trong cơ sở dữ liệu
+        db.delete("notification", selection, selectionArgs);
+
+        db.close();
     }
 }

@@ -116,25 +116,23 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
-//        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 //        Date created_date;
 //        Notification notification;
 //        try {
-//            created_date = sdf.parse("2023-07-5 15:00:00");
+//            created_date = sdf.parse("2023-06-2 15:00:00");
 //        } catch (ParseException e) {
 //            throw new RuntimeException(e);
 //        }
-
+//
+//        notification = new Notification(15, 2, 2, created_date);
 //        try {
-//            notification = new Notification(15, postsDAO.getPostById(1),
-//                    userAccountDAO.getUserAccountById(7), "Phòng trọ rẻ", created_date);
+//            long l = notificationService.addNotification(notification);
 //        } catch (ParseException e) {
 //            throw new RuntimeException(e);
 //        }
-
-//        notificationService.addNotification(notification);
 
 
         createFirebase();

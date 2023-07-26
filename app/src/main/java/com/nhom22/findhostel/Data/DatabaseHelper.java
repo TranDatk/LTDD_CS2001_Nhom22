@@ -192,7 +192,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "id_posts INTEGER," +
                 "id_user INTEGER ," +
-                "description TEXT," +
                 "created_date DATETIME" +
                 ")");
     }

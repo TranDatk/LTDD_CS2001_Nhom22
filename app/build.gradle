@@ -1,13 +1,14 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.android'
 
 }
 
 android {
     namespace 'com.nhom22.findhostel'
     useLibrary 'org.apache.http.legacy'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.nhom22.findhostel"
@@ -37,6 +38,11 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
+
+    kotlinOptions {
+        // Sử dụng JVM Toolchain để đặt mục tiêu phiên bản Java cho Kotlin
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -51,6 +57,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
     implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
     implementation 'com.google.firebase:firebase-auth:22.1.0'
+    implementation 'com.mapbox.maps:android:10.14.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'androidx.core:core-ktx:+'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

@@ -10,25 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.viewpager.widget.ViewPager;
-
+import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Data.PostsDAO;
+import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.Address;
-import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Notification;
-import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.Service.Detail_ImageService;
-import com.nhom22.findhostel.UI.Extension.ItemPostsHostelAdapter;
-import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ItemNotificationAdapter extends BaseAdapter {
 
@@ -37,6 +31,8 @@ public class ItemNotificationAdapter extends BaseAdapter {
     private List<Notification> notifications;
     private Posts posts = null;
     private PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
+    private AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
+    private UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
 
     public ItemNotificationAdapter(Context context, int layout, List<Notification> notifications){
         this.context = context;
@@ -85,12 +81,18 @@ public class ItemNotificationAdapter extends BaseAdapter {
         }
 
         Notification notification = notifications.get(position);
-        Address address = notification.getPosts().getAddress();
+        try {
+            posts = postsDAO.getPostById(notification.getPostsId());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        Address address = posts.getAddress();
+        UserAccount userAccount = userAccountDAO.getUserAccountById(notification.getUserAccountId());
 
         String districts_posts = address.getHouseNumber() + " " + address.getStreets().getName() + ", " +
                 address.getSubDistrics().getName() + ", " + address.getDistricts().getName() + ", " + address.getCities().getName();
-        String author_name = notification.getUserAccount().getUsername();
-        String posts_type = notification.getPosts().getType().getName();
+        String author_name = userAccount.getUsername();
+        String posts_type = posts.getType().getName();
 
         String title = author_name + " " + "đã đăng bài viết cho thuê " + posts_type + " " + "gần địa chỉ của bạn";
 
@@ -106,7 +108,7 @@ public class ItemNotificationAdapter extends BaseAdapter {
         holder.tvAuthorName.setText(author_name);
 
 
-        byte[] avatar = notification.getUserAccount().getImage();
+        byte[] avatar = userAccount.getImage();
         try {
             if (avatar != null && avatar.length > 0) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(avatar,0,avatar.length);

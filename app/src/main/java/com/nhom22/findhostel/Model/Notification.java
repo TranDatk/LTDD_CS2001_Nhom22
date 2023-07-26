@@ -4,34 +4,22 @@ import java.util.Date;
 
 public class Notification {
     private int id;
-    private Posts posts;
-    private UserAccount userAccount;
-    private String description;
+    private int postsId;
+    private int userAccountId;
     private Date created_date;
 
-
-    public Notification(int id, Posts posts, UserAccount userAccount, String description, Date created_date) {
+    public Notification(int id, int postsId, int userAccountId, Date created_date) {
         this.id = id;
-        this.posts = posts;
-        this.userAccount = userAccount;
-        this.description = description;
+        this.postsId = postsId;
+        this.userAccountId = userAccountId;
         this.created_date = created_date;
     }
 
     public Notification() {
         this.id = 0;
-        this.posts = null;
-        this.userAccount = null;
-        this.description = "";
+        this.postsId = 0;
+        this.userAccountId = 0;
         this.created_date = null;
-    }
-
-    public UserAccount getUserAccount() {
-        return userAccount;
-    }
-
-    public void setUserAccount(UserAccount userAccount) {
-        this.userAccount = userAccount;
     }
 
     public int getId() {
@@ -42,20 +30,20 @@ public class Notification {
         this.id = id;
     }
 
-    public Posts getPosts() {
-        return posts;
+    public int getPostsId() {
+        return postsId;
     }
 
-    public void setPosts(Posts posts_id) {
-        this.posts = posts_id;
+    public void setPostsId(int posts) {
+        this.postsId = posts;
     }
 
-    public String getDescription() {
-        return description;
+    public int getUserAccountId() {
+        return userAccountId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUserAccountId(int userAccount) {
+        this.userAccountId = userAccount;
     }
 
     public Date getCreated_date() {
