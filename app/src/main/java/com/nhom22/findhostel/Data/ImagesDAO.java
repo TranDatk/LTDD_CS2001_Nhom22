@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.Images;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ImagesDAO {
     private DatabaseHelper dbHelper;
 
@@ -47,11 +50,49 @@ public class ImagesDAO {
         return images;
     }
 
+    public List<Images> getAllImagesByName(String name) {
+        List<Images> imagesList = new ArrayList<>();
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "name",
+                "image",
+                "is_active"
+        };
+
+        String selection = "name = ?";
+        String[] selectionArgs = {name};
+
+        Cursor cursor = db.query("images", columns, selection, selectionArgs, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int imageId = cursor.getInt(cursor.getColumnIndex("id"));
+                @SuppressLint("Range") String imageName = cursor.getString(cursor.getColumnIndex("name"));
+                @SuppressLint("Range") byte[] image = cursor.getBlob(cursor.getColumnIndex("image"));
+                @SuppressLint("Range") int isActive = cursor.getInt(cursor.getColumnIndex("is_active"));
+
+                // Create Images object from the columns in the Cursor
+                Images images = new Images(imageId, imageName, image, isActive);
+                imagesList.add(images);
+            } while (cursor.moveToNext());
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+
+        return imagesList;
+    }
+
     public long addAImages(Images image) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("id", image.getId());
         values.put("name", image.getName());
         values.put("image", image.getImage());
         values.put("is_active", image.getIsActive());

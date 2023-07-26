@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.nhom22.findhostel.Data.DatabaseHelper;
@@ -40,9 +42,24 @@ public class NotificationPageFragment extends Fragment {
 
     public static DatabaseHelper dataBase;
     ListView lsvItem;
-    List<com.nhom22.findhostel.Model.Notification> arrItem;
+    List<com.nhom22.findhostel.Model.Notification> arrItem, arrItemOverThirtyDays;
     ItemNotificationAdapter itemAdapter;
     private final NotificationService notificationService = new NotificationService();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        try {
+            arrItemOverThirtyDays = notificationService.getNotificationOverThirtyDay();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (int i = 0; i < arrItemOverThirtyDays.size(); i++){
+            notificationService.deleteNotificationById(arrItemOverThirtyDays.get(i).getId());
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +93,7 @@ public class NotificationPageFragment extends Fragment {
                     .into(gifImageView);
             binding.gifImgNoti.setVisibility(View.VISIBLE);
         }
+        Toast.makeText(getContext(), String.valueOf(arrItem.size()), Toast.LENGTH_SHORT).show();
 
         return view;
     }

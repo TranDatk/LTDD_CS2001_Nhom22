@@ -1,12 +1,24 @@
 package com.nhom22.findhostel.UI.HomeSecond;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.Manifest;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,32 +29,42 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
+import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
+import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
+import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
 import com.nhom22.findhostel.Service.UserAccountService;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -51,6 +73,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class PostOwnerActivity extends AppCompatActivity {
 
@@ -69,6 +96,18 @@ public class PostOwnerActivity extends AppCompatActivity {
     private final TypeService typeService = new TypeService();
 
     private final PostsService postsService = new PostsService();
+
+    private final AddressService addressService = new AddressService();
+
+    private final ImagesService imagesService = new ImagesService();
+
+    private static final int REQUEST_PERMISSIONS = 1;
+    private static final int PICK_IMAGE_MULTIPLE = 2;
+    private static final int REQUEST_IMAGE_CAPTURE = 3;
+
+    private RecyclerView recyclerView;
+    private ArrayList<Uri> selectedImages = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +125,12 @@ public class PostOwnerActivity extends AppCompatActivity {
         EditText houseNumberEditText = findViewById(R.id.houseNumberEditText);
         autoCitiesField = findViewById(R.id.autoCitiesField);
         autoDistrictField = findViewById(R.id.autoDistrictField);
-        autoSubDistrictField =findViewById(R.id.autoSubDistrictField);
+        autoSubDistrictField = findViewById(R.id.autoSubDistrictField);
         autoStreetField = findViewById(R.id.autoStreetField);
         EditText namePostEditText = findViewById(R.id.txtNamePost);
         EditText pricePost = findViewById(R.id.txtPrice);
         EditText desPost = findViewById(R.id.editTextLanguage);
+
 
         FlexboxLayout boxFurni = findViewById(R.id.boxFurni);
         List<Furniture> furnitureList = furnitureService.getAllFurniture();
@@ -110,10 +150,8 @@ public class PostOwnerActivity extends AppCompatActivity {
                 boxFurni.addView(newCheckBox);
             }
         } else {
-            Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
         }
-
-
 
         addCities();
 
@@ -121,7 +159,6 @@ public class PostOwnerActivity extends AppCompatActivity {
         autoDistrictField.setEnabled(false);
         autoSubDistrictField.setEnabled(false);
         autoStreetField.setEnabled(false);
-
 
         autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedCityName = (String) parent.getItemAtPosition(position);
@@ -147,10 +184,9 @@ public class PostOwnerActivity extends AppCompatActivity {
             addStreet(selectedSubDistrictId);
         });
 
-
         Spinner spinnerLanguage = findViewById(R.id.spinnerLanguage);
 
-        String[] languages = {"Tiếng anh","Tiếng việt"};
+        String[] languages = {"Tiếng Anh", "Tiếng Việt"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, languages);
         spinnerLanguage.setAdapter(adapter);
 
@@ -159,74 +195,52 @@ public class PostOwnerActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLanguage = languages[position];
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        Address address = new Address();
-        String selectedCityName = autoCitiesField.getText().toString();
-        if (!TextUtils.isEmpty(selectedCityName)) {
-            int cityID = getCitiesIdByName(selectedCityName);
-            Cities city = citiesService.getCityById(cityID);
-            address.setCities(city);
+
+        Button galleryButton = findViewById(R.id.galleryButton);
+        Button cameraButton = findViewById(R.id.cameraButton);
+        Button upImage = findViewById(R.id.btnUpImage);
+        recyclerView = findViewById(R.id.recyclerView);
+        selectedImages = new ArrayList<>();
+
+        upImage.setOnClickListener(v -> {
+            for (Uri uri : selectedImages) {
+                Images images = new Images();
+                images.setIsActive(1);
+                images.setName(String.valueOf(userId));
+                try {
+                    byte[] a = getBytesFromUri(uri);
+                    images.setImage(a);
+                    long result = imagesService.addAImages(images);
+                    if (result > 0) {
+                        Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        galleryButton.setOnClickListener(v -> openGallery());
+
+        cameraButton.setOnClickListener(v -> openCamera());
+
+        // Request necessary permissions
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        List<String> permissionList = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(permission);
+            }
         }
-
-        String selectedDistrictName = autoDistrictField.getText().toString();
-        if (!TextUtils.isEmpty(selectedDistrictName)) {
-            int districtId = getDistrictByName(selectedDistrictName);
-            Districts districts = districtsService.getDistrictById(districtId);
-            address.setDistricts(districts);
+        if (!permissionList.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[0]), REQUEST_PERMISSIONS);
         }
-
-        String selectedSubDistrictName = autoSubDistrictField.getText().toString();
-        if (!TextUtils.isEmpty(selectedSubDistrictName)) {
-            int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
-            SubDistricts subDistricts = subDistrictsService.getSubDistrictById(subDistrictId);
-            address.setSubDistrics(subDistricts);
-        }
-
-        String selectedStreetName = autoStreetField.getText().toString();
-        if (!TextUtils.isEmpty(selectedStreetName)) {
-            int streetId = getStreetIdByName(selectedStreetName);
-            Streets streets = streetsService.getStreetsById(streetId);
-            address.setStreets(streets);
-        }
-
-        address.setHouseNumber(houseNumberEditText.getText().toString());
-        long currentTimeMillis = System.currentTimeMillis();
-        Date currentDate = new Date(currentTimeMillis);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.MONTH, 1);
-        Date futureDate = calendar.getTime();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
-        String formattedCurrentDate = sdf.format(currentDate);
-        String formattedFutureDate = sdf.format(futureDate);
-
         Posts posts = new Posts();
-        posts.setPostName(namePostEditText.getText().toString());
-        posts.setAddress(address);
-        String priceText = pricePost.getText().toString();
-        if (!priceText.isEmpty()) {
-            posts.setPrice(Float.parseFloat(priceText));
-        } else { }
-        posts.setDescription(desPost.getText().toString());
-
-        try {
-            Date parsedCurrentDate = sdf.parse(formattedCurrentDate);
-            Date parsedFutureDate = sdf.parse(formattedFutureDate);
-            posts.setTimeFrom(parsedCurrentDate);
-            posts.setTimeTo(parsedFutureDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        posts.setActivePost(1);
-        posts.setUserAccount(user);
-
-
 
         FlexboxLayout boxType = findViewById(R.id.boxType);
         List<Type> typeList = typeService.getAllType();
@@ -244,13 +258,10 @@ public class PostOwnerActivity extends AppCompatActivity {
                         RadioGroup.LayoutParams.WRAP_CONTENT
                 ));
 
-                newRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            Type selectedType = typeService.getTypeById(type.getId());
-                            posts.setType(selectedType);
-                        }
+                newRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        Type selectedType = typeService.getTypeById(type.getId());
+                        posts.setType(selectedType);
                     }
                 });
 
@@ -260,20 +271,127 @@ public class PostOwnerActivity extends AppCompatActivity {
             boxType.addView(radioGroup);
         } else {
             Button btn = new Button(this);
-            btn.setText("Thêm loại phòng");
+            btn.setText("Thêm loại phòng");
             boxType.addView(btn);
         }
 
-
         Button btnAddPost = findViewById(R.id.btnAddPost);
         btnAddPost.setOnClickListener(v -> {
+            // Create a new Posts object
+            String city = autoCitiesField.getText().toString();
+            String district = autoDistrictField.getText().toString();
+            String subdistrict = autoSubDistrictField.getText().toString();
+            String street = autoStreetField.getText().toString();
+            String housenum = houseNumberEditText.getText().toString();
+
+            // Set the post name
+            String name = namePostEditText.getText().toString();
+            posts.setPostName(name);
+
+            // Set the address
+            Address address = new Address();
+            boolean isDataValid = true;
+            if (TextUtils.isEmpty(city)) {
+                isDataValid = false;
+                autoCitiesField.setError("Chưa chọn thành phố");
+            }
+
+            if (TextUtils.isEmpty(district)) {
+                isDataValid = false;
+                autoDistrictField.setError("Chưa chọn quận");
+            }
+
+            if (TextUtils.isEmpty(subdistrict)) {
+                isDataValid = false;
+                autoSubDistrictField.setError("Chưa chọn phường");
+            }
+
+            if (TextUtils.isEmpty(street)) {
+                isDataValid = false;
+                autoStreetField.setError("Chưa chọn tên đường");
+            }
+
+            if (TextUtils.isEmpty(housenum)) {
+                isDataValid = false;
+                houseNumberEditText.setError("Chưa nhập số nhà");
+            }
+            if (isDataValid) {
+                String selectedCityName = autoCitiesField.getText().toString();
+                if (!TextUtils.isEmpty(selectedCityName)) {
+                    int cityID = getCitiesIdByName(selectedCityName);
+                    Cities citys = citiesService.getCityById(cityID);
+                    address.setCities(citys);
+                }
+
+                String selectedDistrictName = autoDistrictField.getText().toString();
+                if (!TextUtils.isEmpty(selectedDistrictName)) {
+                    int districtId = getDistrictByName(selectedDistrictName);
+                    Districts districts = districtsService.getDistrictById(districtId);
+                    address.setDistricts(districts);
+                }
+
+                String selectedSubDistrictName = autoSubDistrictField.getText().toString();
+                if (!TextUtils.isEmpty(selectedSubDistrictName)) {
+                    int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
+                    SubDistricts subDistricts = subDistrictsService.getSubDistrictById(subDistrictId);
+                    address.setSubDistrics(subDistricts);
+                }
+
+                String selectedStreetName = autoStreetField.getText().toString();
+                if (!TextUtils.isEmpty(selectedStreetName)) {
+                    int streetId = getStreetIdByName(selectedStreetName);
+                    Streets streets = streetsService.getStreetsById(streetId);
+                    address.setStreets(streets);
+                }
+            }
+
+            address.setHouseNumber(houseNumberEditText.getText().toString());
+            addressService.addAddress(address);
+            posts.setAddress(address);
+
+            // Set the price
+            String priceText = pricePost.getText().toString();
+            if (!priceText.isEmpty()) {
+                posts.setPrice(Float.parseFloat(priceText));
+            }
+
+            // Set the description
+            posts.setDescription(desPost.getText().toString());
+
+            // Set the time
+            long currentTimeMillis = System.currentTimeMillis();
+            Date currentDate = new Date(currentTimeMillis);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(currentDate);
+            calendar.add(Calendar.MONTH, 1);
+            Date futureDate = calendar.getTime();
+
+            posts.setTimeFrom(currentDate);
+            posts.setTimeTo(futureDate);
+
+            // Set the active post
+            posts.setActivePost(1);
+            posts.setUserAccount(user);
+
+            // Set the type
+
+
+            // Add the post
             long checkAdd = postsService.addAPost(posts);
             if (checkAdd > 0) {
-                Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
+                Detail_Image detail_image = new Detail_Image();
+                Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
+                detail_image.setPosts(posts);
+                List<Images> imagesList = imagesService.getAllImagesByName(String.valueOf(userId));
+                for (Images images : imagesList) {
+                    detail_image.setImages(images);
+                }
             } else {
-                Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
@@ -380,4 +498,84 @@ public class PostOwnerActivity extends AppCompatActivity {
         return -1;
     }
 
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_MULTIPLE);
+    }
+
+    private void openCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    private void updateRecyclerView(List<Uri> selectedImages) {
+        ImageAdapter imageAdapter = new ImageAdapter(selectedImages);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setAdapter(imageAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK && data != null) {
+            if (data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    selectedImages.add(imageUri);
+                }
+                Toast.makeText(this, "Selected " + count + " images", Toast.LENGTH_SHORT).show();
+            } else if (data.getData() != null) {
+                Uri imageUri = data.getData();
+                selectedImages.add(imageUri);
+
+                Toast.makeText(this, "Selected 1 image", Toast.LENGTH_SHORT).show();
+            }
+            updateRecyclerView(selectedImages);
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Uri imageUri = getImageUriFromBitmap(imageBitmap);
+            selectedImages.add(imageUri);
+            updateRecyclerView(selectedImages);
+        }
+    }
+
+    private Uri getImageUriFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+    }
+
+    private byte[] getBytesFromUri(Uri uri) throws IOException {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+
+        return outputStream.toByteArray();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission denied: " + permissions[i], Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 }

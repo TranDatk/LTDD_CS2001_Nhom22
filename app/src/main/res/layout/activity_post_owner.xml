@@ -27,6 +27,7 @@
             android:padding="15dp">
 
             <TextView
+                android:id="@+id/test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Hình ảnh tin đăng*"
@@ -45,27 +46,37 @@
                 android:text="Hình ảnh tin đăng*"
                 android:textAllCaps="true" />
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/white"
+                android:padding="8dp"
+                android:scrollbarStyle="outsideInset"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/galleryButton"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/camera" />
-
-                <TextView
-                    android:layout_width="match_parent"
+                    android:text="Thêm ảnh" />
+                <Button
+                    android:id="@+id/cameraButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Thêm hình ảnh"
-                    android:textAllCaps="true"
-                    android:textColor="@color/green" />
+                    android:text="Chụp ảnh" />
+
+                <Button
+                    android:id="@+id/btnUpImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chụp ảnh" />
 
             </LinearLayout>
 

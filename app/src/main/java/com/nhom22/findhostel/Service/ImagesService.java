@@ -12,6 +12,8 @@ import com.nhom22.findhostel.Data.ImagesDAO;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.YourApplication;
 
+import java.util.List;
+
 public class ImagesService {
     private final static ImagesDAO IMAGES_DAO;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -33,6 +35,16 @@ public class ImagesService {
         }
     }
 
+    public List<Images> getAllImagesByName(String name) {
+        List<Images> imagesList = IMAGES_DAO.getAllImagesByName(name);
+
+        if (imagesList == null || imagesList.isEmpty()) {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "No images found with the given name", Toast.LENGTH_SHORT).show();
+        }
+
+        return imagesList;
+    }
     public long addAImages(Images images) {
         if (images != null) {
             long result = IMAGES_DAO.addAImages(images);

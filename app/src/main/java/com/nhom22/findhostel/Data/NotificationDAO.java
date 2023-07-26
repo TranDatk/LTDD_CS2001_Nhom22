@@ -173,10 +173,8 @@ public class NotificationDAO {
         calendar.add(Calendar.DAY_OF_MONTH, -30);
         Date thirtyDaysAgo = calendar.getTime();
 
-        String selection = "created_date < ?";
-        String[] selectionArgs = {formatDate(thirtyDaysAgo)};
 
-        Cursor cursor = db.query("notification", columns, selection, selectionArgs, null, null, null);
+        Cursor cursor = db.query("notification", columns, null, null, null, null, null);
 
         List<Notification> notificationList = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -185,8 +183,10 @@ public class NotificationDAO {
             int userId = cursor.getInt(cursor.getColumnIndex("id_user"));
             Date createdDate = parseDate(cursor.getString(cursor.getColumnIndex("created_date")));
 
-            Notification notification = new Notification(id, postsId, userId, createdDate);
-            notificationList.add(notification);
+            if(createdDate.before(thirtyDaysAgo)){
+                Notification notification = new Notification(id, postsId, userId, createdDate);
+                notificationList.add(notification);
+            }
         }
 
         cursor.close();
@@ -194,12 +194,25 @@ public class NotificationDAO {
     }
 
     private Date parseDate(String dateString) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         return dateFormat.parse(dateString);
     }
 
     private String formatDate(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         return dateFormat.format(date);
+    }
+
+    public void deleteNotificationById(int id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Chuỗi điều kiện để xóa thông báo có id tương ứng
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        // Thực hiện câu lệnh xóa thông báo trong cơ sở dữ liệu
+        db.delete("notification", selection, selectionArgs);
+
+        db.close();
     }
 }
