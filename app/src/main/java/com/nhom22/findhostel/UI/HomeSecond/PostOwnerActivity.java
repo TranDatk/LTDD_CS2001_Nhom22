@@ -348,7 +348,7 @@ public class PostOwnerActivity extends AppCompatActivity {
                 }
 
                 address.setHouseNumber(houseNumberEditText.getText().toString());
-                address.setIsActive(1);
+                address.setIsActive(0);
                 long a = addressService.addAddress(address);
                 if (a > 0) {
                     Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
