@@ -71,4 +71,8 @@ public class NotificationService {
     public List<Notification> getNotificationOverThirtyDay() throws ParseException {
         return NOTIFICATION_DAO.getNotificationOverThirtyDay();
     }
+
+    public void deleteNotificationById(int id){
+        NOTIFICATION_DAO.deleteNotificationById(id);
+    }
 }

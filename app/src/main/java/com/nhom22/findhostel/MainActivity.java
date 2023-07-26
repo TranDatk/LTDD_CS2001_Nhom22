@@ -58,7 +58,10 @@ import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
@@ -114,6 +117,23 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//        Date created_date;
+//        Notification notification;
+//        try {
+//            created_date = sdf.parse("2023-06-2 15:00:00");
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        notification = new Notification(15, 2, 2, created_date);
+//        try {
+//            long l = notificationService.addNotification(notification);
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+
 
         createFirebase();
     }
