@@ -67,4 +67,8 @@ public class NotificationService {
             return null;
         }
     }
+
+    public List<Notification> getNotificationOverThirtyDay() throws ParseException {
+        return NOTIFICATION_DAO.getNotificationOverThirtyDay();
+    }
 }

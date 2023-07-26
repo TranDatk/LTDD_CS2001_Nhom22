@@ -11,6 +11,7 @@ import com.nhom22.findhostel.Model.Notification;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -61,7 +62,7 @@ public class NotificationDAO {
             String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
 
             // Create SimpleDateFormat with the correct pattern
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
 
             // Parse the date strings using the SimpleDateFormat
             Date createdDate;
@@ -138,7 +139,7 @@ public class NotificationDAO {
             String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
 
             // Create SimpleDateFormat with the correct pattern
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
 
             // Parse the date strings using the SimpleDateFormat
             Date createdDate = null;
@@ -154,5 +155,51 @@ public class NotificationDAO {
 
         cursor.close();
         return notification;
+    }
+
+    @SuppressLint("Range")
+    public List<Notification> getNotificationOverThirtyDay() throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "id_posts",
+                "id_user",
+                "created_date"
+        };
+
+        // Lấy ngày hiện tại và tính ngày trước 30 ngày
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -30);
+        Date thirtyDaysAgo = calendar.getTime();
+
+        String selection = "created_date < ?";
+        String[] selectionArgs = {formatDate(thirtyDaysAgo)};
+
+        Cursor cursor = db.query("notification", columns, selection, selectionArgs, null, null, null);
+
+        List<Notification> notificationList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int postsId = cursor.getInt(cursor.getColumnIndex("id_posts"));
+            int userId = cursor.getInt(cursor.getColumnIndex("id_user"));
+            Date createdDate = parseDate(cursor.getString(cursor.getColumnIndex("created_date")));
+
+            Notification notification = new Notification(id, postsId, userId, createdDate);
+            notificationList.add(notification);
+        }
+
+        cursor.close();
+        return notificationList;
+    }
+
+    private Date parseDate(String dateString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+        return dateFormat.parse(dateString);
+    }
+
+    private String formatDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+        return dateFormat.format(date);
     }
 }
