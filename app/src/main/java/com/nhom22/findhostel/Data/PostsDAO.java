@@ -106,7 +106,7 @@ public class PostsDAO {
         values.put("type_id", post.getType().getId());
 
         long id = db.insert("posts", null, values);
-        if(id > 0){
+        if (id > 0) {
             id = getIdOfLastInsertedRow();
         }
         db.close();
@@ -327,6 +327,67 @@ public class PostsDAO {
             if (userAccount.getId() == ownerId) {
                 postList.add(post);
             }
+        }
+
+        cursor.close();
+
+        return postList;
+    }
+
+    @SuppressLint("Range")
+    public List<Posts> getListPostsActive() throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "time_from",
+                "time_to",
+                "post_name",
+                "price",
+                "description",
+                "active_post",
+                "address_id",
+                "owner_id",
+                "type_id"
+        };
+
+        String selection = "active_post = ?";
+        String[] selectionArgs = {String.valueOf(1)};
+
+        Cursor cursor = db.query("posts", columns, selection, selectionArgs, null, null, null);
+
+        List<Posts> postList = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String timeFromStr = cursor.getString(cursor.getColumnIndex("time_from"));
+            String timeToStr = cursor.getString(cursor.getColumnIndex("time_to"));
+            String postName = cursor.getString(cursor.getColumnIndex("post_name"));
+            float price = cursor.getFloat(cursor.getColumnIndex("price"));
+            String description = cursor.getString(cursor.getColumnIndex("description"));
+            int activePost = cursor.getInt(cursor.getColumnIndex("active_post"));
+            int addressId = cursor.getInt(cursor.getColumnIndex("address_id"));
+            int ownerIdFromDb = cursor.getInt(cursor.getColumnIndex("owner_id"));
+            int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
+
+            // Chuyển đổi chuỗi thời gian thành đối tượng Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+            Date timeFrom = dateFormat.parse(timeFromStr);
+            Date timeTo = dateFormat.parse(timeToStr);
+
+            // Tạo các đối tượng liên quan
+            AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
+            UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
+            TypeDAO typeDAO = new TypeDAO(YourApplication.getInstance().getApplicationContext());
+
+            Address address = addressDAO.getAddressById(addressId);
+            UserAccount userAccount = userAccountDAO.getUserAccountById(ownerIdFromDb);
+            Type type = typeDAO.getTypeById(typeId);
+
+            // Tạo đối tượng Posts và thêm vào danh sách
+            Posts post = new Posts(id, timeFrom, timeTo, postName, price, description, activePost, address, userAccount, type);
+
+            postList.add(post);
         }
 
         cursor.close();

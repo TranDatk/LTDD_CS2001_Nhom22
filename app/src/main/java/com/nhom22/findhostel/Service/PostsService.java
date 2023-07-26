@@ -91,4 +91,8 @@ public class PostsService {
             return null;
         }
     }
+
+    public List<Posts> getListPostsActive() throws ParseException {
+        return POSTS_DAO.getListPostsActive();
+    }
 }
