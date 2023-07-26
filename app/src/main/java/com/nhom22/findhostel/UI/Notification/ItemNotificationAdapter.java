@@ -10,28 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.viewpager.widget.ViewPager;
-
 import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.Address;
-import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Notification;
-import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
-import com.nhom22.findhostel.Service.Detail_ImageService;
-import com.nhom22.findhostel.UI.Extension.ItemPostsHostelAdapter;
-import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ItemNotificationAdapter extends BaseAdapter {
 
@@ -91,12 +82,12 @@ public class ItemNotificationAdapter extends BaseAdapter {
 
         Notification notification = notifications.get(position);
         try {
-            posts = postsDAO.getPostById(notification.getPosts());
+            posts = postsDAO.getPostById(notification.getPostsId());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         Address address = posts.getAddress();
-        UserAccount userAccount = userAccountDAO.getUserAccountById(notification.getUserAccount());
+        UserAccount userAccount = userAccountDAO.getUserAccountById(notification.getUserAccountId());
 
         String districts_posts = address.getHouseNumber() + " " + address.getStreets().getName() + ", " +
                 address.getSubDistrics().getName() + ", " + address.getDistricts().getName() + ", " + address.getCities().getName();

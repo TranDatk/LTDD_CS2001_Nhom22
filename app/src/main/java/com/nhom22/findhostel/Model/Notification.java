@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class Notification {
     private int id;
-    private int posts;
-    private int userAccount;
+    private int postsId;
+    private int userAccountId;
     private Date created_date;
 
-    public Notification(int id, int posts, int userAccount, Date created_date) {
+    public Notification(int id, int postsId, int userAccountId, Date created_date) {
         this.id = id;
-        this.posts = posts;
-        this.userAccount = userAccount;
+        this.postsId = postsId;
+        this.userAccountId = userAccountId;
         this.created_date = created_date;
     }
 
     public Notification() {
         this.id = 0;
-        this.posts = 0;
-        this.userAccount = 0;
+        this.postsId = 0;
+        this.userAccountId = 0;
         this.created_date = null;
     }
 
@@ -30,20 +30,20 @@ public class Notification {
         this.id = id;
     }
 
-    public int getPosts() {
-        return posts;
+    public int getPostsId() {
+        return postsId;
     }
 
-    public void setPosts(int posts) {
-        this.posts = posts;
+    public void setPostsId(int posts) {
+        this.postsId = posts;
     }
 
-    public int getUserAccount() {
-        return userAccount;
+    public int getUserAccountId() {
+        return userAccountId;
     }
 
-    public void setUserAccount(int userAccount) {
-        this.userAccount = userAccount;
+    public void setUserAccountId(int userAccount) {
+        this.userAccountId = userAccount;
     }
 
     public Date getCreated_date() {

@@ -7,9 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.Notification;
-import com.nhom22.findhostel.Model.Posts;
-import com.nhom22.findhostel.Model.UserAccount;
-import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,8 +25,8 @@ public class NotificationDAO {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("id_posts", notification.getPosts());
-        values.put("id_user", notification.getUserAccount());
+        values.put("id_posts", notification.getPostsId());
+        values.put("id_user", notification.getUserAccountId());
         values.put("created_date", notification.getCreated_date().toString());
 
 
@@ -117,5 +114,45 @@ public class NotificationDAO {
         db.close();
 
         return id;
+    }
+
+    @SuppressLint("Range")
+    public Notification getANotificationByPostsIdAndUserId(int postsId, int userId) throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "id_posts",
+                "id_user",
+                "created_date"
+        };
+
+        String selection = "id_posts = ? AND id_user = ?";
+        String[] selectionArgs = {String.valueOf(postsId), String.valueOf(userId)};
+
+        Cursor cursor = db.query("notification", columns, selection, selectionArgs, null, null, null);
+
+        Notification notification = null;
+        if (cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String created_date = cursor.getString( cursor.getColumnIndex("created_date"));
+
+            // Create SimpleDateFormat with the correct pattern
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.getDefault());
+
+            // Parse the date strings using the SimpleDateFormat
+            Date createdDate = null;
+            try {
+                createdDate = dateFormat.parse(created_date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                // Handle the parsing exception as needed
+            }
+
+            notification = new Notification(id, postsId, userId, createdDate);
+        }
+
+        cursor.close();
+        return notification;
     }
 }
