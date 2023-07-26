@@ -1,14 +1,19 @@
 package com.nhom22.findhostel.Service;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.YourApplication;
 
 public class AddressService {
     private final static AddressDAO ADDRESS_DAO;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private final DatabaseReference addressRef = database.getReference("address");
 
     static {
         Context appContext = YourApplication.getInstance().getApplicationContext();
@@ -28,7 +33,15 @@ public class AddressService {
 
     public long addAddress(Address address){
         if(address != null){
-            return ADDRESS_DAO.addAddress(address);
+
+            long result = ADDRESS_DAO.addAddress(address);
+            if(result > 0){
+                address.setId(Integer.parseInt(String.valueOf(result)));
+                addressRef.child(String.valueOf(address.getId())).setValue(address);
+            }else{
+                Log.e("addAddress", String.valueOf(result));
+            }
+            return result;
         }
         else {
             Context context = YourApplication.getInstance().getApplicationContext();

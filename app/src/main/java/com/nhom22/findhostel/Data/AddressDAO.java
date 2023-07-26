@@ -80,9 +80,13 @@ public class AddressDAO {
         values.put("districts_id", address.getDistricts().getId());
         values.put("sub_districts_id", address.getSubDistrics().getId());
         values.put("streets_id", address.getStreets().getId());
-        long addressId = db.insert("address", null, values);
+
+        long result = db.insert("address", null, values);
+        if(result > 0){
+            result = getIdOfLastInsertedRow();
+        }
         db.close();
-        return addressId;
+        return result;
     }
 
     public Address getAddressByNameStreetAndHouseNumber(String streetName, String houseNumber) {
@@ -152,4 +156,22 @@ public class AddressDAO {
 
         db.close();
     }
+
+    public long getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "address";
+        Cursor cursor = db.rawQuery(query, null);
+
+        long id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
+    }
 }
+
+
