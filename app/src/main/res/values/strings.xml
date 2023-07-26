@@ -27,4 +27,5 @@
 
     <string name="rotate_threshold">Rotate threshold</string>
     <string name="scale_threshold">Scale threshold</string>
+    <string name="findhostel">findhostel</string>
 </resources>

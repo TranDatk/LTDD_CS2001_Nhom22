@@ -7,6 +7,7 @@ import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
+import com.nhom22.findhostel.Model.HostelCollection;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.PostDecor;
@@ -345,4 +346,22 @@ public class FirebasePromises {
         return future;
     }
 
+    public static CompletableFuture<List<HostelCollection>> getHostelCollection() {
+        CompletableFuture<List<HostelCollection>> future = new CompletableFuture<>();
+
+        HostelCollectionFirebase hostelCollectionFirebase = new HostelCollectionFirebase();
+        hostelCollectionFirebase.getHostelCollection(new HostelCollectionFirebase.HostelCollectionCallback() {
+            @Override
+            public void onHostelCollectionLoaded(List<HostelCollection> hostelCollectionList) {
+                future.complete(hostelCollectionList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                future.completeExceptionally(new Exception(errorMessage));
+            }
+        });
+
+        return future;
+    }
 }

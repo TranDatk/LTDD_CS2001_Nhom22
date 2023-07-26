@@ -1,8 +1,11 @@
 package com.nhom22.findhostel.Service;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.StreetsDAO;
 import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.YourApplication;
@@ -12,6 +15,9 @@ import java.util.List;
 
 public class StreetsService {
     private final static StreetsDAO STREETS_DAO;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    private final DatabaseReference streetsRef = database.getReference("streets");
 
     static {
         Context appContext = YourApplication.getInstance().getApplicationContext();
@@ -58,7 +64,12 @@ public class StreetsService {
     public long addStreets(Streets streets) {
         if(streets != null){
             long result = STREETS_DAO.addStreets(streets);
-
+            if (result > 0){
+                streets.setId(Integer.parseInt(String.valueOf(result)));
+                streetsRef.child(String.valueOf(streets.getId())).setValue(streets);
+            }else{
+                Log.e("addStreets", String.valueOf(result));
+            }
             return result;
         }else{
             Context context = YourApplication.getInstance().getApplicationContext();
