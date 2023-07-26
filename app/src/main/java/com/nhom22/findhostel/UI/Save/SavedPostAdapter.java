@@ -25,7 +25,9 @@ import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.Save_PostService;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SavedPostAdapter extends BaseAdapter {
 
@@ -62,6 +64,7 @@ public class SavedPostAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.item_saved_post, null);
 
         ImageView imgMain = view.findViewById(R.id.imgMain);
+        ImageView imgState = view.findViewById(R.id.imgState);
         TextView tvAddress = view.findViewById(R.id.tvAddress);
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         Button btnPhoneNumber = view.findViewById(R.id.btnPhoneNumber);
@@ -92,6 +95,13 @@ public class SavedPostAdapter extends BaseAdapter {
                 items.get(i).getAddress().getCities().getName());
         tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");
         btnPhoneNumber.setText(items.get(i).getUserAccount().getPhone());
+        Date from = items.get(i).getTimeFrom();
+        Date to = items.get(i).getTimeTo();
+        long diffInMillis = to.getTime() - from.getTime();
+        long daysdiff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+        if (daysdiff < 0) {
+            imgState.setImageResource(R.drawable.clock);
+        }
 
         btnPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override

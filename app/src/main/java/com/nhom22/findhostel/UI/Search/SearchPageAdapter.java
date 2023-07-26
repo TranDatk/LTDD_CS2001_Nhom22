@@ -20,7 +20,9 @@ import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SearchPageAdapter extends BaseAdapter {
 
@@ -62,6 +64,7 @@ public class SearchPageAdapter extends BaseAdapter {
         TextView tvAddress = view.findViewById(R.id.tvAddress);
         TextView tvBed = view.findViewById(R.id.tvBed);
         TextView tvShower = view.findViewById(R.id.tvShower);
+        TextView tvDateCounter = view.findViewById(R.id.tvDateCounter);
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
 
 
@@ -103,6 +106,13 @@ public class SearchPageAdapter extends BaseAdapter {
                     items.get(i).getAddress().getSubDistrics().getName() + ", " +
                     items.get(i).getAddress().getDistricts().getName() + ", " +
                     items.get(i).getAddress().getCities().getName());
+            Date from = items.get(i).getTimeFrom();
+            Date to = items.get(i).getTimeTo();
+            long diffInMillis = to.getTime() - from.getTime();
+            long daysdiff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+            tvDateCounter.setText("Bài đăng còn " + String.valueOf(daysdiff) + " ngày");
+
         }
 
         return view;
