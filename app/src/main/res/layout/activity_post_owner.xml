@@ -74,9 +74,10 @@
 
                 <Button
                     android:id="@+id/btnUpImage"
+                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chụp ảnh" />
+                    android:text="Thêm ảnh đã chọn" />
 
             </LinearLayout>
 
