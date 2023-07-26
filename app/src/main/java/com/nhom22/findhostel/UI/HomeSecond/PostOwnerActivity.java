@@ -1,5 +1,27 @@
 package com.nhom22.findhostel.UI.HomeSecond;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,41 +30,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.Manifest;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.flexbox.FlexboxLayout;
-import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
-import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
@@ -69,18 +60,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class PostOwnerActivity extends AppCompatActivity {
 
@@ -382,15 +365,15 @@ public class PostOwnerActivity extends AppCompatActivity {
             posts.setUserAccount(user);
 
             // Add the post
-            long checkAdd = postsService.addAPost(posts);
-            if (checkAdd > 0) {
+            long idCurrentPost = postsService.addAPost(posts);
+            if (idCurrentPost > 0) {
                 Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
 
                 // add detail_image
                 List<Images> imagesList = imagesService.getAllImagesByName(name);
                 for (Images images : imagesList) {
                     try {
-                        detail_imageService.addADetailImage(images.getId(),postsService.getPostIdbyName(name));
+                        detail_imageService.addADetailImage(images.getId(),Integer.parseInt(String.valueOf(idCurrentPost)));
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
@@ -401,7 +384,7 @@ public class PostOwnerActivity extends AppCompatActivity {
 
                 for (Furniture furniture : furnitureListChoose) {
                     try {
-                        detailFurniture.setPosts(postsService.getPostByName(name));
+                        detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(idCurrentPost))));
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
