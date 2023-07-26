@@ -31,14 +31,14 @@ public class NotificationService {
                 && getANotificationByPostsIdAndUserId(notification.getPostsId(),notification.getUserAccountId()) == null){
 
             long result = NOTIFICATION_DAO.addNotification(notification);
-            notification.setId(Integer.parseInt(String.valueOf(result)));
 
-            notificationRef.child(String.valueOf(result)).setValue(notification);
-
+            if(result > 0){
+                notification.setId(Integer.parseInt(String.valueOf(result)));
+                notificationRef.child(String.valueOf(result)).setValue(notification);
+            }
             return result; // -1 Unsuccessful, >0 Successful
         }
         else if(notification == null){
-
             Toast.makeText(context, "Null notification", Toast.LENGTH_SHORT).show();
             return -1; // Return -1 to indicate unsuccessful operation
         }else{

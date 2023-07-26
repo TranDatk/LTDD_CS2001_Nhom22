@@ -23,6 +23,7 @@ import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
+import com.nhom22.findhostel.Model.HostelCollection;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Notification;
 import com.nhom22.findhostel.Model.PostDecor;
@@ -40,6 +41,7 @@ import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
+import com.nhom22.findhostel.Service.HostelCollectionService;
 import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.NotificationService;
 import com.nhom22.findhostel.Service.PostDecorService;
@@ -120,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
     }
 
@@ -190,6 +191,10 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .thenCompose(postDecorList -> {
                     onPostDecorLoaded(postDecorList);
+                    return FirebasePromises.getHostelCollection();
+                })
+                .thenCompose(hostelCollectionList -> {
+                    onHostelCollectionLoaded(hostelCollectionList);
                     return FirebasePromises.getDetailFurniture();
                 })
                 .thenCompose(detail_furnitures -> {
@@ -428,6 +433,29 @@ public class MainActivity extends AppCompatActivity {
         notificationService.resetNotificationAutoIncrement();
         for (Notification notification : notificationList) {
             notificationService.addNotification(notification);
+        }
+    }
+
+    private void onHostelCollectionLoaded(List<HostelCollection> hostelCollectionList) {
+        HostelCollectionService hostelCollectionService = new HostelCollectionService();
+        hostelCollectionService.deleteAllHostelCollection();
+        hostelCollectionService.resetHostelCollectionAutoIncrement();
+
+        for (HostelCollection hostelCollection : hostelCollectionList) {
+            hostelCollectionService.addHostelCollection(hostelCollection);
+            ImageUserAccountFirebase.getHostelCollectionImage(String.valueOf(hostelCollection.getId()) + ".png",
+                    new ImageUserAccountFirebase.ImageDownloadListener() {
+                        @Override
+                        public void onImageDownloaded(byte[] imageData) {
+                            hostelCollectionService.insertImageHostelCollection(hostelCollection.getId(), imageData);
+                        }
+
+                        @Override
+                        public void onImageDownloadFailed(String errorMessage) {
+                            // Xử lý khi có lỗi tải xuống ảnh
+                            Log.e("ErrorDowloadImage", "Failed to download image: " + errorMessage);
+                        }
+                    });
         }
     }
 }

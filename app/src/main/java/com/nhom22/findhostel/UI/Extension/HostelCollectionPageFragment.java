@@ -1,6 +1,5 @@
 package com.nhom22.findhostel.UI.Extension;
 
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,26 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.HostelCollection;
-import com.nhom22.findhostel.Model.PostDecor;
-import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.AddressService;
-import com.nhom22.findhostel.Service.HotelCollectionService;
-import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.Service.HostelCollectionService;
 import com.nhom22.findhostel.YourApplication;
-import com.nhom22.findhostel.databinding.FragmentHostelCollectionPageAddBinding;
 import com.nhom22.findhostel.databinding.FragmentHostelCollectionPageBinding;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,7 +29,7 @@ public class HostelCollectionPageFragment extends Fragment {
     ItemHotelCollectionAdapter itemAdapter;
     private final AddressService addressService = new AddressService();
 
-    private final HotelCollectionService hotelCollectionService = new HotelCollectionService();
+    private final HostelCollectionService hostelCollectionService = new HostelCollectionService();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +45,7 @@ public class HostelCollectionPageFragment extends Fragment {
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
         lsvItem = binding.lvHotelCollection;
-        arrItem = hotelCollectionService.getAllHostelCollection();
+        arrItem = hostelCollectionService.getAllHostelCollection();
         itemAdapter = new ItemHotelCollectionAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_hostel_collection_layout, arrItem);
         lsvItem.setAdapter(itemAdapter);
 

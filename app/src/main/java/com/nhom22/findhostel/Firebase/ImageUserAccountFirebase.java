@@ -31,7 +31,7 @@ public class ImageUserAccountFirebase {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("images").child(imageName);
 
-        final long MAX_SIZE_BYTES = 1024 * 1024; // Maximum image size set to 1MB
+        final long MAX_SIZE_BYTES = 2048 * 2048; // Maximum image size set to 1MB
 
         storageRef.getBytes(MAX_SIZE_BYTES).addOnSuccessListener(bytes -> {
             listener.onImageDownloaded(bytes);
@@ -46,13 +46,28 @@ public class ImageUserAccountFirebase {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("post_decorImage").child(imageName);
 
-        final long MAX_SIZE_BYTES = 1024 * 1024; // Maximum image size set to 1MB
+        final long MAX_SIZE_BYTES = 2048 * 2048; // Maximum image size set to 1MB
 
         storageRef.getBytes(MAX_SIZE_BYTES).addOnSuccessListener(bytes -> {
             listener.onImageDownloaded(bytes);
         }).addOnFailureListener(exception -> {
             String errorMessage = exception.getMessage();
             Log.e("PostDecorImage", "Failed to download image: " + errorMessage);
+            listener.onImageDownloadFailed(errorMessage);
+        });
+    }
+
+    public static void getHostelCollectionImage(String imageName, final ImageDownloadListener listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("hostel_collectionImage").child(imageName);
+
+        final long MAX_SIZE_BYTES = 2048 * 2048; // Maximum image size set to 1MB
+
+        storageRef.getBytes(MAX_SIZE_BYTES).addOnSuccessListener(bytes -> {
+            listener.onImageDownloaded(bytes);
+        }).addOnFailureListener(exception -> {
+            String errorMessage = exception.getMessage();
+            Log.e("HostelCollectionImage", "Failed to download image: " + errorMessage);
             listener.onImageDownloadFailed(errorMessage);
         });
     }

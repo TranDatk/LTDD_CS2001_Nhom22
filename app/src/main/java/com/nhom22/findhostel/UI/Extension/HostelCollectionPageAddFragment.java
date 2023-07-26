@@ -44,13 +44,12 @@ import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
-import com.nhom22.findhostel.Service.HotelCollectionService;
+import com.nhom22.findhostel.Service.HostelCollectionService;
 import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentHostelCollectionPageAddBinding;
-import com.nhom22.findhostel.databinding.FragmentPostDecorPageAddBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class HostelCollectionPageAddFragment extends Fragment {
     private final SubDistrictsService subDistrictsService = new SubDistrictsService();
     private final StreetsService streetsService = new StreetsService();
     private final AddressService addressService = new AddressService();
-    private final HotelCollectionService hotelCollectionService = new HotelCollectionService();
+    private final HostelCollectionService hostelCollectionService = new HostelCollectionService();
 
     private final UserAccountService userAccountService = new UserAccountService();
     @Override
@@ -194,7 +193,7 @@ public class HostelCollectionPageAddFragment extends Fragment {
 
 
 
-                long addHostelCollection = hotelCollectionService.addHostelCollection(hostelCollection);
+                long addHostelCollection = hostelCollectionService.addHostelCollection(hostelCollection);
                 if (addHostelCollection != -1) {
                     Toast.makeText(getContext(), "Tạo tin thành công!!!", Toast.LENGTH_LONG).show();
                     List<UserAccount> userAccountList = userAccountService.getAllUserAccountByDistrictId(newAddress.getDistricts().getId());

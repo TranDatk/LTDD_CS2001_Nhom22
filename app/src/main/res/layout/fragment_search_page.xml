@@ -17,23 +17,23 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:background="@color/white">
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="35dp"
-                android:text="Tên ứng dụng"
-                android:textStyle="bold"
-                android:textColor="#00FD9E"/>
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:textSize="30dp"
-                android:text="Thuê nhà"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity=""
+                    android:src="@drawable/findhostel"/>
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <View

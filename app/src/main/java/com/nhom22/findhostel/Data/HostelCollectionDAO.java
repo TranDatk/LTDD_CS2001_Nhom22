@@ -6,10 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.HostelCollection;
-import com.nhom22.findhostel.Model.UserAccount;
-import com.nhom22.findhostel.YourApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +27,9 @@ public class HostelCollectionDAO {
         values.put("address_id",hostelCollection.getAddress());
 
         long id = db.insert("hostel_collection", null, values);
+        if(id > 0){
+            id = getIdOfLastInsertedRow();
+        }
 
         db.close();
 
@@ -97,5 +97,48 @@ public class HostelCollectionDAO {
         db.close();
 
         return hostelCollectionList;
+    }
+
+    public int getIdOfLastInsertedRow() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT last_insert_rowid() FROM " + "hostel_collection";
+        Cursor cursor = db.rawQuery(query, null);
+
+        int id = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            id = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return id;
+    }
+
+    public void deleteAllHostelCollection() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete("hostel_collection", null, null);
+
+        db.close();
+    }
+
+    public void resetHostelCollectionAutoIncrement() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String query = "DELETE FROM sqlite_sequence WHERE name='hostel_collection'";
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    public void insertImageHostelCollection(int idHostelCollection, byte[] image) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("image", image);
+        String whereClause = "id = ?";
+        String[] whereArgs = {String.valueOf(idHostelCollection)};
+        db.update("hostel_collection", values, whereClause, whereArgs);
+        db.close();
     }
 }
