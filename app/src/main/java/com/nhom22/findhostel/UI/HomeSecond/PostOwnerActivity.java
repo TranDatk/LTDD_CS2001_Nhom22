@@ -41,6 +41,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
+import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Detail_Image;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
@@ -53,6 +54,8 @@ import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
+import com.nhom22.findhostel.Service.Detail_FurnitureService;
+import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
@@ -100,6 +103,8 @@ public class PostOwnerActivity extends AppCompatActivity {
     private final AddressService addressService = new AddressService();
 
     private final ImagesService imagesService = new ImagesService();
+    private final Detail_ImageService detail_imageService = new Detail_ImageService();
+    private final Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
 
     private static final int REQUEST_PERMISSIONS = 1;
     private static final int PICK_IMAGE_MULTIPLE = 2;
@@ -122,6 +127,8 @@ public class PostOwnerActivity extends AppCompatActivity {
         int userId = sharedPreferences.getInt("userId", -1);
         UserAccount user = userAccountService.getUserAccountById(userId);
 
+        Posts posts = new Posts();
+
         EditText houseNumberEditText = findViewById(R.id.houseNumberEditText);
         autoCitiesField = findViewById(R.id.autoCitiesField);
         autoDistrictField = findViewById(R.id.autoDistrictField);
@@ -132,8 +139,12 @@ public class PostOwnerActivity extends AppCompatActivity {
         EditText desPost = findViewById(R.id.editTextLanguage);
 
 
+
         FlexboxLayout boxFurni = findViewById(R.id.boxFurni);
         List<Furniture> furnitureList = furnitureService.getAllFurniture();
+
+
+        List<Furniture> furnitureListChoose = new ArrayList<>();
 
         if (furnitureList != null && !furnitureList.isEmpty()) {
             for (Furniture furniture : furnitureList) {
@@ -146,6 +157,16 @@ public class PostOwnerActivity extends AppCompatActivity {
                 );
                 params.setFlexBasisPercent(0.33f);
                 newCheckBox.setLayoutParams(params);
+                newCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            furnitureListChoose.add(furniture);
+                        } else {
+                            furnitureListChoose.remove(furniture);
+                        }
+                    }
+                });
 
                 boxFurni.addView(newCheckBox);
             }
@@ -155,32 +176,21 @@ public class PostOwnerActivity extends AppCompatActivity {
 
         addCities();
 
-        autoCitiesField.setEnabled(true);
-        autoDistrictField.setEnabled(false);
-        autoSubDistrictField.setEnabled(false);
-        autoStreetField.setEnabled(false);
-
         autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedCityName = (String) parent.getItemAtPosition(position);
             int selectedCityId = getCitiesIdByName(selectedCityName);
-            autoDistrictField.setEnabled(true);
             addDistrict(selectedCityId);
-            autoSubDistrictField.setEnabled(false);
-            autoStreetField.setEnabled(false);
         });
 
         autoDistrictField.setOnItemClickListener((parent, view12, position, id) -> {
             String selectedDistrictName = (String) parent.getItemAtPosition(position);
             int selectedDistrictId = getDistrictByName(selectedDistrictName);
-            autoSubDistrictField.setEnabled(true);
             addSubDistrict(selectedDistrictId);
-            autoStreetField.setEnabled(false);
         });
 
         autoSubDistrictField.setOnItemClickListener((parent, view13, position, id) -> {
             String selectedDistrictName = (String) parent.getItemAtPosition(position);
             int selectedSubDistrictId = getSubDistrictIdByName(selectedDistrictName);
-            autoStreetField.setEnabled(true);
             addStreet(selectedSubDistrictId);
         });
 
@@ -190,17 +200,6 @@ public class PostOwnerActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, languages);
         spinnerLanguage.setAdapter(adapter);
 
-        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLanguage = languages[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
         Button galleryButton = findViewById(R.id.galleryButton);
         Button cameraButton = findViewById(R.id.cameraButton);
         Button upImage = findViewById(R.id.btnUpImage);
@@ -208,10 +207,11 @@ public class PostOwnerActivity extends AppCompatActivity {
         selectedImages = new ArrayList<>();
 
         upImage.setOnClickListener(v -> {
+            String name = namePostEditText.getText().toString();
             for (Uri uri : selectedImages) {
                 Images images = new Images();
                 images.setIsActive(1);
-                images.setName(String.valueOf(userId));
+                images.setName(name);
                 try {
                     byte[] a = getBytesFromUri(uri);
                     images.setImage(a);
@@ -240,7 +240,7 @@ public class PostOwnerActivity extends AppCompatActivity {
         if (!permissionList.isEmpty()) {
             ActivityCompat.requestPermissions(this, permissionList.toArray(new String[0]), REQUEST_PERMISSIONS);
         }
-        Posts posts = new Posts();
+
 
         FlexboxLayout boxType = findViewById(R.id.boxType);
         List<Type> typeList = typeService.getAllType();
@@ -278,11 +278,7 @@ public class PostOwnerActivity extends AppCompatActivity {
         Button btnAddPost = findViewById(R.id.btnAddPost);
         btnAddPost.setOnClickListener(v -> {
             // Create a new Posts object
-            String city = autoCitiesField.getText().toString();
-            String district = autoDistrictField.getText().toString();
-            String subdistrict = autoSubDistrictField.getText().toString();
-            String street = autoStreetField.getText().toString();
-            String housenum = houseNumberEditText.getText().toString();
+
 
             // Set the post name
             String name = namePostEditText.getText().toString();
@@ -290,6 +286,12 @@ public class PostOwnerActivity extends AppCompatActivity {
 
             // Set the address
             Address address = new Address();
+            String city = autoCitiesField.getText().toString();
+            String district = autoDistrictField.getText().toString();
+            String subdistrict = autoSubDistrictField.getText().toString();
+            String street = autoStreetField.getText().toString();
+            String housenum = houseNumberEditText.getText().toString();
+
             boolean isDataValid = true;
             if (TextUtils.isEmpty(city)) {
                 isDataValid = false;
@@ -315,6 +317,7 @@ public class PostOwnerActivity extends AppCompatActivity {
                 isDataValid = false;
                 houseNumberEditText.setError("Chưa nhập số nhà");
             }
+
             if (isDataValid) {
                 String selectedCityName = autoCitiesField.getText().toString();
                 if (!TextUtils.isEmpty(selectedCityName)) {
@@ -343,11 +346,15 @@ public class PostOwnerActivity extends AppCompatActivity {
                     Streets streets = streetsService.getStreetsById(streetId);
                     address.setStreets(streets);
                 }
-            }
 
-            address.setHouseNumber(houseNumberEditText.getText().toString());
-            addressService.addAddress(address);
-            posts.setAddress(address);
+                address.setHouseNumber(houseNumberEditText.getText().toString());
+                address.setIsActive(1);
+                long a = addressService.addAddress(address);
+                if (a > 0) {
+                    Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                    posts.setAddress(address);
+                }
+            }
 
             // Set the price
             String priceText = pricePost.getText().toString();
@@ -374,24 +381,43 @@ public class PostOwnerActivity extends AppCompatActivity {
             posts.setActivePost(1);
             posts.setUserAccount(user);
 
-            // Set the type
-
-
             // Add the post
             long checkAdd = postsService.addAPost(posts);
             if (checkAdd > 0) {
-                Detail_Image detail_image = new Detail_Image();
                 Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
-                detail_image.setPosts(posts);
-                List<Images> imagesList = imagesService.getAllImagesByName(String.valueOf(userId));
+
+                // add detail_image
+                List<Images> imagesList = imagesService.getAllImagesByName(name);
                 for (Images images : imagesList) {
-                    detail_image.setImages(images);
+                    try {
+                        detail_imageService.addADetailImage(images.getId(),postsService.getPostIdbyName(name));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+
+                // add detail_furniture
+                Detail_Furniture detailFurniture = new Detail_Furniture();
+
+                for (Furniture furniture : furnitureListChoose) {
+                    try {
+                        detailFurniture.setPosts(postsService.getPostByName(name));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    detailFurniture.setQuantity(1);
+                    detailFurniture.setFurniture(furniture);
+                    try {
+                        detail_furnitureService.addADetailFurniture(detailFurniture);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             } else {
                 Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 
@@ -567,6 +593,33 @@ public class PostOwnerActivity extends AppCompatActivity {
         return outputStream.toByteArray();
     }
 
+    private int getSelectedTypeId(FlexboxLayout boxType) {
+        for (int i = 0; i < boxType.getChildCount(); i++) {
+            View view = boxType.getChildAt(i);
+            if (view instanceof RadioGroup) {
+                RadioGroup radioGroup = (RadioGroup) view;
+                int radioButtonId = radioGroup.getCheckedRadioButtonId();
+                RadioButton radioButton = radioGroup.findViewById(radioButtonId);
+                if (radioButton != null) {
+                    String selectedTypeName = radioButton.getText().toString();
+                    return getTypeByName(selectedTypeName);
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int getTypeByName(String typeName) {
+        List<Type> typeList = typeService.getAllType();
+
+        for (Type type : typeList) {
+            if (type.getName().equals(typeName)) {
+                return type.getId();
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -579,3 +632,4 @@ public class PostOwnerActivity extends AppCompatActivity {
         }
     }
 }
+
