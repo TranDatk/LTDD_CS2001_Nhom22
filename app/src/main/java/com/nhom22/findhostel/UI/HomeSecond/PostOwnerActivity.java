@@ -573,18 +573,13 @@ public class PostOwnerActivity extends AppCompatActivity {
                     posts.setAddress(address);
                 }
                 // Set the post name
-                if (!namePost.isEmpty())
-                    posts.setPostName(namePost);
+                posts.setPostName(namePost);
 
                 // Set the price
-                if (!priceText.isEmpty()) {
-                    posts.setPrice(Float.parseFloat(priceText));
-                }
+                posts.setPrice(Float.parseFloat(priceText));
 
                 // Set the description
-                if (!desPostA.isEmpty()) {
-                    posts.setDescription(desPostA);
-                }
+                posts.setDescription(desPostA);
 
 
                 // Set the time

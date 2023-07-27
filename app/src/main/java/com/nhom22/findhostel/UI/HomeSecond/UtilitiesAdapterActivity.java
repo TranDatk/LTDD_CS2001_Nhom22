@@ -16,10 +16,13 @@ import java.util.List;
 
 public class UtilitiesAdapterActivity extends BaseAdapter {
     private List<Detail_Utilities> items;
+
+    PostDetailActivity activity;
     private LayoutInflater inflater;
 
-    public UtilitiesAdapterActivity(Context context, List<Detail_Utilities> items) {
-        this.inflater = LayoutInflater.from(context);
+    public UtilitiesAdapterActivity(PostDetailActivity activity, List<Detail_Utilities> items) {
+        inflater = LayoutInflater.from(activity);
+        this.activity = activity;
         this.items = items;
     }
 
@@ -43,7 +46,7 @@ public class UtilitiesAdapterActivity extends BaseAdapter {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_post_furniture, parent, false);
+            convertView = inflater.inflate(R.layout.item_post_utilities, parent, false);
             viewHolder = new ViewHolder();
 
             viewHolder.imgIcon = convertView.findViewById(R.id.imgIcon);
