@@ -119,6 +119,26 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Các dịch vụ: " />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/boxUti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:flexDirection="column"
+                app:justifyContent="space_evenly"/>
+            <Button
+                android:id="@+id/test3"
+                android:layout_width="wrap_content"
+                android:text="test"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Loại phòng: " />
 
             <com.google.android.flexbox.FlexboxLayout
@@ -239,11 +259,6 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
-                <Spinner
-                    android:id="@+id/spinnerLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black" />
 
                 <EditText
                     android:id="@+id/editTextLanguage"

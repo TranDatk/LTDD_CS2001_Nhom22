@@ -5,21 +5,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +42,7 @@ import com.google.android.flexbox.JustifyContent;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
+import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.Model.Images;
@@ -45,11 +51,13 @@ import com.nhom22.findhostel.Model.Streets;
 import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.Model.Utilities;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.Service.CitiesService;
 import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.DistrictsService;
 import com.nhom22.findhostel.Service.FurnitureService;
 import com.nhom22.findhostel.Service.ImagesService;
@@ -58,6 +66,7 @@ import com.nhom22.findhostel.Service.StreetsService;
 import com.nhom22.findhostel.Service.SubDistrictsService;
 import com.nhom22.findhostel.Service.TypeService;
 import com.nhom22.findhostel.Service.UserAccountService;
+import com.nhom22.findhostel.Service.UtilitiesService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -68,6 +77,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PostOwnerActivity extends AppCompatActivity {
 
@@ -81,6 +91,7 @@ public class PostOwnerActivity extends AppCompatActivity {
     private final SubDistrictsService subDistrictsService = new SubDistrictsService();
     private final StreetsService streetsService = new StreetsService();
     private final FurnitureService furnitureService = new FurnitureService();
+    private final UtilitiesService utilitiesService = new UtilitiesService();
 
     private final UserAccountService userAccountService = new UserAccountService();
     private final TypeService typeService = new TypeService();
@@ -92,6 +103,7 @@ public class PostOwnerActivity extends AppCompatActivity {
     private final ImagesService imagesService = new ImagesService();
     private final Detail_ImageService detail_imageService = new Detail_ImageService();
     private final Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+    private final Detail_UtilitiesService detail_utilitiesService = new Detail_UtilitiesService();
 
     private static final int REQUEST_PERMISSIONS = 1;
     private static final int PICK_IMAGE_MULTIPLE = 2;
@@ -139,7 +151,7 @@ public class PostOwnerActivity extends AppCompatActivity {
                 newCheckBox.setText(furniture.getName());
                 newCheckBox.setTextColor(ContextCompat.getColor(this, R.color.black));
                 FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
-                        0,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
                         FlexboxLayout.LayoutParams.WRAP_CONTENT
                 );
                 params.setFlexBasisPercent(0.33f);
@@ -161,6 +173,135 @@ public class PostOwnerActivity extends AppCompatActivity {
             Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
         }
 
+        FlexboxLayout boxUti = findViewById(R.id.boxUti);
+        List<Utilities> utilitiesList = utilitiesService.getAllUtilities();
+        List<Detail_Utilities> detail_utilitiesList = new ArrayList<>();
+        if (utilitiesList != null && !utilitiesList.isEmpty()) {
+
+            for (Utilities utility : utilitiesList) {
+                // Create a new Detail_Utilities object for each utility
+                Detail_Utilities detail_utilities = new Detail_Utilities();
+                LinearLayout utilityLayout = new LinearLayout(this);
+                utilityLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                // Create the CheckBox for the utility
+                CheckBox newCheckBox = new CheckBox(this);
+                newCheckBox.setText(utility.getName());
+                newCheckBox.setTextColor(ContextCompat.getColor(this, R.color.black));
+
+                // Create the EditText fields for price and unit
+                EditText txtPriceUti = new EditText(this);
+                EditText txtUnitUti = new EditText(this);
+                txtPriceUti.setInputType(InputType.TYPE_CLASS_NUMBER); // Only allow integer input
+                txtPriceUti.setTextColor(Color.BLACK);
+                txtPriceUti.setHint("Nhập giá");
+
+                txtUnitUti.setTextColor(Color.BLACK);
+                txtUnitUti.setHint("Nhập đơn vị");
+
+                // Initially, set the EditText fields to be invisible
+                txtPriceUti.setVisibility(View.GONE);
+                txtUnitUti.setVisibility(View.GONE);
+
+                // Set layout parameters for each view
+                LinearLayout.LayoutParams checkBoxParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                checkBoxParams.weight = 1; // The CheckBox will take 1/3 of the width
+
+                LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                editTextParams.weight = 2; // The EditText fields will take 2/3 of the width
+
+                newCheckBox.setLayoutParams(checkBoxParams);
+                txtPriceUti.setLayoutParams(editTextParams);
+                txtUnitUti.setLayoutParams(editTextParams);
+
+                // Add the CheckBox and EditText fields to the utility layout
+                utilityLayout.addView(newCheckBox);
+                utilityLayout.addView(txtPriceUti);
+                utilityLayout.addView(txtUnitUti);
+
+                boxUti.addView(utilityLayout);
+
+                // Set up the CheckBox and EditText listeners
+                newCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            detail_utilities.setUtilities(utility);
+                            txtPriceUti.setVisibility(View.VISIBLE);
+                            txtUnitUti.setVisibility(View.VISIBLE);
+                        } else {
+                            detail_utilities.setUtilities(null);
+                            txtPriceUti.setVisibility(View.GONE);
+                            txtUnitUti.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                txtPriceUti.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String price = txtPriceUti.getText().toString();
+                        detail_utilities.setPrice(Double.parseDouble(price));
+                    }
+                });
+
+                txtUnitUti.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String unit = txtUnitUti.getText().toString();
+                        detail_utilities.setUnit(unit);
+
+                    }
+                });
+
+
+
+
+
+                detail_utilitiesList.add(detail_utilities);
+            }
+        } else {
+            Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        Button test = (Button) findViewById(R.id.test3);
+
+               test.setOnClickListener(v->{
+                   for (Detail_Utilities detail_utilities : detail_utilitiesList) {
+                       Double price = detail_utilities.getPrice();
+                       String unit = detail_utilities.getUnit();
+                       Toast.makeText(this, unit + " - " + String.valueOf(price), Toast.LENGTH_SHORT).show();
+                   }
+
+        });
+
+
+
+
         addCities();
 
         autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
@@ -181,11 +322,6 @@ public class PostOwnerActivity extends AppCompatActivity {
             addStreet(selectedSubDistrictId);
         });
 
-        Spinner spinnerLanguage = findViewById(R.id.spinnerLanguage);
-
-        String[] languages = {"Tiếng Anh", "Tiếng Việt"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, languages);
-        spinnerLanguage.setAdapter(adapter);
 
         Button galleryButton = findViewById(R.id.galleryButton);
         Button cameraButton = findViewById(R.id.cameraButton);
@@ -355,7 +491,7 @@ public class PostOwnerActivity extends AppCompatActivity {
                     }
 
                     address.setHouseNumber(houseNumberEditText.getText().toString());
-                    address.setIsActive(0);
+                    address.setIsActive(1);
                     long a = addressService.addAddress(address);
                     if (a > 0) {
                         Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
@@ -418,6 +554,19 @@ public class PostOwnerActivity extends AppCompatActivity {
                             detail_furnitureService.addADetailFurniture(detailFurniture);
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
+                        }
+                    }
+
+
+                    // add detail_utilities
+                    for (Detail_Utilities detailUtilities : detail_utilitiesList) {
+                        if (detailUtilities != null) {
+                            try {
+                                detailUtilities.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(idCurrentPost))));
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                            detail_utilitiesService.addADetailUtilities(detailUtilities);
                         }
                     }
 
