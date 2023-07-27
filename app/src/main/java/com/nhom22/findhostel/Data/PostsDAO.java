@@ -92,6 +92,88 @@ public class PostsDAO {
         return post;
     }
 
+    public Posts getPostByName(String postName) throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "time_from",
+                "time_to",
+                "post_name",
+                "price",
+                "description",
+                "active_post",
+                "address_id",
+                "owner_id",
+                "type_id"
+        };
+
+        String selection = "post_name = ?";
+        String[] selectionArgs = {postName};
+
+        Cursor cursor = db.query("posts", columns, selection, selectionArgs, null, null, null);
+
+        Posts post = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") int postId = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") String timeFromStr = cursor.getString(cursor.getColumnIndex("time_from"));
+            @SuppressLint("Range") String timeToStr = cursor.getString(cursor.getColumnIndex("time_to"));
+
+            // Convert time_from and time_to strings to Date objects using SimpleDateFormat
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("en"));
+            Date timeFromDate = sdf.parse(timeFromStr);
+            Date timeToDate = sdf.parse(timeToStr);
+
+            @SuppressLint("Range") float price = cursor.getFloat(cursor.getColumnIndex("price"));
+            @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("description"));
+            @SuppressLint("Range") int activePost = cursor.getInt(cursor.getColumnIndex("active_post"));
+            @SuppressLint("Range") int addressId = cursor.getInt(cursor.getColumnIndex("address_id"));
+            @SuppressLint("Range") int userAccountId = cursor.getInt(cursor.getColumnIndex("owner_id"));
+            @SuppressLint("Range") int typeId = cursor.getInt(cursor.getColumnIndex("type_id"));
+
+            AddressDAO addressDAO = new AddressDAO(YourApplication.getInstance().getApplicationContext());
+            Address address = addressDAO.getAddressById(addressId);
+
+            UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
+            UserAccount userAccount = userAccountDAO.getUserAccountById(userAccountId);
+
+            TypeDAO typeDAO = new TypeDAO(YourApplication.getInstance().getApplicationContext());
+            Type type = typeDAO.getTypeById(typeId);
+
+            post = new Posts(postId, timeFromDate, timeToDate, postName, price, description, activePost, address, userAccount, type);
+        }
+
+        cursor.close();
+        db.close();
+
+        return post;
+    }
+
+    public int getPostIdbyName(String postName) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {"id"};
+        String selection = "post_name = ?";
+        String[] selectionArgs = {postName};
+
+        Cursor cursor = db.query("posts", columns, selection, selectionArgs, null, null, null);
+
+        int postId = -1; // Default value if post with the given name is not found
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("id");
+            if (columnIndex >= 0) {
+                postId = cursor.getInt(columnIndex);
+            }
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
+        return postId;
+    }
+
     public long addAPost(Posts post) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 

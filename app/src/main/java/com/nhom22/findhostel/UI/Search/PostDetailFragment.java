@@ -34,7 +34,9 @@ import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.Save_PostService;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +106,7 @@ public class PostDetailFragment extends Fragment {
         TextView tvPhoneNumber = view.findViewById(R.id.tvPhoneNumber);
         TextView tvBed = view.findViewById(R.id.tvBed);
         TextView tvShower = view.findViewById(R.id.tvShower);
+        TextView tvDateCounter = view.findViewById(R.id.tvDateCounter);
         ImageButton btnBack = view.findViewById(R.id.btnBack);
         ImageButton btnSave = view.findViewById(R.id.btnSave);
         ImageButton btnCall = view.findViewById(R.id.btnCall);
@@ -131,6 +134,12 @@ public class PostDetailFragment extends Fragment {
                     p.getAddress().getCities().getName());
             tvPrice.setText(String.valueOf(p.getPrice()) + "đ");
             tvPhoneNumber.setText(p.getUserAccount().getPhone());
+            Date from = p.getTimeFrom();
+            Date to = p.getTimeTo();
+            long diffInMillis = to.getTime() - from.getTime();
+            long daysdiff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+            tvDateCounter.setText("Bài đăng còn " + String.valueOf(daysdiff) + " ngày");
 
             Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
             try {

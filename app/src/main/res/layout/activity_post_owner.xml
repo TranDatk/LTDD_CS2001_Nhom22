@@ -19,6 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,11 +28,12 @@
             android:orientation="vertical"
             android:padding="15dp">
 
+
             <TextView
                 android:id="@+id/test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hình ảnh tin đăng*"
+                android:text="Tiêu đề bài viết*"
                 android:textAllCaps="true" />
 
             <EditText
@@ -74,9 +77,10 @@
 
                 <Button
                     android:id="@+id/btnUpImage"
+                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chụp ảnh" />
+                    android:text="Thêm ảnh đã chọn" />
 
             </LinearLayout>
 
@@ -102,7 +106,7 @@
                 app:alignContent="flex_start"
                 app:alignItems="flex_start"
                 app:flexWrap="wrap"
-                app:justifyContent="space_evenly"></com.google.android.flexbox.FlexboxLayout>
+                app:justifyContent="space_evenly"/>
 
             <EditText
                 android:id="@+id/countFurni"
@@ -125,9 +129,7 @@
                 app:alignContent="flex_start"
                 app:alignItems="flex_start"
                 app:flexWrap="wrap"
-                app:justifyContent="space_evenly">
-
-            </com.google.android.flexbox.FlexboxLayout>
+                app:justifyContent="space_evenly" />
 
 
             <LinearLayout

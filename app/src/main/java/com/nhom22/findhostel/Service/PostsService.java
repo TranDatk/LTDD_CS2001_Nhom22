@@ -36,6 +36,26 @@ public class PostsService {
         }
     }
 
+    public Posts getPostByName(String postsName) throws ParseException {
+        if (postsName != null && !postsName.isEmpty()) {
+            return POSTS_DAO.getPostByName(postsName); // Assuming POSTS_DAO is an instance of the class where you defined the getPostByName method
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null or empty postsName", Toast.LENGTH_SHORT).show();
+            return null; // Return null to indicate unsuccessful operation
+        }
+    }
+
+    public int getPostIdbyName(String postsName) throws ParseException {
+        if (postsName != null) {
+            return POSTS_DAO.getPostIdbyName(postsName); // -1 Unsuccessful, >0 Successful
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null postsName", Toast.LENGTH_SHORT).show();
+            return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
     public long addAPost(Posts post) {
         if(post != null){
             long result = POSTS_DAO.addAPost(post);

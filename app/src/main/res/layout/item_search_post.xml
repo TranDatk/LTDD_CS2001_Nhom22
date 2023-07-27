@@ -111,8 +111,6 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray" />
-
-            <!-- Địa chỉ -->
             <TextView
                 android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
@@ -120,6 +118,20 @@
                 android:layout_marginTop="4dp"
                 android:text="Địa chỉ: Số 123, Đường ABC, Quận XYZ, Thành phố HCM"
                 android:textSize="20sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/tvDateCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Còn 1 ngày"
+                android:textSize="15sp"/>
 
         </LinearLayout>
 

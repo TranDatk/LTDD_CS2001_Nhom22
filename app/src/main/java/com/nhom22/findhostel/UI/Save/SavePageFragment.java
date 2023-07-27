@@ -100,8 +100,14 @@ public class SavePageFragment extends Fragment {
                 lvItems.setAdapter(adapter);
             }
             else {
+                replaceFragment(new SaveNullFragment());
                 Toast.makeText(requireContext(), "Không có dữ liệu", Toast.LENGTH_SHORT).show();
             }
+        }
+
+        else {
+            replaceFragment(new SaveNullFragment());
+            Toast.makeText(requireContext(), "Hãy đăng nhập để lưu bài viết", Toast.LENGTH_SHORT).show();
         }
 
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {

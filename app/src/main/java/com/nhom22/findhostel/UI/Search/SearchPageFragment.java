@@ -104,7 +104,7 @@ public class SearchPageFragment extends Fragment {
         snOptions.setAdapter(adapterSpinner);
         PostsService postsService = new PostsService();
         try {
-            items = postsService.getAllPost();
+            items = postsService.getListPostsActive();
         } catch (ParseException e) {throw new RuntimeException(e);
         }
 
@@ -176,7 +176,7 @@ public class SearchPageFragment extends Fragment {
 //                    }
                     if (items.size() != counter) {
                         try {
-                            items = postsService.getAllPost();
+                            items = postsService.getListPostsActive();
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
@@ -207,7 +207,7 @@ public class SearchPageFragment extends Fragment {
 //                    }
                     if (items.size() != counter) {
                         try {
-                            items = postsService.getAllPost();
+                            items = postsService.getListPostsActive();
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
@@ -240,7 +240,7 @@ public class SearchPageFragment extends Fragment {
 //                    }
                     if (items.size() != counter) {
                         try {
-                            items = postsService.getAllPost();
+                            items = postsService.getListPostsActive();
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }

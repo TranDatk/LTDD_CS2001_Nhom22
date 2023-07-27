@@ -62,10 +62,7 @@ import com.nhom22.findhostel.UI.Search.SearchPageFragment;
 import com.nhom22.findhostel.databinding.ActivityMainBinding;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
