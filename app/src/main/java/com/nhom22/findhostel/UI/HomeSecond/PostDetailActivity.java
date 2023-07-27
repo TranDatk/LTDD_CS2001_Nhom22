@@ -19,25 +19,29 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.nhom22.findhostel.Model.Detail_Furniture;
+import com.nhom22.findhostel.Model.Detail_Utilities;
 import com.nhom22.findhostel.Model.Images;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.UI.Search.FurnitureAdapter;
 import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
+import com.nhom22.findhostel.UI.Search.UtilitiesAdapter;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class PostDetailActivity extends AppCompatActivity {
 
-    public Posts p;
-
+    private Posts p;
     private List<Detail_Furniture> furs;
-
+    private List<Detail_Utilities> utis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +68,20 @@ public class PostDetailActivity extends AppCompatActivity {
             // Update the furniture details
             updateFurnitureDetails(id);
 
+            // Update the utilities details
+            updateUtilitiesDetails(id);
+
             // Update the image details
             updateImageDetails(id);
 
-            Button btnUpdate = (Button) findViewById(R.id.btnUpdatePost);
-            btnUpdate.setOnClickListener(v-> {
-                    Intent intent  = new Intent(PostDetailActivity.this, UpdatePostActivity.class);
-                    startActivity(intent);
+            Button btnUpdate = findViewById(R.id.btnUpdatePost);
+            btnUpdate.setOnClickListener(v -> {
+                Intent intent = new Intent(PostDetailActivity.this, UpdatePostActivity.class);
+                startActivity(intent);
             });
         }
     }
+
     @SuppressLint("SetTextI18n")
     private void updatePostDetails(Posts post) {
         TextView tvDescription = findViewById(R.id.tvDescription);
@@ -81,6 +89,7 @@ public class PostDetailActivity extends AppCompatActivity {
         TextView tvAddress = findViewById(R.id.tvAddress);
         TextView tvPrice = findViewById(R.id.tvPrice);
         TextView tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
+        TextView tvDateCounter = findViewById(R.id.tvDateCounter);
 
         tvDescription.setText(post.getDescription());
         tvType.setText(post.getType().getName());
@@ -91,6 +100,12 @@ public class PostDetailActivity extends AppCompatActivity {
                 post.getAddress().getCities().getName());
         tvPrice.setText(String.valueOf(post.getPrice()) + "đ");
         tvPhoneNumber.setText(post.getUserAccount().getPhone());
+        Date from = post.getTimeFrom();
+        Date to = post.getTimeTo();
+        long diffInMillis = to.getTime() - from.getTime();
+        long daysdiff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+        tvDateCounter.setText("Bài đăng còn " + String.valueOf(daysdiff) + " ngày");
     }
 
     private void updateFurnitureDetails(int postId) {
@@ -114,6 +129,22 @@ public class PostDetailActivity extends AppCompatActivity {
             }
             FurnitureAdapterActivity adapter = new FurnitureAdapterActivity(this, furs);
             gvFurniture.setAdapter(adapter);
+        }
+    }
+
+    private void updateUtilitiesDetails(int postId) {
+        GridView gvUtilities = findViewById(R.id.gvUtilities);
+
+        Detail_UtilitiesService detail_utilitiesService = new Detail_UtilitiesService();
+        try {
+            utis = detail_utilitiesService.getListDetailUtilitiesByPostId(postId);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (utis != null && !utis.isEmpty()) {
+            UtilitiesAdapterActivity adapter = new UtilitiesAdapterActivity(this, utis);
+            gvUtilities.setAdapter(adapter);
         }
     }
 
