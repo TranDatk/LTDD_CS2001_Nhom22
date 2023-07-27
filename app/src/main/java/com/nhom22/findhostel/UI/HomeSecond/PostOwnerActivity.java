@@ -30,7 +30,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.JustifyContent;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Detail_Furniture;
@@ -64,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PostOwnerActivity extends AppCompatActivity {
 
@@ -188,7 +192,7 @@ public class PostOwnerActivity extends AppCompatActivity {
         Button upImage = findViewById(R.id.btnUpImage);
         recyclerView = findViewById(R.id.recyclerView);
         selectedImages = new ArrayList<>();
-
+        AtomicBoolean isUpdateImageButton = new AtomicBoolean(false);
         upImage.setOnClickListener(v -> {
             String name = namePostEditText.getText().toString();
             for (Uri uri : selectedImages) {
@@ -206,6 +210,7 @@ public class PostOwnerActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             }
+            isUpdateImageButton.set(true);
         });
 
         galleryButton.setOnClickListener(v -> openGallery());
@@ -229,17 +234,35 @@ public class PostOwnerActivity extends AppCompatActivity {
         List<Type> typeList = typeService.getAllType();
 
         if (typeList != null && !typeList.isEmpty()) {
+            FlexboxLayout.LayoutParams flexLayoutParams = new FlexboxLayout.LayoutParams(
+                    FlexboxLayout.LayoutParams.MATCH_PARENT,
+                    FlexboxLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            FlexboxLayout flexboxLayout = new FlexboxLayout(this);
+            flexboxLayout.setPadding(0, 10, 30, 15);
+            flexboxLayout.setFlexDirection(FlexDirection.ROW);
+            flexboxLayout.setFlexWrap(FlexWrap.WRAP);
+            flexboxLayout.setJustifyContent(JustifyContent.FLEX_START);
+            flexboxLayout.setLayoutParams(flexLayoutParams);
+
             RadioGroup radioGroup = new RadioGroup(this);
-            radioGroup.setOrientation(RadioGroup.HORIZONTAL);
+            radioGroup.setLayoutParams(new RadioGroup.LayoutParams(
+                    RadioGroup.LayoutParams.WRAP_CONTENT,
+                    RadioGroup.LayoutParams.WRAP_CONTENT
+            ));
+
+            FlexboxLayout.LayoutParams radioButtonLayoutParams = new FlexboxLayout.LayoutParams(
+                    FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                    FlexboxLayout.LayoutParams.WRAP_CONTENT
+            );
+            radioButtonLayoutParams.setMargins(0, 0, 10, 10);
 
             for (Type type : typeList) {
                 RadioButton newRadioButton = new RadioButton(this);
                 newRadioButton.setText(type.getName());
                 newRadioButton.setTextColor(ContextCompat.getColor(this, R.color.black));
-                newRadioButton.setLayoutParams(new RadioGroup.LayoutParams(
-                        RadioGroup.LayoutParams.MATCH_PARENT,
-                        RadioGroup.LayoutParams.WRAP_CONTENT
-                ));
+                newRadioButton.setLayoutParams(radioButtonLayoutParams);
 
                 newRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
@@ -251,154 +274,158 @@ public class PostOwnerActivity extends AppCompatActivity {
                 radioGroup.addView(newRadioButton);
             }
 
-            boxType.addView(radioGroup);
+            flexboxLayout.addView(radioGroup);
+            boxType.addView(flexboxLayout);
         } else {
             Button btn = new Button(this);
             btn.setText("Thêm loại phòng");
             boxType.addView(btn);
         }
 
+
         Button btnAddPost = findViewById(R.id.btnAddPost);
         btnAddPost.setOnClickListener(v -> {
-            // Create a new Posts object
 
+            if (isUpdateImageButton.get() == true) {
+                // Set the post name
+                String name = namePostEditText.getText().toString();
+                posts.setPostName(name);
 
-            // Set the post name
-            String name = namePostEditText.getText().toString();
-            posts.setPostName(name);
+                // Set the address
+                Address address = new Address();
+                String city = autoCitiesField.getText().toString();
+                String district = autoDistrictField.getText().toString();
+                String subdistrict = autoSubDistrictField.getText().toString();
+                String street = autoStreetField.getText().toString();
+                String housenum = houseNumberEditText.getText().toString();
 
-            // Set the address
-            Address address = new Address();
-            String city = autoCitiesField.getText().toString();
-            String district = autoDistrictField.getText().toString();
-            String subdistrict = autoSubDistrictField.getText().toString();
-            String street = autoStreetField.getText().toString();
-            String housenum = houseNumberEditText.getText().toString();
-
-            boolean isDataValid = true;
-            if (TextUtils.isEmpty(city)) {
-                isDataValid = false;
-                autoCitiesField.setError("Chưa chọn thành phố");
-            }
-
-            if (TextUtils.isEmpty(district)) {
-                isDataValid = false;
-                autoDistrictField.setError("Chưa chọn quận");
-            }
-
-            if (TextUtils.isEmpty(subdistrict)) {
-                isDataValid = false;
-                autoSubDistrictField.setError("Chưa chọn phường");
-            }
-
-            if (TextUtils.isEmpty(street)) {
-                isDataValid = false;
-                autoStreetField.setError("Chưa chọn tên đường");
-            }
-
-            if (TextUtils.isEmpty(housenum)) {
-                isDataValid = false;
-                houseNumberEditText.setError("Chưa nhập số nhà");
-            }
-
-            if (isDataValid) {
-                String selectedCityName = autoCitiesField.getText().toString();
-                if (!TextUtils.isEmpty(selectedCityName)) {
-                    int cityID = getCitiesIdByName(selectedCityName);
-                    Cities citys = citiesService.getCityById(cityID);
-                    address.setCities(citys);
+                boolean isDataValid = true;
+                if (TextUtils.isEmpty(city)) {
+                    isDataValid = false;
+                    autoCitiesField.setError("Chưa chọn thành phố");
                 }
 
-                String selectedDistrictName = autoDistrictField.getText().toString();
-                if (!TextUtils.isEmpty(selectedDistrictName)) {
-                    int districtId = getDistrictByName(selectedDistrictName);
-                    Districts districts = districtsService.getDistrictById(districtId);
-                    address.setDistricts(districts);
+                if (TextUtils.isEmpty(district)) {
+                    isDataValid = false;
+                    autoDistrictField.setError("Chưa chọn quận");
                 }
 
-                String selectedSubDistrictName = autoSubDistrictField.getText().toString();
-                if (!TextUtils.isEmpty(selectedSubDistrictName)) {
-                    int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
-                    SubDistricts subDistricts = subDistrictsService.getSubDistrictById(subDistrictId);
-                    address.setSubDistrics(subDistricts);
+                if (TextUtils.isEmpty(subdistrict)) {
+                    isDataValid = false;
+                    autoSubDistrictField.setError("Chưa chọn phường");
                 }
 
-                String selectedStreetName = autoStreetField.getText().toString();
-                if (!TextUtils.isEmpty(selectedStreetName)) {
-                    int streetId = getStreetIdByName(selectedStreetName);
-                    Streets streets = streetsService.getStreetsById(streetId);
-                    address.setStreets(streets);
+                if (TextUtils.isEmpty(street)) {
+                    isDataValid = false;
+                    autoStreetField.setError("Chưa chọn tên đường");
                 }
 
-                address.setHouseNumber(houseNumberEditText.getText().toString());
-                address.setIsActive(0);
-                long a = addressService.addAddress(address);
-                if (a > 0) {
-                    Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
-                    posts.setAddress(address);
+                if (TextUtils.isEmpty(housenum)) {
+                    isDataValid = false;
+                    houseNumberEditText.setError("Chưa nhập số nhà");
                 }
-            }
 
-            // Set the price
-            String priceText = pricePost.getText().toString();
-            if (!priceText.isEmpty()) {
-                posts.setPrice(Float.parseFloat(priceText));
-            }
+                if (isDataValid) {
+                    String selectedCityName = autoCitiesField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedCityName)) {
+                        int cityID = getCitiesIdByName(selectedCityName);
+                        Cities citys = citiesService.getCityById(cityID);
+                        address.setCities(citys);
+                    }
 
-            // Set the description
-            posts.setDescription(desPost.getText().toString());
+                    String selectedDistrictName = autoDistrictField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedDistrictName)) {
+                        int districtId = getDistrictByName(selectedDistrictName);
+                        Districts districts = districtsService.getDistrictById(districtId);
+                        address.setDistricts(districts);
+                    }
 
-            // Set the time
-            long currentTimeMillis = System.currentTimeMillis();
-            Date currentDate = new Date(currentTimeMillis);
+                    String selectedSubDistrictName = autoSubDistrictField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedSubDistrictName)) {
+                        int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
+                        SubDistricts subDistricts = subDistrictsService.getSubDistrictById(subDistrictId);
+                        address.setSubDistrics(subDistricts);
+                    }
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(currentDate);
-            calendar.add(Calendar.MONTH, 1);
-            Date futureDate = calendar.getTime();
+                    String selectedStreetName = autoStreetField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedStreetName)) {
+                        int streetId = getStreetIdByName(selectedStreetName);
+                        Streets streets = streetsService.getStreetsById(streetId);
+                        address.setStreets(streets);
+                    }
 
-            posts.setTimeFrom(currentDate);
-            posts.setTimeTo(futureDate);
-
-            // Set the active post
-            posts.setActivePost(1);
-            posts.setUserAccount(user);
-
-            // Add the post
-            long idCurrentPost = postsService.addAPost(posts);
-            if (idCurrentPost > 0) {
-                Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
-
-                // add detail_image
-                List<Images> imagesList = imagesService.getAllImagesByName(name);
-                for (Images images : imagesList) {
-                    try {
-                        detail_imageService.addADetailImage(images.getId(),Integer.parseInt(String.valueOf(idCurrentPost)));
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
+                    address.setHouseNumber(houseNumberEditText.getText().toString());
+                    address.setIsActive(0);
+                    long a = addressService.addAddress(address);
+                    if (a > 0) {
+                        Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        posts.setAddress(address);
                     }
                 }
 
-                // add detail_furniture
-                Detail_Furniture detailFurniture = new Detail_Furniture();
-
-                for (Furniture furniture : furnitureListChoose) {
-                    try {
-                        detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(idCurrentPost))));
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
-                    detailFurniture.setQuantity(1);
-                    detailFurniture.setFurniture(furniture);
-                    try {
-                        detail_furnitureService.addADetailFurniture(detailFurniture);
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
+                // Set the price
+                String priceText = pricePost.getText().toString();
+                if (!priceText.isEmpty()) {
+                    posts.setPrice(Float.parseFloat(priceText));
                 }
 
+                // Set the description
+                posts.setDescription(desPost.getText().toString());
+
+                // Set the time
+                long currentTimeMillis = System.currentTimeMillis();
+                Date currentDate = new Date(currentTimeMillis);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.MONTH, 1);
+                Date futureDate = calendar.getTime();
+
+                posts.setTimeFrom(currentDate);
+                posts.setTimeTo(futureDate);
+
+                // Set the active post
+                posts.setActivePost(1);
+                posts.setUserAccount(user);
+
+                // Add the post
+                long idCurrentPost = postsService.addAPost(posts);
+                if (idCurrentPost > 0) {
+                    Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
+
+                    // add detail_image
+                    List<Images> imagesList = imagesService.getAllImagesByName(name);
+                    for (Images images : imagesList) {
+                        try {
+                            detail_imageService.addADetailImage(images.getId(), Integer.parseInt(String.valueOf(idCurrentPost)));
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    // add detail_furniture
+                    Detail_Furniture detailFurniture = new Detail_Furniture();
+
+                    for (Furniture furniture : furnitureListChoose) {
+                        try {
+                            detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(idCurrentPost))));
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        detailFurniture.setQuantity(1);
+                        detailFurniture.setFurniture(furniture);
+                        try {
+                            detail_furnitureService.addADetailFurniture(detailFurniture);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Bạn chưa thêm ảnh vào trong dữ liệu", Toast.LENGTH_SHORT).show();
             }
         });
 
