@@ -1,6 +1,7 @@
 package com.nhom22.findhostel.UI.Search;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +20,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.nhom22.findhostel.UI.Map.MapActivity;
+import com.github.ybq.android.spinkit.style.FoldingCube;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.UI.Map.MapActivity;
 import com.nhom22.findhostel.databinding.FragmentSearchPageBinding;
 
 import java.text.ParseException;
@@ -94,7 +97,16 @@ public class SearchPageFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentSearchPageBinding binding = FragmentSearchPageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        // Tìm ProgressBar và ListView trong layout
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+        progressBar.setIndeterminateDrawable(new FoldingCube());
+
         lvPost = view.findViewById(R.id.lvPost);
+        // Ẩn ListView khi đang load dữ liệu
+        lvPost.setVisibility(View.GONE);
+        new LoadDataAsyncTask(progressBar, lvPost).execute();
+
         String[] itemsSpinner = {"Mới nhất", "Giá thấp đến cao", "Giá cao đến thấp"};
         Spinner snOptions = view.findViewById(R.id.snOptions);
         edtKeyWord = view.findViewById(R.id.edtKeyword);
@@ -309,5 +321,36 @@ public class SearchPageFragment extends Fragment {
 
             }
         });
+    }
+
+    public class LoadDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        private ProgressBar progressBar;
+        private ListView listView;
+
+        public LoadDataAsyncTask(ProgressBar progressBar, ListView listView) {
+            this.progressBar = progressBar;
+            this.listView = listView;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Thực hiện các tác vụ nền ở đây (ví dụ: load dữ liệu)
+            // Ví dụ:
+            try {
+                Thread.sleep(2000); // Giả lập thời gian load dữ liệu (3 giây)
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            // Sau khi tác vụ nền hoàn thành, ẩn ProgressBar và hiển thị ListView
+            progressBar.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+        }
     }
 }
