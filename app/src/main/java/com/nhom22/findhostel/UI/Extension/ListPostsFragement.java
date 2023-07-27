@@ -57,7 +57,7 @@ public class ListPostsFragement extends Fragment {
             subDistric_id = bundle.getString("key");
             // Sử dụng dữ liệu ở đây
         }
-        binding.tvAddressIdLp.setText(subDistric_id);
+//        binding.tvAddressIdLp.setText(subDistric_id);
 
 
         dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());

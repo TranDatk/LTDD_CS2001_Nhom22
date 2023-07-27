@@ -7,7 +7,9 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.NotificationDAO;
+import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Notification;
+import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -44,6 +46,17 @@ public class NotificationService {
         }else{
             Toast.makeText(context, "Notification đã tồn tại", Toast.LENGTH_SHORT).show();
             return -1;
+        }
+    }
+
+    public List<Notification> getNotificationByDistrictsPostsAndUserId(Districts districs, UserAccount user) throws ParseException{
+        if(districs != null){
+            return NOTIFICATION_DAO.getNotificationByDistrictsPostsAndUserId(districs, user);
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null posts", Toast.LENGTH_SHORT).show();
+            return null;
         }
     }
 
