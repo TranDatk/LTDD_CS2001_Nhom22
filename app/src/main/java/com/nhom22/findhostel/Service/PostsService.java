@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.PostsDAO;
+import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.YourApplication;
@@ -84,6 +85,17 @@ public class PostsService {
     public List<Posts> getPostsByOwnerId(int ownerId) throws ParseException {
         if(ownerId >= 0){
             return POSTS_DAO.getPostsByOwnerId(ownerId);
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null posts", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
+
+    public List<Posts> getPostsByDistricsAndNotUserId(Districts districs, UserAccount userAccount) throws ParseException{
+        if(districs != null){
+            return POSTS_DAO.getPostsByDistricsAndNotUserId(districs, userAccount);
         }
         else {
             Context context = YourApplication.getInstance().getApplicationContext();

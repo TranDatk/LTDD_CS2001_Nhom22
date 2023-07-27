@@ -73,13 +73,13 @@ public class HostelCollectionPageFragment extends Fragment {
 
 
 
-//                int itemSubDistrict = address.getSubDistrics().getId();
-//                String text = String.valueOf(itemSubDistrict);
+                int itemSubDistrict = address.getSubDistrics().getId();
+                String text = String.valueOf(itemSubDistrict);
 //                Toast.makeText(getContext(), String.valueOf(text), Toast.LENGTH_SHORT).show();
 
                 ListPostsFragement fragment = new ListPostsFragement();
                 Bundle bundle = new Bundle();
-                bundle.putString("key", "6");
+                bundle.putString("key", text);
                 fragment.setArguments(bundle);
 
                 replaceFragment(fragment);

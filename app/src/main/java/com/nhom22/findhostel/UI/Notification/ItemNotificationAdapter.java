@@ -87,7 +87,7 @@ public class ItemNotificationAdapter extends BaseAdapter {
             throw new RuntimeException(e);
         }
         Address address = posts.getAddress();
-        UserAccount userAccount = userAccountDAO.getUserAccountById(notification.getUserAccountId());
+        UserAccount userAccount = posts.getUserAccount();
 
         String districts_posts = address.getHouseNumber() + " " + address.getStreets().getName() + ", " +
                 address.getSubDistrics().getName() + ", " + address.getDistricts().getName() + ", " + address.getCities().getName();

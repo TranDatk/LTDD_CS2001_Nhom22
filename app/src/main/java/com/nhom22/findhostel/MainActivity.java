@@ -15,6 +15,8 @@ import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
+import com.nhom22.findhostel.Firebase.PostDecorFirebase;
+import com.nhom22.findhostel.Firebase.PostsFirebase;
 import com.nhom22.findhostel.Firebase.Save_PostFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
@@ -71,9 +73,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
-    private UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
-    private final NotificationService notificationService = new NotificationService();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,23 +119,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-//        Date created_date;
-//        Notification notification;
-//        try {
-//            created_date = sdf.parse("2023-06-2 15:00:00");
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        notification = new Notification(15, 2, 2, created_date);
-//        try {
-//            long l = notificationService.addNotification(notification);
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-
 
         createFirebase();
     }
