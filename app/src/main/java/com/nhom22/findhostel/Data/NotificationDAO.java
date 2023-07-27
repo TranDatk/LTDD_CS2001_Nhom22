@@ -6,7 +6,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Notification;
+import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.Service.PostsService;
+import com.nhom22.findhostel.Service.UserAccountService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +24,7 @@ import java.util.Locale;
 
 public class NotificationDAO {
     private DatabaseHelper dbHelper;
+    private PostsService postsService = new PostsService();
 
 
     public NotificationDAO(Context context){dbHelper = new DatabaseHelper(context);}
@@ -155,6 +162,38 @@ public class NotificationDAO {
 
         cursor.close();
         return notification;
+    }
+
+    @SuppressLint("Range")
+    public List<Notification> getNotificationByDistrictsPostsAndUserId(Districts districs, UserAccount user) throws ParseException {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "id",
+                "id_posts",
+                "id_user",
+                "created_date"
+        };
+
+        Cursor cursor = db.query("notification", columns, null, null, null, null, null);
+
+        List<Notification> notifications = new ArrayList<>();
+        while (cursor != null && cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int postsId = cursor.getInt(cursor.getColumnIndex("id_posts"));
+            int userId = cursor.getInt(cursor.getColumnIndex("id_user"));
+            Date createdDate = parseDate(cursor.getString(cursor.getColumnIndex("created_date")));
+
+            Posts posts = postsService.getPostById(postsId);
+            Notification  notification = new Notification(id, postsId, userId, createdDate);
+
+            if(districs.getId() == posts.getAddress().getDistricts().getId() && posts.getActivePost() == 1 && userId == user.getId()){
+              notifications.add(notification);
+            }
+        }
+        cursor.close();
+        db.close();
+        return notifications;
     }
 
     @SuppressLint("Range")

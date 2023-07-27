@@ -15,6 +15,8 @@ import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Firebase.FirebasePromises;
 import com.nhom22.findhostel.Firebase.ImageUserAccountFirebase;
+import com.nhom22.findhostel.Firebase.PostDecorFirebase;
+import com.nhom22.findhostel.Firebase.PostsFirebase;
 import com.nhom22.findhostel.Firebase.Save_PostFirebase;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Cities;
@@ -68,9 +70,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private PostsDAO postsDAO = new PostsDAO(YourApplication.getInstance().getApplicationContext());
-    private UserAccountDAO userAccountDAO = new UserAccountDAO(YourApplication.getInstance().getApplicationContext());
-    private final NotificationService notificationService = new NotificationService();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frame_container, defaultFragment)
                 .commit();
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
-
-
 
         createFirebase();
     }
