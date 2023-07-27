@@ -92,7 +92,7 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/baseline_bed_24" />
+                            android:src="@drawable/colorbed" />
 
                         <TextView
                             android:id="@+id/tvBed"
@@ -111,7 +111,7 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/baseline_bathroom_24" />
+                            android:src="@drawable/shower" />
 
                         <TextView
                             android:id="@+id/tvShower"
@@ -199,7 +199,7 @@
                             android:id="@+id/btnSave"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
-                            android:background="@drawable/savepost"
+                            android:background="@drawable/bookmark"
                             tools:ignore="TouchTargetSizeCheck"/>
 
                         <ImageButton
@@ -207,7 +207,7 @@
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_marginLeft="10dp"
-                            android:background="@drawable/baseline_local_phone_24"
+                            android:background="@drawable/phonecall"
                             tools:ignore="TouchTargetSizeCheck"/>
 
                         <ImageButton
@@ -215,7 +215,7 @@
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_marginLeft="10dp"
-                            android:background="@drawable/baseline_sms_24"
+                            android:background="@drawable/sms"
                             android:text="sms"
                             tools:ignore="TouchTargetSizeCheck"/>
                     </LinearLayout>
