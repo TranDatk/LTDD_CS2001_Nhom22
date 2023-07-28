@@ -40,7 +40,7 @@ import com.nhom22.findhostel.Service.UserAccountService;
 import java.text.ParseException;
 import java.util.List;
 
-public class HomeSecondActivity extends AppCompatActivity {
+public class HomeSecondActivity extends AppCompatActivity implements PostAdapter.CreditReducer {
     private DrawerLayout drawerLayout;
     List<Posts> items = null;
     PostAdapter adapter;
@@ -54,12 +54,12 @@ public class HomeSecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_second);
 
 
-        ListView lvPost = (ListView) findViewById(R.id.lvPost);
+        ListView lvPost =  findViewById(R.id.lvPost);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         Button btnPost = findViewById(R.id.postBtn);
-        FloatingActionButton btnPost2 = (FloatingActionButton) findViewById(R.id.postBtn2);
+        FloatingActionButton btnPost2 =  findViewById(R.id.postBtn2);
         LinearLayout screenNot = findViewById(R.id.screen_not);
         RelativeLayout screenHavePost = findViewById(R.id.screen_have_post);
 
@@ -67,6 +67,8 @@ public class HomeSecondActivity extends AppCompatActivity {
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
         int userId = sharedPreferences.getInt("userId", -1);
         UserAccount user = userAccountService.getUserAccountById(userId);
+
+        user.getDigital_money();
 
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -107,22 +109,12 @@ public class HomeSecondActivity extends AppCompatActivity {
         }
 
         try {
-            items = postsService.getAllPost();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        adapter = new PostAdapter(this, items);
-        lvPost.setAdapter(adapter);
-
-
-        int countPost = 0;
-        List<Posts> postsList;
-        try {
-            postsList = postsService.getPostsByOwnerId(userId);
-            if (postsList != null && !postsList.isEmpty()) {
+           items = postsService.getPostsByOwnerId(userId);
+            if (items != null && !items.isEmpty()) {
                 screenNot.setVisibility(View.GONE);
                 screenHavePost.setVisibility(View.VISIBLE);
+                adapter = new PostAdapter(this, items, this);
+                lvPost.setAdapter(adapter);
                 btnPost2.setOnClickListener(v -> {
                     Intent intent = new Intent(HomeSecondActivity.this, PostOwnerActivity.class);
                     startActivity(intent);
@@ -152,6 +144,8 @@ public class HomeSecondActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,6 +235,19 @@ public class HomeSecondActivity extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void reduceCredit(int userId) {
+        UserAccount user = userAccountService.getUserAccountById(userId);
+        double currentCredit = user.getDigital_money();
+        if (currentCredit >= 15000) {
+            double newCredit = currentCredit - 15000;
+            user.setDigital_money(newCredit);
+            userAccountService.updateUserAccount(user);
+            Toast.makeText(this, "Bạn đã thanh toán thành công!!!.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Thanh toán không thành công!! Số dư trong tài khoản không đủ!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
