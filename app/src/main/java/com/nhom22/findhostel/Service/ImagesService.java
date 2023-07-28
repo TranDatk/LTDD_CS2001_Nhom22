@@ -88,6 +88,7 @@ public class ImagesService {
         IMAGES_DAO.deleteAllImages();
     }
 
+
     public void resetImagesAutoIncrement() {
         IMAGES_DAO.resetImagesAutoIncrement();
     }

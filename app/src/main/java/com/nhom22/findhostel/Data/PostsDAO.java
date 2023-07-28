@@ -7,10 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.nhom22.findhostel.Model.Address;
+import com.nhom22.findhostel.Model.Cities;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Posts;
+import com.nhom22.findhostel.Model.Streets;
+import com.nhom22.findhostel.Model.SubDistricts;
 import com.nhom22.findhostel.Model.Type;
 import com.nhom22.findhostel.Model.UserAccount;
+import com.nhom22.findhostel.Service.AddressService;
 import com.nhom22.findhostel.YourApplication;
 
 import java.text.ParseException;
@@ -91,6 +95,36 @@ public class PostsDAO {
 
         return post;
     }
+
+    public Address getAddressByPostId(int postId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {
+                "address_id"
+        };
+
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(postId)};
+
+        Cursor cursor = db.query("posts", columns, selection, selectionArgs, null, null, null);
+
+        Address address = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            @SuppressLint("Range") int addressId = cursor.getInt(cursor.getColumnIndex("address_id"));
+
+            AddressService addressService = new AddressService();
+            address = addressService.getAddressById(addressId);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
+        return address;
+    }
+
+
 
     public Posts getPostByName(String postName) throws ParseException {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -194,6 +228,33 @@ public class PostsDAO {
         }
         db.close();
         return id;
+    }
+
+    public boolean updatePost(Posts post) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("time_from", post.getTimeFrom().toString());
+        values.put("time_to", post.getTimeTo().toString());
+        values.put("post_name", post.getPostName());
+        values.put("price", post.getPrice());
+        values.put("description", post.getDescription());
+        values.put("active_post", post.getActivePost());
+        values.put("address_id", post.getAddress().getId());
+        values.put("owner_id", post.getUserAccount().getId());
+        values.put("type_id", post.getType().getId());
+
+        // Assuming the posts table has a primary key column named "id"
+        long id = post.getId(); // Get the ID of the post to be updated
+        String whereClause = "id = ?";
+        String[] whereArgs = {String.valueOf(id)};
+
+        // Perform the update operation
+        int rowsAffected = db.update("posts", values, whereClause, whereArgs);
+        db.close();
+
+        // Return true if at least one row was affected (i.e., the update was successful)
+        return rowsAffected > 0;
     }
 
     public void deleteAllPosts() {

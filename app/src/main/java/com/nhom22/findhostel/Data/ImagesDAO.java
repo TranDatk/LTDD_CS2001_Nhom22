@@ -113,6 +113,7 @@ public class ImagesDAO {
         db.close();
     }
 
+
     public void resetImagesAutoIncrement() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 

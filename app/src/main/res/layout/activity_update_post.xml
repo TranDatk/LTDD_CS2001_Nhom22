@@ -13,11 +13,13 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:title="Sửa bài viết" />
+        app:title="Sửa tin đăng cho thuê" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,33 +28,60 @@
             android:orientation="vertical"
             android:padding="15dp">
 
+
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tiêu đề bài viết*"
+                android:textAllCaps="true" />
+
+            <EditText
+                android:id="@+id/txtNamePost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_1"
+                android:padding="5dp" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Hình ảnh tin đăng*"
                 android:textAllCaps="true" />
 
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:scrollbarStyle="outsideInset"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/white"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/galleryButton"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/camera" />
-
-                <TextView
-                    android:layout_width="match_parent"
+                    android:text="Thêm ảnh" />
+                <Button
+                    android:id="@+id/cameraButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Thêm hình ảnh"
-                    android:textAllCaps="true"
-                    android:textColor="@color/green" />
+                    android:text="Chụp ảnh" />
+
+                <Button
+                    android:id="@+id/btnUpImage"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thêm ảnh đã chọn" />
 
             </LinearLayout>
 
@@ -69,38 +98,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tiện tích của phòng" />
+
             <com.google.android.flexbox.FlexboxLayout
-                android:layout_marginBottom="15dp"
                 android:id="@+id/boxFurni"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="flex_start"
+                android:layout_marginBottom="15dp"
                 app:alignContent="flex_start"
-                app:justifyContent="space_evenly">
-            </com.google.android.flexbox.FlexboxLayout>
-            <EditText
-                android:id="@+id/countFurni"
-                android:layout_width="200dp"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
+                app:justifyContent="space_evenly"/>
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_1"
-                android:hint="Nhập số lượng"
-                android:inputType="number" />
+                android:text="Các dịch vụ: " />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/boxUti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:flexDirection="column"
+                app:justifyContent="space_evenly"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Loại phòng: " />
+
             <com.google.android.flexbox.FlexboxLayout
-                android:layout_marginBottom="15dp"
                 android:id="@+id/boxType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="flex_start"
+                android:layout_marginBottom="15dp"
                 app:alignContent="flex_start"
-                app:justifyContent="space_evenly">
-
-            </com.google.android.flexbox.FlexboxLayout>
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
+                app:justifyContent="space_evenly" />
 
 
             <LinearLayout
@@ -210,14 +247,9 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
-                <Spinner
-                    android:id="@+id/spinnerLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black" />
 
                 <EditText
-                    android:id="@+id/editTextLanguage"
+                    android:id="@+id/descPost"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -229,10 +261,10 @@
 
 
             <Button
-                android:id="@+id/btnUpdate"
+                android:id="@+id/btnAddPost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sửa bài viết"
+                android:text="Sửa bài đăng tin"
                 android:textAllCaps="true" />
         </LinearLayout>
     </ScrollView>

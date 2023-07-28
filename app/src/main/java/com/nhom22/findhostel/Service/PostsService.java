@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.PostsDAO;
+import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.Model.Districts;
 import com.nhom22.findhostel.Model.Posts;
 import com.nhom22.findhostel.Model.UserAccount;
@@ -32,6 +33,17 @@ public class PostsService {
         else {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Null postsId", Toast.LENGTH_SHORT).show();
+            return null; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+    public Address getAddressByPostId(int postId) {
+        if(postId >= 0){
+            return POSTS_DAO.getAddressByPostId(postId); // -1 Unsuccessful, >0 Successful
+        }
+        else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Null posts ID", Toast.LENGTH_SHORT).show();
             return null; // Return -1 to indicate unsuccessful operation
         }
     }
@@ -78,6 +90,38 @@ public class PostsService {
             return -1; // Return -1 to indicate unsuccessful operation
         }
     }
+
+    public boolean updatePost(Posts post) {
+        if (post != null) {
+            boolean isUpdated = POSTS_DAO.updatePost(post);
+
+            // If the local update is successful, update data in Firebase as well
+            if (isUpdated) {
+                UserAccount userAccountFirebase = post.getUserAccount();
+                userAccountFirebase.setImage(null);
+
+                Posts postsFirebase = new Posts(
+                        post.getId(),
+                        post.getTimeFrom(),
+                        post.getTimeTo(),
+                        post.getPostName(),
+                        post.getPrice(),
+                        post.getDescription(),
+                        post.getActivePost(),
+                        post.getAddress(),
+                        userAccountFirebase,
+                        post.getType()
+                );
+
+                postsRef.child(String.valueOf(postsFirebase.getId())).setValue(postsFirebase);
+            }
+
+            return isUpdated;
+        } else {
+            return false; // Return false to indicate unsuccessful operation
+        }
+    }
+
 
     public void deleteAllPosts() {
         POSTS_DAO.deleteAllPosts();
