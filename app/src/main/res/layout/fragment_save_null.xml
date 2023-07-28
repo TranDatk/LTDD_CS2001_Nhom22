@@ -60,12 +60,10 @@
             android:layout_height="1dp"
             android:background="@android:color/darker_gray" />
 
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Không có dữ liệu"
-            android:gravity="center"
-            android:textSize="35sp"/>
+            android:src="@drawable/delete"/>
 
     </LinearLayout>
 
