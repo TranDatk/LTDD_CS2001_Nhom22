@@ -95,9 +95,14 @@ public class NotificationPageFragment extends Fragment {
         FragmentNotificationPageBinding binding = FragmentNotificationPageBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        ImageView gifImageView = binding.gifImgNoti;
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.no_notification)
+                .into(gifImageView);
+
         Date currentDate = new Date();
         if(userId > 0){
-            binding.gifImgNoti.setVisibility(View.GONE);
 
             dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
@@ -139,33 +144,34 @@ public class NotificationPageFragment extends Fragment {
             itemAdapter = new ItemNotificationAdapter(YourApplication.getInstance().getApplicationContext(), R.layout.item_noti_layout, arrItem);
             lsvItem.setAdapter(itemAdapter);
 
-
             itemAdapter.notifyDataSetChanged();
+
+            if(arrItem.isEmpty()){
+                binding.gifImgNoti.setVisibility(View.VISIBLE);
+            }else{
+                binding.gifImgNoti.setVisibility(View.GONE);
+                lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        // Tạo Bundle và chuyển dữ liệu cần truyền vào
+                        Bundle dataBundle = new Bundle();
+
+                        dataBundle.putInt("id", arrItem.get(i).getPostsId());
+
+                        // Tạo Fragment mới và gắn Bundle vào Fragment
+                        PostDetailFragment postDetailFragment = new PostDetailFragment();
+                        postDetailFragment.setArguments(dataBundle);
+
+                        // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
+                        replaceFragment(postDetailFragment);
+                    }
+                });
+            }
+
         } else {
-            ImageView gifImageView = binding.gifImgNoti;
-            Glide.with(this)
-                    .asGif()
-                    .load(R.drawable.no_notification)
-                    .into(gifImageView);
+            Toast.makeText(requireContext(), "Hãy đăng nhập để nhận thông báo mới nhất về các phòng trọ xung quanh bạn", Toast.LENGTH_SHORT).show();
             binding.gifImgNoti.setVisibility(View.VISIBLE);
         }
-
-        lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Tạo Bundle và chuyển dữ liệu cần truyền vào
-                Bundle dataBundle = new Bundle();
-
-                dataBundle.putInt("id", arrItem.get(i).getPostsId());
-
-                // Tạo Fragment mới và gắn Bundle vào Fragment
-                PostDetailFragment postDetailFragment = new PostDetailFragment();
-                postDetailFragment.setArguments(dataBundle);
-
-                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
-                replaceFragment(postDetailFragment);
-            }
-        });
 
 
         return view;

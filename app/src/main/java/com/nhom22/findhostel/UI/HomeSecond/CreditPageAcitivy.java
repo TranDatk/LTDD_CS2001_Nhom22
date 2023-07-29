@@ -23,8 +23,8 @@ import com.nhom22.findhostel.Service.UserAccountService;
 
 import java.util.Objects;
 
-import vn.zalopay.sdk.Environment;
-import vn.zalopay.sdk.ZaloPaySDK;
+//import vn.zalopay.sdk.Environment;
+//import vn.zalopay.sdk.ZaloPaySDK;
 
 public class CreditPageAcitivy extends AppCompatActivity {
 
@@ -47,7 +47,7 @@ public class CreditPageAcitivy extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX);
+//        ZaloPaySDK.init(2553, Environment.SANDBOX);
 
         LinearLayout btnNap = (LinearLayout) findViewById(R.id.btnNap);
 
