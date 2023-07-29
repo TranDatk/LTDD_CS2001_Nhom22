@@ -1,32 +1,45 @@
 package com.nhom22.findhostel.UI.HomeSecond;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.UserAccountService;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.math.BigDecimal;
 import java.util.Objects;
 
-import vn.zalopay.sdk.Environment;
-import vn.zalopay.sdk.ZaloPaySDK;
 
 public class CreditPageAcitivy extends AppCompatActivity {
+
 
     private final UserAccountService userAccountService = new UserAccountService();
     @Override
@@ -41,13 +54,7 @@ public class CreditPageAcitivy extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        StrictMode.ThreadPolicy policy = new
-                StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         LinearLayout btnNap = (LinearLayout) findViewById(R.id.btnNap);
 
@@ -55,7 +62,7 @@ public class CreditPageAcitivy extends AppCompatActivity {
         TextView txtCreditCanWithdraw = (TextView) findViewById(R.id.creditCountWithdraw);
 
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationTop);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -81,6 +88,11 @@ public class CreditPageAcitivy extends AppCompatActivity {
 
         txtCredit.setText(String.valueOf(user.getDigital_money()));
         txtCreditCanWithdraw.setText("Có thể rút: " + String.valueOf(user.getDigital_money()));
+
+        btnNap.setOnClickListener(v-> {
+            Intent intent = new Intent(this, PayScreen.class);
+            startActivity(intent);
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -98,4 +110,6 @@ public class CreditPageAcitivy extends AppCompatActivity {
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
     }
+
+
 }
