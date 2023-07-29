@@ -46,6 +46,31 @@ public class UserAccountDAO{
       return id;
    }
 
+   public int updateUserAccount(UserAccount userAccount) {
+      SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+      ContentValues values = new ContentValues();
+      values.put("username", userAccount.getUsername());
+      values.put("email", userAccount.getEmail());
+      values.put("phone", userAccount.getPhone());
+      values.put("digital_money", userAccount.getDigital_money());
+      values.put("role_user", userAccount.getRoleUser());
+      values.put("avatar", userAccount.getImage());
+      values.put("is_active", userAccount.getIsActive());
+      values.put("password", userAccount.getPassword());
+      values.put("address_id", userAccount.getAddress().getId());
+
+      String whereClause = "id = ?";
+      String[] whereArgs = {String.valueOf(userAccount.getId())};
+
+      int rowsAffected = db.update("user_account", values, whereClause, whereArgs);
+
+      db.close();
+
+      return rowsAffected;
+   }
+
+
    public int deleteUserAccount(String username) {
       SQLiteDatabase db = dbHelper.getWritableDatabase();
 

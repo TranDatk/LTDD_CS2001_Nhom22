@@ -111,6 +111,7 @@ public class Detail_FurnitureDAO {
         return id;
     }
 
+
     public void deleteAllDetailFurniture() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -118,6 +119,8 @@ public class Detail_FurnitureDAO {
 
         db.close();
     }
+
+
 
     public void resetDetailFurnitureAutoIncrement() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

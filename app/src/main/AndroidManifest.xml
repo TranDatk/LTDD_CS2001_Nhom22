@@ -40,10 +40,10 @@
             android:name=".UI.Map.MapActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.HomeSecond.UpdatePostActivity"
+            android:name=".UI.HomeSecond.PostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.HomeSecond.PostDetailActivity"
+            android:name=".UI.HomeSecond.PostUpdateControlActivity"
             android:exported="false" />
         <activity
             android:name=".UI.HomeSecond.PostOwnerActivity"

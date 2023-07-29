@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,9 +24,7 @@ import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.Detail_UtilitiesService;
 import com.nhom22.findhostel.Service.PostsService;
-import com.nhom22.findhostel.UI.Search.FurnitureAdapter;
 import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
-import com.nhom22.findhostel.UI.Search.UtilitiesAdapter;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -54,10 +49,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
         Bundle dataBundle = getIntent().getExtras();
         if (dataBundle != null) {
-            int id = dataBundle.getInt("id");
+            int idCurrentPost = dataBundle.getInt("id");
             PostsService postsService = new PostsService();
             try {
-                p = postsService.getPostById(id);
+                p = postsService.getPostById(idCurrentPost);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -66,17 +61,20 @@ public class PostDetailActivity extends AppCompatActivity {
             updatePostDetails(p);
 
             // Update the furniture details
-            updateFurnitureDetails(id);
+            updateFurnitureDetails(idCurrentPost);
 
             // Update the utilities details
-            updateUtilitiesDetails(id);
+            updateUtilitiesDetails(idCurrentPost);
 
             // Update the image details
-            updateImageDetails(id);
+            updateImageDetails(idCurrentPost);
 
             Button btnUpdate = findViewById(R.id.btnUpdatePost);
             btnUpdate.setOnClickListener(v -> {
-                Intent intent = new Intent(PostDetailActivity.this, UpdatePostActivity.class);
+                Bundle data = new Bundle();
+                data.putInt("id", idCurrentPost);
+                Intent intent = new Intent(PostDetailActivity.this, PostUpdateControlActivity.class);
+                intent.putExtras(data);
                 startActivity(intent);
             });
         }

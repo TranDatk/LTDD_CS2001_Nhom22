@@ -9,7 +9,10 @@ import androidx.fragment.app.FragmentManager;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,6 +22,9 @@ import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.UserAccountService;
 
 import java.util.Objects;
+
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPaySDK;
 
 public class CreditPageAcitivy extends AppCompatActivity {
 
@@ -35,6 +41,15 @@ public class CreditPageAcitivy extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
+
+        LinearLayout btnNap = (LinearLayout) findViewById(R.id.btnNap);
 
         TextView txtCredit =  (TextView)  findViewById(R.id.creditCount);
         TextView txtCreditCanWithdraw = (TextView) findViewById(R.id.creditCountWithdraw);
@@ -60,6 +75,7 @@ public class CreditPageAcitivy extends AppCompatActivity {
             }
         });
         loadFragment(new GiaoDichFragment());
+
 
 
 

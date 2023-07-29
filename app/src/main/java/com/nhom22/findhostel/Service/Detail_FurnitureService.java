@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nhom22.findhostel.Data.Detail_FurnitureDAO;
+import com.nhom22.findhostel.Data.PostsDAO;
 import com.nhom22.findhostel.Model.Detail_Furniture;
 import com.nhom22.findhostel.Model.Furniture;
 import com.nhom22.findhostel.YourApplication;
@@ -81,10 +82,11 @@ public class Detail_FurnitureService {
             return result;
         }
     }
-
     public void deleteAllDetailFurniture() {
         DETAIL_FURNITURE_DAO.deleteAllDetailFurniture();
     }
+
+
 
     public void resetDetailFurnitureAutoIncrement() {
         DETAIL_FURNITURE_DAO.resetDetailFurnitureAutoIncrement();

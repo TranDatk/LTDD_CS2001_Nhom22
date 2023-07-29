@@ -10,6 +10,8 @@ import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Model.Address;
 import com.nhom22.findhostel.YourApplication;
 
+import java.util.List;
+
 public class AddressService {
     private final static AddressDAO ADDRESS_DAO;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -31,6 +33,10 @@ public class AddressService {
         }
     }
 
+    public List<Address> getAllAddress() {
+            return ADDRESS_DAO.getAllAddress();
+    }
+
     public long addAddress(Address address){
         if(address != null){
 
@@ -44,6 +50,26 @@ public class AddressService {
             return result;
         }
         else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "Address is null", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+    }
+
+    public long updateAddress(Address address){
+        if (address != null){
+            if (address.getId() > 0) {
+                long result = ADDRESS_DAO.updateAddress(address);
+                if (result > 0) {
+                    addressRef.child(String.valueOf(address.getId())).setValue(address);
+                } else {
+                    Log.e("updateAddress", String.valueOf(result));
+                }
+                return result;
+            } else {
+                return addAddress(address);
+            }
+        } else {
             Context context = YourApplication.getInstance().getApplicationContext();
             Toast.makeText(context, "Address is null", Toast.LENGTH_SHORT).show();
             return -1;

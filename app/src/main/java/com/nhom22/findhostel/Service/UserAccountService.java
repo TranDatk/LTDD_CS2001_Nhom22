@@ -67,6 +67,28 @@ public class UserAccountService {
         }
     }
 
+    public long updateUserAccount(UserAccount userAccount) {
+        if (userAccount != null) {
+            long result = USER_ACCOUNT_DAO.updateUserAccount(userAccount);
+            if (result < 1) {
+                Log.e("UpdateUserAccount", "Failed to update UserAccount in Sqlite");
+            } else {
+                UserAccount userAccountFirebase = new UserAccount(userAccount.getId(), userAccount.getUsername(),
+                        userAccount.getEmail(), userAccount.getPassword(), userAccount.getPhone(),
+                        userAccount.getDigital_money(), userAccount.getRoleUser(), null, userAccount.getIsActive(), userAccount.getAddress());
+
+                userAccountRef.child(String.valueOf(userAccountFirebase.getId())).setValue(userAccountFirebase);
+            }
+            return result; // -1 Unsuccessful, >0 Successful
+        } else {
+            Context context = YourApplication.getInstance().getApplicationContext();
+            Toast.makeText(context, "User account is null", Toast.LENGTH_SHORT).show();
+            return -1; // Return -1 to indicate unsuccessful operation
+        }
+    }
+
+
+
     public UserAccount getUserAccountById(Integer userAccountId) {
         if (userAccountId != null) {
             return USER_ACCOUNT_DAO.getUserAccountById(userAccountId); // -1 Unsuccessful, >0 Successful
