@@ -15,10 +15,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.TypeService;
 import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.UI.Extension.ItemPostsHostelAdapter;
+import com.nhom22.findhostel.UI.Search.PostDetailFragment;
 import com.nhom22.findhostel.YourApplication;
 import com.nhom22.findhostel.databinding.FragmentNotificationPageBinding;
 
@@ -146,6 +150,23 @@ public class NotificationPageFragment extends Fragment {
             binding.gifImgNoti.setVisibility(View.VISIBLE);
         }
 
+        lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Tạo Bundle và chuyển dữ liệu cần truyền vào
+                Bundle dataBundle = new Bundle();
+
+                dataBundle.putInt("id", arrItem.get(i).getPostsId());
+
+                // Tạo Fragment mới và gắn Bundle vào Fragment
+                PostDetailFragment postDetailFragment = new PostDetailFragment();
+                postDetailFragment.setArguments(dataBundle);
+
+                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
+                replaceFragment(postDetailFragment);
+            }
+        });
+
 
         return view;
     }
@@ -166,5 +187,13 @@ public class NotificationPageFragment extends Fragment {
 
     private int getNotificationId(){
         return (int) new Date().getTime();
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -11,8 +11,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="50dp">
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Tiện ích"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity=""
+                android:src="@drawable/findhostel"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:id="@+id/ln_listHouse"
@@ -21,6 +49,7 @@
             android:orientation="horizontal"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/border_background"
             >
             <LinearLayout
@@ -115,7 +144,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Bộ sưu tập nhà cho thuê"
+                    android:text="Cảm hứng trang trí"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/baseline_lightbulb_24"
@@ -126,7 +155,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[Hà Nội] Danh sách phòng trọ giá rẻ dành cho công nhân"
+                    android:text="Tìm cảm hứng trong việc trang trí nhà"
                     android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_circle"
                     android:gravity="center_vertical"
@@ -139,7 +168,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[Đà Nẵng] Phòng trọ công nhân giá rẻ tại Đà Nẵng"
+                    android:text="Cập nhật hàng tuần"
                     android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_circle"
                     android:gravity="center_vertical"
@@ -152,7 +181,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="[TP.HCM] Phòng trọ giá rẻ cho công nhân tại TP.HCM"
+                    android:text="0 bài chưa đọc"
                     android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_circle"
                     android:gravity="center_vertical"
