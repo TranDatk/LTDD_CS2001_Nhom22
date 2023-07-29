@@ -17,11 +17,6 @@ import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.databinding.FragmentExtensionPageBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExtensionPageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ExtensionPageFragment extends Fragment {
 
     @Override

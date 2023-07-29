@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.Posts;
@@ -75,24 +76,26 @@ public class ListPostsFragement extends Fragment {
 
         itemAdapter.notifyDataSetChanged();
 
+        if(arrItem.isEmpty()){
+            Toast.makeText(getContext(), "Hệ thống đang lỗi không lấy được dữ liệu", Toast.LENGTH_SHORT).show();
+        }else {
+            lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    // Tạo Bundle và chuyển dữ liệu cần truyền vào
+                    Bundle dataBundle = new Bundle();
 
-        lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Tạo Bundle và chuyển dữ liệu cần truyền vào
-                Bundle dataBundle = new Bundle();
+                    dataBundle.putInt("id", arrItem.get(i).getId());
 
-                dataBundle.putInt("id", arrItem.get(i).getId());
+                    // Tạo Fragment mới và gắn Bundle vào Fragment
+                    PostDetailFragment postDetailFragment = new PostDetailFragment();
+                    postDetailFragment.setArguments(dataBundle);
 
-                // Tạo Fragment mới và gắn Bundle vào Fragment
-                PostDetailFragment postDetailFragment = new PostDetailFragment();
-                postDetailFragment.setArguments(dataBundle);
-
-                // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
-                replaceFragment(postDetailFragment);
-            }
-        });
-
+                    // Thực hiện thay thế Fragment hiện tại bằng Fragment mới có dữ liệu được truyền
+                    replaceFragment(postDetailFragment);
+                }
+            });
+        }
 
         return view;
     }
