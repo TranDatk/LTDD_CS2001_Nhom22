@@ -54,6 +54,7 @@ public class CreditPageAcitivy extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         LinearLayout btnNap = (LinearLayout) findViewById(R.id.btnNap);
