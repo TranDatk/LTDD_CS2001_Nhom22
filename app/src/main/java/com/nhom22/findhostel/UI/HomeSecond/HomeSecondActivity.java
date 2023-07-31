@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,13 +39,14 @@ import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.Service.UserAccountService;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeSecondActivity extends AppCompatActivity implements PostAdapter.CreditReducer {
     private DrawerLayout drawerLayout;
     List<Posts> items = null;
-    PostAdapter adapter;
-
+    private final List<Posts> itemsChoose = new ArrayList<>();
+    private PostAdapter adapter;
     private final UserAccountService userAccountService = new UserAccountService();
     private final PostsService postsService = new PostsService();
 
@@ -109,16 +111,34 @@ public class HomeSecondActivity extends AppCompatActivity implements PostAdapter
         }
 
         try {
-           items = postsService.getPostsByOwnerId(userId);
+            List<Posts> items = postsService.getPostsByOwnerId(userId);
+
             if (items != null && !items.isEmpty()) {
-                screenNot.setVisibility(View.GONE);
-                screenHavePost.setVisibility(View.VISIBLE);
-                adapter = new PostAdapter(this, items, this);
-                lvPost.setAdapter(adapter);
-                btnPost2.setOnClickListener(v -> {
-                    Intent intent = new Intent(HomeSecondActivity.this, PostOwnerActivity.class);
-                    startActivity(intent);
-                });
+                for (Posts p : items) {
+                    if (p.getActivePost() == 1) {
+                        itemsChoose.add(p);
+                    }
+                }
+
+                if (!itemsChoose.isEmpty()) {
+                    // At least one active post is found
+                    screenNot.setVisibility(View.GONE);
+                    screenHavePost.setVisibility(View.VISIBLE);
+                    adapter = new PostAdapter(this, itemsChoose, this);
+                    lvPost.setAdapter(adapter);
+                    btnPost2.setOnClickListener(v -> {
+                        Intent intent = new Intent(HomeSecondActivity.this, PostOwnerActivity.class);
+                        startActivity(intent);
+                    });
+                } else {
+                    Toast.makeText(this, "Không có bài viết nào", Toast.LENGTH_SHORT).show();
+                    screenNot.setVisibility(View.VISIBLE);
+                    screenHavePost.setVisibility(View.GONE);
+                    btnPost.setOnClickListener(v -> {
+                        Intent intent = new Intent(HomeSecondActivity.this, PostOwnerActivity.class);
+                        startActivity(intent);
+                    });
+                }
             } else {
                 Toast.makeText(this, "Không có bài viết nào", Toast.LENGTH_SHORT).show();
                 screenNot.setVisibility(View.VISIBLE);
@@ -129,15 +149,14 @@ public class HomeSecondActivity extends AppCompatActivity implements PostAdapter
                 });
             }
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            Log.e("HomeSecondActivity", "Error while fetching posts: " + e.getMessage());
         }
 
-
-        lvPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        lvPost.setOnItemClickListener((adapterView, view, i, l) -> {
+            if (i < itemsChoose.size()) {
+                int postId = itemsChoose.get(i).getId();
                 Bundle dataBundle = new Bundle();
-                dataBundle.putInt("id", items.get(i).getId());
+                dataBundle.putInt("id", postId);
 
                 Intent intent = new Intent(HomeSecondActivity.this, PostDetailActivity.class);
                 intent.putExtras(dataBundle);
