@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.DatabaseHelper;
 import com.nhom22.findhostel.Model.Address;
@@ -50,7 +51,6 @@ public class HostelCollectionPageFragment extends Fragment {
         lsvItem.setAdapter(itemAdapter);
 
         itemAdapter.notifyDataSetChanged();
-
         binding.btnAddHotelCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,33 +58,38 @@ public class HostelCollectionPageFragment extends Fragment {
             }
         });
 
-        binding.lvHotelCollection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HostelCollection item = itemAdapter.getItem(position);
+        if(arrItem.isEmpty()){
+            Toast.makeText(getContext(), "Hệ thống đang bị lỗi không lấy được dữ liệu", Toast.LENGTH_SHORT).show();
+        }else {
+            binding.lvHotelCollection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    HostelCollection item = itemAdapter.getItem(position);
 //                TextView textView = view.findViewById(R.id.tv_DistrictHotelCollection);
 //                String text = textView.getText().toString();
 //                int itemId = item.getId();
 //                String itemTitle = item.getTitle();
-                int itemDistrict = item.getAddress();
-                Address address = addressService.getAddressById(itemDistrict);
+                    int itemDistrict = item.getAddress();
+                    Address address = addressService.getAddressById(itemDistrict);
 
-                dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
+                    dataBase = new DatabaseHelper(YourApplication.getInstance().getApplicationContext());
 
+                    if(address != null){
+                        int itemSubDistrict = address.getSubDistrics().getId();
+                        String text = String.valueOf(itemSubDistrict);
 
+                        ListPostsFragement fragment = new ListPostsFragement();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key", text);
+                        fragment.setArguments(bundle);
 
-                int itemSubDistrict = address.getSubDistrics().getId();
-                String text = String.valueOf(itemSubDistrict);
-//                Toast.makeText(getContext(), String.valueOf(text), Toast.LENGTH_SHORT).show();
-
-                ListPostsFragement fragment = new ListPostsFragement();
-                Bundle bundle = new Bundle();
-                bundle.putString("key", text);
-                fragment.setArguments(bundle);
-
-                replaceFragment(fragment);
-            }
-        });
+                        replaceFragment(fragment);
+                    }else {
+                        Toast.makeText(getContext(), "Hệ thống đang lỗi không lấy được dữ liệu", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
 
         binding.imgBtnBackExtensionFromHostelCollectionPage.setOnClickListener(new View.OnClickListener() {
             @Override

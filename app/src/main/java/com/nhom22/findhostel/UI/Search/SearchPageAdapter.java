@@ -68,37 +68,40 @@ public class SearchPageAdapter extends BaseAdapter {
         ViewPager imageViewPager = view.findViewById(R.id.imageViewPager);
 
 
+        if (items.get(i) != null) {
+            Detail_ImageService detail_imageService = new Detail_ImageService();
+            List<Images> images = null;
+            try {
+                images = detail_imageService.getListImageByPostsId(items.get(i).getId());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
 
-        Detail_ImageService detail_imageService = new Detail_ImageService();
-        List<Images> images = null;
-        try {
-            images = detail_imageService.getListImageByPostsId(items.get(i).getId());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+            if (images != null && !images.isEmpty()) {
+                ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(fragment.getContext(), images);
+                imageViewPager.setAdapter(imageSliderAdapter);
+            }
+
+            Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+            try {
+                furs = detail_furnitureService.getListDetailFurnitureByPostId(items.get(i).getId());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (furs != null && !furs.isEmpty()) {
+                for (int x = 0; x < furs.size(); x++) {
+                    if (furs.get(x).getFurniture().getName().contains("Giường")) {
+                        tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
+                        tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
+                    }
+                }
+            }
         }
 
-        if (images != null && !images.isEmpty()) {
-            ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(fragment.getContext(), images);
-            imageViewPager.setAdapter(imageSliderAdapter);
-        }
+//
 
-        Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
-        try {
-            furs = detail_furnitureService.getListDetailFurnitureByPostId(items.get(i).getId());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-//        if (furs != null && !furs.isEmpty()) {
-//            for (int x = 0; x < furs.size(); x++) {
-//                if(furs.get(x).getFurniture().getName().contains("Giường")) {
-//                    tvBed.setText(String.valueOf(furs.get(x).getQuantity()));
-//                    tvShower.setText(String.valueOf(furs.get(x).getQuantity()));
-//                }
-//            }
-//        }
-
-        if (items != null && !items.isEmpty()) {
+        if (items.get(i) != null) {
             tvPrice.setText(String.valueOf(items.get(i).getPrice()) + "đ");
             tvType.setText(items.get(i).getType().getName());
             tvAddress.setText(items.get(i).getAddress().getHouseNumber() + ", " +
