@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +25,7 @@ import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_FurnitureService;
 import com.nhom22.findhostel.Service.Detail_ImageService;
 import com.nhom22.findhostel.Service.Detail_UtilitiesService;
+import com.nhom22.findhostel.Service.ImagesService;
 import com.nhom22.findhostel.Service.PostsService;
 import com.nhom22.findhostel.UI.Search.ImageSliderAdapter;
 
@@ -35,8 +38,9 @@ import java.util.concurrent.TimeUnit;
 public class PostDetailActivity extends AppCompatActivity {
 
     private Posts p;
-    private List<Detail_Furniture> furs;
-    private List<Detail_Utilities> utis;
+    private final Detail_ImageService detail_imageService = new Detail_ImageService();
+    private final PostsService postsService = new PostsService();
+    private final ImagesService imagesService = new ImagesService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class PostDetailActivity extends AppCompatActivity {
         Bundle dataBundle = getIntent().getExtras();
         if (dataBundle != null) {
             int idCurrentPost = dataBundle.getInt("id");
-            PostsService postsService = new PostsService();
+
             try {
                 p = postsService.getPostById(idCurrentPost);
             } catch (ParseException e) {
@@ -76,6 +80,26 @@ public class PostDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(PostDetailActivity.this, PostUpdateControlActivity.class);
                 intent.putExtras(data);
                 startActivity(intent);
+            });
+
+            Button btnDelete = findViewById(R.id.btnDeletePost);
+            btnDelete.setOnClickListener(v -> {
+                try {
+                    List<Images> imagesList = detail_imageService.getListImageByPostsId(idCurrentPost);
+                    for (Images images : imagesList) {
+                        imagesService.updateActiveImage(images.getId(), 0);
+                    }
+                    Posts p = postsService.getPostById(idCurrentPost);
+                    if (p != null) {
+                        p.setActivePost(0);
+                        postsService.updatePost(p);
+                    } else {
+                        Log.e("DeletePost", "Post not found with id: " + idCurrentPost);
+                    }
+                    Toast.makeText(this, "Xóa bài viết thành công", Toast.LENGTH_SHORT).show();
+                } catch (ParseException e) {
+                    Log.e("DeletePost", "Error while fetching post from service: " + e.getMessage());
+                }
             });
         }
     }
@@ -112,6 +136,7 @@ public class PostDetailActivity extends AppCompatActivity {
         GridView gvFurniture = findViewById(R.id.gvFurniture);
 
         Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
+        List<Detail_Furniture> furs;
         try {
             furs = detail_furnitureService.getListDetailFurnitureByPostId(postId);
         } catch (ParseException e) {
@@ -134,6 +159,7 @@ public class PostDetailActivity extends AppCompatActivity {
         GridView gvUtilities = findViewById(R.id.gvUtilities);
 
         Detail_UtilitiesService detail_utilitiesService = new Detail_UtilitiesService();
+        List<Detail_Utilities> utis;
         try {
             utis = detail_utilitiesService.getListDetailUtilitiesByPostId(postId);
         } catch (ParseException e) {

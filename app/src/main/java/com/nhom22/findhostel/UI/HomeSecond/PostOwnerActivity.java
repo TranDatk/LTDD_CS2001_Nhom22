@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -335,24 +336,25 @@ public class PostOwnerActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         selectedImages = new ArrayList<>();
         AtomicBoolean isUpdateImageButton = new AtomicBoolean(false);
+        List<Integer> countImage = new ArrayList<>();
         upImage.setOnClickListener(v -> {
-            String name = namePostEditText.getText().toString();
             for (Uri uri : selectedImages) {
                 Images images = new Images();
                 images.setIsActive(1);
-                images.setName(name);
+                images.setName(null);
                 try {
                     byte[] a = getBytesFromUri(uri);
                     images.setImage(a);
                     long result = imagesService.addAImages(images);
                     if (result > 0) {
+                        countImage.add((int) result);
                         Toast.makeText(this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                        isUpdateImageButton.set(true);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Toast.makeText(this, "Error adding image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
-            isUpdateImageButton.set(true);
         });
 
         galleryButton.setOnClickListener(v -> openGallery());
@@ -571,7 +573,10 @@ public class PostOwnerActivity extends AppCompatActivity {
                 if (addressId > 0) {
                     Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
                     posts.setAddress(address);
+                } else {
+                    Toast.makeText(this, "Thêm địa chỉ thất bại", Toast.LENGTH_SHORT).show();
                 }
+
                 // Set the post name
                 posts.setPostName(namePost);
 
@@ -598,57 +603,57 @@ public class PostOwnerActivity extends AppCompatActivity {
                 posts.setActivePost(1);
                 posts.setUserAccount(user);
 
-                // Add the post
-                long postId = postsService.addAPost(posts);
-                if (postId > 0) {
-                    Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
-
-                    // Add detail_image
-                    List<Images> imagesList = imagesService.getAllImagesByName(namePost);
-                    for (Images images : imagesList) {
-                        try {
-                            detail_imageService.addADetailImage(images.getId(), Integer.parseInt(String.valueOf(postId)));
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    // Add detail_furniture
-                    Detail_Furniture detailFurniture = new Detail_Furniture();
-                    for (Furniture furniture : furnitureListChoose) {
-                        try {
-                            detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                        detailFurniture.setQuantity(1);
-                        detailFurniture.setFurniture(furniture);
-                        try {
-                            long check1 = detail_furnitureService.addADetailFurniture(detailFurniture);
-                            if (check1 > 0) {
-                                Toast.makeText(this, "thêm nội thất thành công", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                    // Add detail_utilities
-                    for (Detail_Utilities detailUtilities : detail_utilitiesList) {
-                        if (detailUtilities != null) {
+                try {
+                    long postId = postsService.addAPost(posts);
+                    if (postId > 0) {
+                        Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
+                        for (Integer c : countImage) {
                             try {
-                                detailUtilities.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
+                                detail_imageService.addADetailImage(c, Integer.parseInt(String.valueOf(postId)));
                             } catch (ParseException e) {
                                 throw new RuntimeException(e);
                             }
-                            long check2 = detail_utilitiesService.addADetailUtilities(detailUtilities);
-                            if (check2 > 0) {
-                                Toast.makeText(this, "thêm tiện ích thành công", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // Add detail_furniture
+                        Detail_Furniture detailFurniture = new Detail_Furniture();
+                        for (Furniture furniture : furnitureListChoose) {
+                            try {
+                                detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                            detailFurniture.setQuantity(1);
+                            detailFurniture.setFurniture(furniture);
+                            try {
+                                long check1 = detail_furnitureService.addADetailFurniture(detailFurniture);
+                                if (check1 > 0) {
+                                    Toast.makeText(this, "thêm nội thất thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
                             }
                         }
+
+                        // Add detail_utilities
+                        for (Detail_Utilities detailUtilities : detail_utilitiesList) {
+                            if (detailUtilities.getUtilities() != null) {
+                                try {
+                                    detailUtilities.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                long check2 = detail_utilitiesService.addADetailUtilities(detailUtilities);
+                                if (check2 > 0) {
+                                    Toast.makeText(this, "thêm tiện ích thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.d("error", e.getMessage());
                 }
             });
         });
@@ -658,10 +663,8 @@ public class PostOwnerActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle ActionBar item clicks here
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // Handle the back button click here
             onBackPressed();
             return true;
         }
@@ -826,33 +829,6 @@ public class PostOwnerActivity extends AppCompatActivity {
         }
 
         return outputStream.toByteArray();
-    }
-
-    private int getSelectedTypeId(FlexboxLayout boxType) {
-        for (int i = 0; i < boxType.getChildCount(); i++) {
-            View view = boxType.getChildAt(i);
-            if (view instanceof RadioGroup) {
-                RadioGroup radioGroup = (RadioGroup) view;
-                int radioButtonId = radioGroup.getCheckedRadioButtonId();
-                RadioButton radioButton = radioGroup.findViewById(radioButtonId);
-                if (radioButton != null) {
-                    String selectedTypeName = radioButton.getText().toString();
-                    return getTypeByName(selectedTypeName);
-                }
-            }
-        }
-        return -1;
-    }
-
-    private int getTypeByName(String typeName) {
-        List<Type> typeList = typeService.getAllType();
-
-        for (Type type : typeList) {
-            if (type.getName().equals(typeName)) {
-                return type.getId();
-            }
-        }
-        return -1;
     }
 
     @Override

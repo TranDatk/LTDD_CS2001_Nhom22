@@ -82,7 +82,7 @@ public class UtilitiesAdapterActivity extends BaseAdapter {
                 viewHolder.imgIcon.setImageResource(R.drawable.colorwifi);
                 break;
             default:
-                viewHolder.imgIcon.setImageResource(0); // Use a default icon here.
+                viewHolder.imgIcon.setImageResource(R.drawable.default_ic);
                 break;
         }
 
@@ -94,7 +94,7 @@ public class UtilitiesAdapterActivity extends BaseAdapter {
                 viewHolder.imgUnit.setImageResource(R.drawable.room);
                 break;
             default:
-                viewHolder.imgUnit.setImageDrawable(null); // Hide the unit icon if not "1 người" or "1 phòng".
+                viewHolder.imgUnit.setImageResource(R.drawable.default_ic);
                 break;
         }
 

@@ -84,6 +84,19 @@ public class ImagesService {
         }
     }
 
+    public int updateActiveImage(long imageId, int isActive) {
+        int rowsAffected = IMAGES_DAO.updateActive(imageId, isActive);
+        if (rowsAffected > 0) {
+            DatabaseReference imagesRef = FirebaseDatabase.getInstance().getReference("images");
+            imagesRef.child(String.valueOf(imageId)).child("isActive").setValue(isActive);
+            Log.d("UpdateActiveImage", "Image with ID " + imageId + " updated successfully");
+            return 1;
+        } else {
+            Log.e("UpdateActiveImage", "Failed to update Image with ID " + imageId);
+            return -1;
+        }
+    }
+
     public void deleteAllImages() {
         IMAGES_DAO.deleteAllImages();
     }

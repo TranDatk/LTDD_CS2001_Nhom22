@@ -105,6 +105,17 @@ public class ImagesDAO {
         return  result;
     }
 
+    public int updateActive(long imageId, int isActive) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_active", isActive);
+        String whereClause = "id = ?";
+        String[] whereArgs = {String.valueOf(imageId)};
+        int rowsUpdated = db.update("images", values, whereClause, whereArgs);
+        db.close();
+        return rowsUpdated;
+    }
+
     public void deleteAllImages() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
