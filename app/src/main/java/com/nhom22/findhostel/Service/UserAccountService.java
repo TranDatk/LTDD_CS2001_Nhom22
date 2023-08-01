@@ -99,6 +99,10 @@ public class UserAccountService {
         }
     }
 
+    public List<String> getAllEmailUser() {
+        return USER_ACCOUNT_DAO.getAllEmailUser();
+    }
+
     public void deleteAllUserAccount() {
         USER_ACCOUNT_DAO.deleteAllUserAccount();
     }

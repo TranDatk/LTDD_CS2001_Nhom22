@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,7 +35,10 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.nhom22.findhostel.R;
+import com.nhom22.findhostel.Service.UserAccountService;
 import com.nhom22.findhostel.databinding.FragmentRegistrationBinding;
+
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -48,17 +52,23 @@ public class RegistrationFragment extends Fragment {
 
     private BottomSheetDialog bottomSheetDialog;
 
+    private final UserAccountService userAccountService = new UserAccountService();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRegistrationBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
         clipboardManager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
 
+
+
         setupListeners();
         loadGif();
         setupUI(binding.myFrameLayout);
         setupKeyboardHiding();
         showPassword();
+
+
 
         return binding.getRoot();
     }
@@ -146,16 +156,31 @@ public class RegistrationFragment extends Fragment {
         String repassword = binding.repasswordEditText.getText().toString().trim();
         String phone = binding.phoneNumber.getText().toString().trim();
 
-        String validationError = isInputValid(email, username, password, repassword, phone);
+        List<String> emailExist = userAccountService.getAllEmailUser();
+        boolean emailExists = false;
 
-        if (validationError == null) {
-            sendConfirmationCode(phone);
-            showConfirmationDialog();
-            copyToClipboard(email, username, password, phone);
+        for (String e : emailExist) {
+            if (e.equals(email)) {
+                emailExists = true;
+                break;
+            }
+        }
+
+        if (emailExists) {
+            Toast.makeText(requireContext(), "Email này đã tồn tại!!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), validationError, Toast.LENGTH_SHORT).show();
+            String validationError = isInputValid(email, username, password, repassword, phone);
+
+            if (validationError == null) {
+                sendConfirmationCode(phone);
+                showConfirmationDialog();
+                copyToClipboard(email, username, password, phone);
+            } else {
+                Toast.makeText(requireContext(), validationError, Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     private String isInputValid(String email, String username, String password, String repassword, String phone) {
         if (email.isEmpty()) {
