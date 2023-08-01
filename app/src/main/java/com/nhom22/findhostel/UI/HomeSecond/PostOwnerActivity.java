@@ -875,8 +875,8 @@ public class PostOwnerActivity extends AppCompatActivity {
         Double defaultMoney = 30000.0;
         UserAccount user = userAccountService.getUserAccountById(userId);
         double currentCredit = user.getDigital_money();
-        if (currentCredit >= (30000.0*currentValue)) {
-            double newCredit = currentCredit - (30000.0*currentValue);
+        if (currentCredit >= (defaultMoney*currentValue)) {
+            double newCredit = currentCredit - (defaultMoney*currentValue);
             user.setDigital_money(newCredit);
             userAccountService.updateUserAccount(user);
             Toast.makeText(this, "Bạn đã thanh toán thành công!!!.", Toast.LENGTH_SHORT).show();
