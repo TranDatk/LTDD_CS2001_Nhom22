@@ -179,6 +179,29 @@ public class UserAccountDAO{
       return userAccountListList;
    }
    @SuppressLint("Range")
+   public List<String> getAllPhoneNumberUser() {
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+      String[] columns = {
+              "phone"
+      };
+
+      Cursor cursor = db.query("user_account", columns, null, null, null, null, null);
+
+      List<String> userPhoneList = new ArrayList<>();
+
+      while (cursor != null && cursor.moveToNext()) {
+         String phone = cursor.getString(cursor.getColumnIndex("phone"));
+         userPhoneList.add(phone);
+      }
+
+      cursor.close();
+      db.close();
+
+      return userPhoneList;
+   }
+
+   @SuppressLint("Range")
    public List<String> getAllEmailUser() {
       SQLiteDatabase db = dbHelper.getReadableDatabase();
 

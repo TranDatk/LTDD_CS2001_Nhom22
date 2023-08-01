@@ -156,29 +156,49 @@ public class RegistrationFragment extends Fragment {
         String repassword = binding.repasswordEditText.getText().toString().trim();
         String phone = binding.phoneNumber.getText().toString().trim();
 
-        List<String> emailExist = userAccountService.getAllEmailUser();
-        boolean emailExists = false;
+        if (emailExists(email)) {
+            showToast("Email này đã tồn tại!!");
+            return;
+        }
 
+        if (phoneExists(phone)) {
+            showToast("Số điện thoại này đã tồn tại!!");
+            return;
+        }
+
+        String validationError = isInputValid(email, username, password, repassword, phone);
+
+        if (validationError == null) {
+            sendConfirmationCode(phone);
+            showConfirmationDialog();
+            copyToClipboard(email, username, password, phone);
+        } else {
+            showToast(validationError);
+        }
+    }
+
+    private boolean emailExists(String email) {
+        List<String> emailExist = userAccountService.getAllEmailUser();
         for (String e : emailExist) {
             if (e.equals(email)) {
-                emailExists = true;
-                break;
+                return true;
             }
         }
+        return false;
+    }
 
-        if (emailExists) {
-            Toast.makeText(requireContext(), "Email này đã tồn tại!!", Toast.LENGTH_SHORT).show();
-        } else {
-            String validationError = isInputValid(email, username, password, repassword, phone);
-
-            if (validationError == null) {
-                sendConfirmationCode(phone);
-                showConfirmationDialog();
-                copyToClipboard(email, username, password, phone);
-            } else {
-                Toast.makeText(requireContext(), validationError, Toast.LENGTH_SHORT).show();
+    private boolean phoneExists(String phone) {
+        List<String> phoneNumber = userAccountService.getAllPhoneNumberUser();
+        for (String p : phoneNumber) {
+            if (p.equals(phone)) {
+                return true;
             }
         }
+        return false;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 

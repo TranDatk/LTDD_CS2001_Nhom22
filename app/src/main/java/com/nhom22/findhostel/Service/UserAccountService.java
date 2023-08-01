@@ -103,6 +103,10 @@ public class UserAccountService {
         return USER_ACCOUNT_DAO.getAllEmailUser();
     }
 
+    public List<String> getAllPhoneNumberUser() {
+        return USER_ACCOUNT_DAO.getAllPhoneNumberUser();
+    }
+
     public void deleteAllUserAccount() {
         USER_ACCOUNT_DAO.deleteAllUserAccount();
     }
