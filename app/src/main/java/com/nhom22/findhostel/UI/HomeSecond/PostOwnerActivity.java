@@ -113,6 +113,11 @@ public class PostOwnerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<Uri> selectedImages = new ArrayList<>();
 
+    private EditText numberInput;
+    private Button increaseButton;
+    private Button decreaseButton;
+    private int currentValue = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +142,27 @@ public class PostOwnerActivity extends AppCompatActivity {
         EditText namePostEditText = findViewById(R.id.txtNamePost);
         EditText pricePost = findViewById(R.id.txtPrice);
         EditText desPost = findViewById(R.id.descPost);
+        numberInput = findViewById(R.id.numberInput);
+        increaseButton = findViewById(R.id.increaseButton);
+        decreaseButton = findViewById(R.id.decreaseButton);
+        numberInput.setText(String.valueOf(currentValue));
+
+
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentValue++;
+                numberInput.setText(String.valueOf(currentValue));
+            }
+        });
+
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentValue--;
+                numberInput.setText(String.valueOf(currentValue));
+            }
+        });
 
 
         FlexboxLayout boxFurni = findViewById(R.id.boxFurni);
@@ -587,13 +613,14 @@ public class PostOwnerActivity extends AppCompatActivity {
                 posts.setDescription(desPostA);
 
 
+
                 // Set the time
                 long currentTimeMillis = System.currentTimeMillis();
                 Date currentDate = new Date(currentTimeMillis);
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(currentDate);
-                calendar.add(Calendar.MONTH, 1);
+                calendar.add(Calendar.DATE, currentValue);
                 Date futureDate = calendar.getTime();
 
                 posts.setTimeFrom(currentDate);
@@ -606,6 +633,7 @@ public class PostOwnerActivity extends AppCompatActivity {
                 try {
                     long postId = postsService.addAPost(posts);
                     if (postId > 0) {
+                        reduceCredit(userId);
                         Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
                         for (Integer c : countImage) {
                             try {
@@ -840,6 +868,20 @@ public class PostOwnerActivity extends AppCompatActivity {
                     Toast.makeText(this, "Permission denied: " + permissions[i], Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+    public void reduceCredit(int userId) {
+        Double defaultMoney = 30000.0;
+        UserAccount user = userAccountService.getUserAccountById(userId);
+        double currentCredit = user.getDigital_money();
+        if (currentCredit >= (30000.0*currentValue)) {
+            double newCredit = currentCredit - (30000.0*currentValue);
+            user.setDigital_money(newCredit);
+            userAccountService.updateUserAccount(user);
+            Toast.makeText(this, "Bạn đã thanh toán thành công!!!.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Thanh toán không thành công!! Số dư trong tài khoản không đủ!!", Toast.LENGTH_SHORT).show();
         }
     }
 }
