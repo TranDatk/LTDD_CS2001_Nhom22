@@ -116,7 +116,7 @@ public class PostOwnerActivity extends AppCompatActivity {
     private EditText numberInput;
     private Button increaseButton;
     private Button decreaseButton;
-    private int currentValue = 0;
+    private int currentValue = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,19 +322,6 @@ public class PostOwnerActivity extends AppCompatActivity {
             Toast.makeText(this, "Không có tiện ích", Toast.LENGTH_SHORT).show();
         }
 
-
-        Button test = (Button) findViewById(R.id.test3);
-
-        test.setOnClickListener(v -> {
-            for (Detail_Utilities detail_utilities : detail_utilitiesList) {
-                Double price = detail_utilities.getPrice();
-                String unit = detail_utilities.getUnit();
-                Toast.makeText(this, unit + " - " + String.valueOf(price), Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
-
         addCities();
 
         autoCitiesField.setOnItemClickListener((parent, view1, position, id) -> {
@@ -367,7 +354,7 @@ public class PostOwnerActivity extends AppCompatActivity {
             for (Uri uri : selectedImages) {
                 Images images = new Images();
                 images.setIsActive(1);
-                images.setName(null);
+                images.setName("");
                 try {
                     byte[] a = getBytesFromUri(uri);
                     images.setImage(a);
