@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,30 +17,29 @@ import android.widget.Toast;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.UserAccountService;
-import com.paypal.android.sdk.payments.PayPalConfiguration;
-import com.paypal.android.sdk.payments.PayPalPayment;
-import com.paypal.android.sdk.payments.PayPalService;
-import com.paypal.android.sdk.payments.PaymentActivity;
-import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+
+import vn.momo.momo_partner.AppMoMoLib;
 
 public class PayScreen extends AppCompatActivity {
 
     private final UserAccountService userAccountService = new UserAccountService();
 
     EditText edtAmount;
-    Button btnPayment;
+    Button btnmomo;
 
-    String clientId = "AfsCUP76fQc3HGbzgs2yyzWs-Tdn4hPRMTF0bUIGk6o5jcHRJggHZKG-B405K19GCg_qp930o2ypPou4";
-
-    int PAYPAL_REQUEST_CODE = 123;
-
-    public static PayPalConfiguration configuration;
+    private String amount = "10000";
+    private String fee = "0";
+    int environment = 0;//developer default
+    private String merchantName = "Thanh toán đơn hàng";
+    private String merchantCode = ""; /// cái này fen xóa này
+    private String merchantNameLabel = "HotelRent";
+    private String description = "nạp tiền vào tài khoản";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +50,15 @@ public class PayScreen extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-        int userId = sharedPreferences.getInt("userId", -1);
-        UserAccount user = userAccountService.getUserAccountById(userId);
+        AppMoMoLib.getInstance().setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT); // AppMoMoLib.ENVIRONMENT.PRODUCTION
 
 
-        configuration = new PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientId);
 
         edtAmount = findViewById(R.id.edtAmount);
-        btnPayment = findViewById(R.id.btnPayment);
+        btnmomo = findViewById(R.id.btnmomo);
 
-        btnPayment.setOnClickListener(v -> {
-            getPayment();
+        btnmomo.setOnClickListener(v -> {
+            requestPayment("sdafasd1");
         });
     }
 
@@ -76,35 +72,97 @@ public class PayScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getPayment() {
-        String amount = edtAmount.getText().toString();
-        PayPalPayment payment = new PayPalPayment(new BigDecimal(amount), "VNĐ", "Nạp tiền vào tài khoản", PayPalPayment.PAYMENT_INTENT_SALE);
+    //Get token through MoMo app
+    private void requestPayment(String iddonhang) {
+        AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT);
+        AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN);
+        if (edtAmount.getText().toString() != null && edtAmount.getText().toString().trim().length() != 0)
+            amount = edtAmount.getText().toString().trim();
 
-        Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, configuration);
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+        Map<String, Object> eventValue = new HashMap<>();
+        //client Required
+        eventValue.put("merchantname", merchantName);
+        eventValue.put("merchantcode", merchantCode);
+        eventValue.put("amount", amount);
+        eventValue.put("orderId", iddonhang);
+        eventValue.put("orderLabel", iddonhang);
 
-        startActivityForResult(intent, PAYPAL_REQUEST_CODE);
+        //client Optional - bill info
+        eventValue.put("merchantnamelabel", merchantNameLabel);
+        eventValue.put("fee", "0");
+        eventValue.put("description", description);
+
+        //client extra data
+        eventValue.put("requestId",  merchantCode+"merchant_billId_"+System.currentTimeMillis());
+        eventValue.put("partnerCode", merchantCode);
+        //Example extra data
+        JSONObject objExtraData = new JSONObject();
+        try {
+            objExtraData.put("site_code", "008");
+            objExtraData.put("site_name", "CGV Cresent Mall");
+            objExtraData.put("screen_code", 0);
+            objExtraData.put("screen_name", "Special");
+            objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3");
+            objExtraData.put("movie_format", "2D");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        eventValue.put("extraData", objExtraData.toString());
+
+        eventValue.put("extra", "");
+        AppMoMoLib.getInstance().requestMoMoCallBack(this, eventValue);
+
+
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    //Get token callback from MoMo app an submit to server side
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        int userId = sharedPreferences.getInt("userId", -1);
+        if(requestCode == AppMoMoLib.getInstance().REQUEST_CODE_MOMO && resultCode == -1) {
+            if(data != null) {
+                if(data.getIntExtra("status", -1) == 0) {
+                    //TOKEN IS AVAILABLE
+                    amount = edtAmount.getText().toString().trim();
+                    UserAccount user = userAccountService.getUserAccountById(userId);
+                    double currentMoney = user.getDigital_money();
+                    double money = currentMoney + Double.parseDouble(amount);
+                    user.setDigital_money(money);
+                    userAccountService.updateUserAccount(user);
+                    Log.d("thanhcong",String.valueOf(currentMoney));
+                    String token = data.getStringExtra("data"); //Token response
+                    String phoneNumber = data.getStringExtra("phonenumber");
+                    Toast.makeText(this, "Thanh toán thành công!!!", Toast.LENGTH_SHORT).show();
+                    String env = data.getStringExtra("env");
+                    if(env == null){
+                        env = "app";
+                    }
 
-        if(requestCode == PAYPAL_REQUEST_CODE) {
-            PaymentConfirmation paymentConfirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
-            if (paymentConfirmation != null) {
-                String paymentDetails = paymentConfirmation.toJSONObject().toString();
-                try {
-                    JSONObject object = new JSONObject(paymentDetails);
-                } catch (JSONException e) {
-                    Toast.makeText(this,e.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                    if(token != null && !token.equals("")) {
+                        // TODO: send phoneNumber & token to your server side to process payment with MoMo server
+                        // IF Momo topup success, continue to process your order
+                    } else {
+                        Log.d("thanhcong","không thành công");
+                    }
+                } else if(data.getIntExtra("status", -1) == 1) {
+                    //TOKEN FAIL
+                    String message = data.getStringExtra("message") != null?data.getStringExtra("message"):"Thất bại";
+                    Log.d("thanhcong","không thành công");
+                } else if(data.getIntExtra("status", -1) == 2) {
+                    //TOKEN FAIL
+                    Log.d("thanhcong","không thành công");
+                } else {
+                    //TOKEN FAIL
+                    Log.d("thanhcong","không thành công");
                 }
-            } else if (requestCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.d("thanhcong","không thành công");
             }
-
-        } else if (requestCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-            Toast.makeText(this, "Invalid payment", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d("thanhcong","không thành công");
         }
     }
+
+
 }

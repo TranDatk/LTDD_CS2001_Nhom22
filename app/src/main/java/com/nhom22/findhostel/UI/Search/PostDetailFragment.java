@@ -125,21 +125,23 @@ public class PostDetailFragment extends Fragment {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            tvDescription.setText(p.getDescription());
-            tvType.setText(p.getType().getName());
-            tvAddress.setText(p.getAddress().getHouseNumber() + ", " +
-                    p.getAddress().getStreets().getName() + ", " +
-                    p.getAddress().getSubDistrics().getName() + ", " +
-                    p.getAddress().getDistricts().getName() + ", " +
-                    p.getAddress().getCities().getName());
-            tvPrice.setText(String.valueOf(p.getPrice()) + "đ");
-            tvPhoneNumber.setText(p.getUserAccount().getPhone());
-            Date from = p.getTimeFrom();
-            Date to = p.getTimeTo();
-            long diffInMillis = to.getTime() - from.getTime();
-            long daysdiff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+            if (p != null) {
+                tvDescription.setText(p.getDescription());
+                tvType.setText(p.getType().getName());
+                tvAddress.setText(p.getAddress().getHouseNumber() + ", " +
+                        p.getAddress().getStreets().getName() + ", " +
+                        p.getAddress().getSubDistrics().getName() + ", " +
+                        p.getAddress().getDistricts().getName() + ", " +
+                        p.getAddress().getCities().getName());
+                tvPrice.setText(String.valueOf(p.getPrice()) + "đ");
+                tvPhoneNumber.setText(p.getUserAccount().getPhone());
+                Date from = p.getTimeFrom();
+                Date to = p.getTimeTo();
+                long diffInMillis = to.getTime() - from.getTime();
+                long daysdiff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
 
-            tvDateCounter.setText("Bài đăng còn " + String.valueOf(daysdiff) + " ngày");
+                tvDateCounter.setText("Bài đăng còn " + String.valueOf(daysdiff) + " ngày");
+            }
 
             Detail_FurnitureService detail_furnitureService = new Detail_FurnitureService();
             try {

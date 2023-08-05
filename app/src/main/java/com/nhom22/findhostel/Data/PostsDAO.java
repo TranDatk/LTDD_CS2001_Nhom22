@@ -243,17 +243,11 @@ public class PostsDAO {
         values.put("address_id", post.getAddress().getId());
         values.put("owner_id", post.getUserAccount().getId());
         values.put("type_id", post.getType().getId());
-
-        // Assuming the posts table has a primary key column named "id"
-        long id = post.getId(); // Get the ID of the post to be updated
+        long id = post.getId();
         String whereClause = "id = ?";
         String[] whereArgs = {String.valueOf(id)};
-
-        // Perform the update operation
         int rowsAffected = db.update("posts", values, whereClause, whereArgs);
         db.close();
-
-        // Return true if at least one row was affected (i.e., the update was successful)
         return rowsAffected > 0;
     }
 

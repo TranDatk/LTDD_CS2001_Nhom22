@@ -108,13 +108,6 @@
                 app:flexWrap="wrap"
                 app:justifyContent="space_evenly"/>
 
-            <EditText
-                android:id="@+id/countFurni"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border_1"
-                android:hint="Nhập số lượng"
-                android:inputType="number" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -130,11 +123,6 @@
                 app:alignItems="flex_start"
                 app:flexDirection="column"
                 app:justifyContent="space_evenly"/>
-            <Button
-                android:id="@+id/test3"
-                android:layout_width="wrap_content"
-                android:text="test"
-                android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -173,6 +161,41 @@
                     android:hint="0"
                     android:padding="5dp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nhập số ngày muốn đăng bài: " />
+            <EditText
+                android:id="@+id/numberInput"
+                android:background="@drawable/border_background"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:hint="Ghi số ngày"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/increaseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tăng" />
+
+                <Button
+                    android:id="@+id/decreaseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giảm" />
+
+            </LinearLayout>
+
+
+
 
             <TextView
                 android:layout_width="match_parent"
