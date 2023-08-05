@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.AddressDAO;
 import com.nhom22.findhostel.Data.PostsDAO;
@@ -80,7 +81,14 @@ public class ItemNotificationAdapter extends BaseAdapter {
             holder = (ItemNotificationAdapter.ViewHolder) convertView.getTag();
         }
 
+
         Notification notification = notifications.get(position);
+
+        if (notification == null) {
+            Toast.makeText(YourApplication.getInstance().getApplicationContext(), "Hệ thống đang bị lỗi không thể lấy dữ liệu", Toast.LENGTH_SHORT).show();
+            return convertView; // Return without processing if notification is null
+        }
+
         try {
             posts = postsDAO.getPostById(notification.getPostsId());
         } catch (ParseException e) {
@@ -120,7 +128,6 @@ public class ItemNotificationAdapter extends BaseAdapter {
             // Handle the exception appropriately (e.g., log the error, show an error message, etc.)
         }
 
-        //chuyen byte -> bitmap
 
 
         return convertView;

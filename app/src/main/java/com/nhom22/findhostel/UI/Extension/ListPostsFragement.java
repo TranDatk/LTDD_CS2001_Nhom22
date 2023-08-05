@@ -76,7 +76,7 @@ public class ListPostsFragement extends Fragment {
 
         itemAdapter.notifyDataSetChanged();
 
-        if(arrItem.isEmpty()){
+        if(arrItem.isEmpty() && arrItem == null){
             Toast.makeText(getContext(), "Hệ thống đang lỗi không lấy được dữ liệu", Toast.LENGTH_SHORT).show();
         }else {
             lsvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nhom22.findhostel.Data.UserAccountDAO;
 import com.nhom22.findhostel.Model.PostDecor;
 import com.nhom22.findhostel.Model.UserAccount;
 import com.nhom22.findhostel.R;
 import com.nhom22.findhostel.Service.Detail_ImageService;
+import com.nhom22.findhostel.YourApplication;
 
 import java.util.List;
 
@@ -74,6 +76,12 @@ public class ItemPostAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         PostDecor item = itemPost.get(position);
+
+        if(item == null){
+            Toast.makeText(YourApplication.getInstance().getApplicationContext(), "Hệ thống đang bị lỗi không thể lấy dữ liệu", Toast.LENGTH_SHORT).show();
+            return convertView; // Return without processing if notification is null
+        }
+
         holder.tvContent.setText(item.getText());
         holder.tvCreatedPost.setText(item.getCreatedDate());
         int id = item.getUserId();

@@ -10,6 +10,7 @@
     import android.widget.BaseAdapter;
     import android.widget.ImageView;
     import android.widget.TextView;
+    import android.widget.Toast;
 
     import com.nhom22.findhostel.Data.AddressDAO;
     import com.nhom22.findhostel.Data.UserAccountDAO;
@@ -19,6 +20,7 @@
     import com.nhom22.findhostel.Model.UserAccount;
     import com.nhom22.findhostel.R;
     import com.nhom22.findhostel.Service.AddressService;
+    import com.nhom22.findhostel.YourApplication;
 
     import java.util.List;
 
@@ -52,8 +54,6 @@
 
         private class ViewHolder{
             TextView tvTitle;
-
-//            TextView tvDistrict;
             ImageView imgItemHostelCollection;
         }
 
@@ -66,7 +66,6 @@
                 convertView = inflater.inflate(layout, null);
 
                 holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_titelCollectionHotel);
-//                holder.tvDistrict = (TextView) convertView.findViewById(R.id.tv_DistrictHotelCollection);
                 holder.imgItemHostelCollection = (ImageView) convertView.findViewById(R.id.img_itemCollectionHotel);
                 convertView.setTag(holder);
             }
@@ -74,15 +73,12 @@
                 holder = (ItemHotelCollectionAdapter.ViewHolder) convertView.getTag();
             }
             HostelCollection item = itemHostelCollection.get(position);
-            holder.tvTitle.setText(item.getTitle());
+            if(item == null){
+                Toast.makeText(YourApplication.getInstance().getApplicationContext(), "Hệ thống đang lỗi không thể lấy dữ liệu", Toast.LENGTH_SHORT).show();
+                return convertView; // Return without processing if notification is null
+            }
 
-//            int address_id = item.getAddress();
-//
-//            Address address = addressService.getAddressById(address_id);
-//
-//            int subDistrictId = address.getSubDistrics().getId();
-//            String subDistrictIdString = String.valueOf(subDistrictId);
-//            holder.tvDistrict.setText(subDistrictIdString);
+            holder.tvTitle.setText(item.getTitle());
 
             //chuyen byte -> bitmap
             byte[] image = item.getImage();

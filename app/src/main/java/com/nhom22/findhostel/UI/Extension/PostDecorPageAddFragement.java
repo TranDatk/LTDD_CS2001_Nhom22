@@ -122,15 +122,15 @@ public class PostDecorPageAddFragement extends Fragment {
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                         String formattedDate = format.format(currentDate);
 
-                        postDecorService.addPostDecor(new PostDecor(1000,
-                                edtContent.getText().toString().trim(),
-                                hinhAnh,
-                                formattedDate,
-                                userId,
-                                1
-                        ));
+                        PostDecor postDecor = new PostDecor(1000, edtContent.getText().toString().trim(), hinhAnh, formattedDate, userId, 1);
 
-                        replaceFragment(new ListDecorPostFragement());
+                        if(postDecor != null){
+                            postDecorService.addPostDecor(postDecor);
+                            replaceFragment(new ListDecorPostFragement());
+                        }else {
+                            Toast.makeText(getContext(), "Thêm bài viết mới thất bại", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                     else {
                         Toast.makeText(getContext(), "Bạn phải thêm ảnh vào bài viết", Toast.LENGTH_SHORT).show();
