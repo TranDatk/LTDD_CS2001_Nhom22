@@ -37,7 +37,7 @@ public class PayScreen extends AppCompatActivity {
     private String fee = "0";
     int environment = 0;//developer default
     private String merchantName = "Thanh toán đơn hàng";
-    private String merchantCode = "MOMOO41P20220925"; /// cái này fen xóa này
+    private String merchantCode = ""; /// cái này fen xóa này
     private String merchantNameLabel = "HotelRent";
     private String description = "nạp tiền vào tài khoản";
 
