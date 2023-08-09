@@ -297,13 +297,14 @@ public class RegistrationFragment extends Fragment {
         confirmOtpButton.setOnClickListener(v -> {
             String otp = otpEditText.getText().toString().trim();
             if (!otp.isEmpty()) {
-                verifyCode(otp);
+                verifyCode(otp); // Pass the entered OTP code to verify
                 bottomSheetDialog.cancel();
             } else {
                 bottomSheetDialog.show();
-                Toast.makeText(requireContext(), "Vui lòng nhập mã OTP", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Vui lòng nhập mã OTP", Toast.LENGTH_SHORT).show();
             }
         });
+
         cancelButton.setOnClickListener(v -> {
             bottomSheetDialog.cancel();
         });
@@ -313,6 +314,7 @@ public class RegistrationFragment extends Fragment {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, enteredCode);
         mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                // Verification successful, proceed to the next step
                 proceedToNextStep();
             } else {
                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -323,6 +325,7 @@ public class RegistrationFragment extends Fragment {
             }
         });
     }
+
 
 
     private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
