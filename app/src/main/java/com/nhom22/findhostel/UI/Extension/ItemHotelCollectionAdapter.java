@@ -82,9 +82,17 @@
 
             //chuyen byte -> bitmap
             byte[] image = item.getImage();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(image,0,image.length);
-            holder.imgItemHostelCollection.setImageBitmap(bitmap);
 
+            try {
+                if (image != null && image.length > 0) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(image,0,image.length);
+                    holder.imgItemHostelCollection.setImageBitmap(bitmap);
+                } else {
+                    // Handle the case where the image array is null or empty
+                }
+            } catch (Exception e) {
+                // Handle the exception appropriately (e.g., log the error, show an error message, etc.)
+            }
 
             return convertView;
         }

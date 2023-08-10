@@ -51,12 +51,12 @@ public class HostelCollectionPageFragment extends Fragment {
         lsvItem.setAdapter(itemAdapter);
 
         itemAdapter.notifyDataSetChanged();
-        binding.btnAddHotelCollection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment(new HostelCollectionPageAddFragment());
-            }
-        });
+//        binding.btnAddHotelCollection.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                replaceFragment(new HostelCollectionPageAddFragment());
+//            }
+//        });
 
         if(arrItem.isEmpty()){
             Toast.makeText(getContext(), "Hệ thống đang bị lỗi không lấy được dữ liệu", Toast.LENGTH_SHORT).show();
