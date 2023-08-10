@@ -442,235 +442,239 @@ public class PostOwnerActivity extends AppCompatActivity {
 
         Button btnAddPost = findViewById(R.id.btnAddPost);
         btnAddPost.setOnClickListener(v -> {
-            String namePost = namePostEditText.getText().toString().trim();
-            String priceText = pricePost.getText().toString().trim();
-            String desPostA = desPost.getText().toString().trim();
+            boolean a = reduceCredit(userId);
+            if (a) {
+                String namePost = namePostEditText.getText().toString().trim();
+                String priceText = pricePost.getText().toString().trim();
+                String desPostA = desPost.getText().toString().trim();
 
-            // Validate namePost
-            if (namePost.isEmpty()) {
-                namePostEditText.setError("Chưa nhập tiêu đề bài viết");
-                return;
-            }
-
-            // Validate priceText
-            if (priceText.isEmpty()) {
-                pricePost.setError("Chưa nhập giá");
-                return;
-            }
-
-            // Validate desPostA
-            if (desPostA.isEmpty()) {
-                desPost.setError("Chưa nhập mô tả");
-                return;
-            }
-
-            try {
-                float price = Float.parseFloat(priceText);
-                if (price <= 0) {
-                    pricePost.setError("Giá phải lớn hơn 0");
+                // Validate namePost
+                if (namePost.isEmpty()) {
+                    namePostEditText.setError("Chưa nhập tiêu đề bài viết");
                     return;
                 }
-            } catch (NumberFormatException e) {
-                pricePost.setError("Giá không hợp lệ");
-                return;
-            }
 
-            // Validate furniture selection
-            boolean isFurnitureSelected = false;
-            for (int i = 0; i < boxFurni.getChildCount(); i++) {
-                View view = boxFurni.getChildAt(i);
-                if (view instanceof CheckBox) {
-                    CheckBox checkBox = (CheckBox) view;
-                    if (checkBox.isChecked()) {
-                        isFurnitureSelected = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!isFurnitureSelected) {
-                Toast.makeText(this, "Chưa chọn nội thất", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Validate utilities selection
-            boolean isUtilitiesSelected = false;
-            for (int i = 0; i < boxUti.getChildCount(); i++) {
-                View view = boxUti.getChildAt(i);
-                if (view instanceof LinearLayout) {
-                    LinearLayout utilityLayout = (LinearLayout) view;
-                    CheckBox checkBox = (CheckBox) utilityLayout.getChildAt(0); // The first child is the CheckBox
-                    if (checkBox.isChecked()) {
-                        isUtilitiesSelected = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!isUtilitiesSelected) {
-                Toast.makeText(this, "Chưa chọn tiện ích", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Validate image
-            if (!isUpdateImageButton.get()) {
-                Toast.makeText(this, "Bạn chưa thêm ảnh vào trong dữ liệu", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Set the address
-            Address address = new Address();
-            String city = autoCitiesField.getText().toString();
-            String district = autoDistrictField.getText().toString();
-            String subdistrict = autoSubDistrictField.getText().toString();
-            String street = autoStreetField.getText().toString();
-            String housenum = houseNumberEditText.getText().toString();
-
-            if (city.isEmpty()) {
-                autoCitiesField.setError("Chưa chọn thành phố");
-                return;
-            }
-
-            if (district.isEmpty()) {
-                autoDistrictField.setError("Chưa chọn quận");
-                return;
-            }
-
-            if (subdistrict.isEmpty()) {
-                autoSubDistrictField.setError("Chưa chọn phường");
-                return;
-            }
-
-            if (street.isEmpty()) {
-                autoStreetField.setError("Chưa chọn tên đường");
-                return;
-            }
-
-            if (housenum.isEmpty()) {
-                houseNumberEditText.setError("Chưa nhập số nhà");
-                return;
-            }
-            runOnUiThread(() -> {
-
-                String selectedCityName = autoCitiesField.getText().toString();
-                if (!TextUtils.isEmpty(selectedCityName)) {
-                    int cityID = getCitiesIdByName(selectedCityName);
-                    Cities cityObj = citiesService.getCityById(cityID);
-                    address.setCities(cityObj);
+                // Validate priceText
+                if (priceText.isEmpty()) {
+                    pricePost.setError("Chưa nhập giá");
+                    return;
                 }
 
-                String selectedDistrictName = autoDistrictField.getText().toString();
-                if (!TextUtils.isEmpty(selectedDistrictName)) {
-                    int districtId = getDistrictByName(selectedDistrictName);
-                    Districts districtObj = districtsService.getDistrictById(districtId);
-                    address.setDistricts(districtObj);
+                // Validate desPostA
+                if (desPostA.isEmpty()) {
+                    desPost.setError("Chưa nhập mô tả");
+                    return;
                 }
-
-                String selectedSubDistrictName = autoSubDistrictField.getText().toString();
-                if (!TextUtils.isEmpty(selectedSubDistrictName)) {
-                    int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
-                    SubDistricts subDistrictObj = subDistrictsService.getSubDistrictById(subDistrictId);
-                    address.setSubDistrics(subDistrictObj);
-                }
-
-                String selectedStreetName = autoStreetField.getText().toString();
-                if (!TextUtils.isEmpty(selectedStreetName)) {
-                    int streetId = getStreetIdByName(selectedStreetName);
-                    Streets streetObj = streetsService.getStreetsById(streetId);
-                    address.setStreets(streetObj);
-                }
-
-                address.setHouseNumber(housenum);
-                address.setIsActive(1);
-                long addressId = addressService.addAddress(address);
-                if (addressId > 0) {
-                    Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
-                    posts.setAddress(address);
-                } else {
-                    Toast.makeText(this, "Thêm địa chỉ thất bại", Toast.LENGTH_SHORT).show();
-                }
-
-                // Set the post name
-                posts.setPostName(namePost);
-
-                // Set the price
-                posts.setPrice(Float.parseFloat(priceText));
-
-                // Set the description
-                posts.setDescription(desPostA);
-
-
-
-                // Set the time
-                long currentTimeMillis = System.currentTimeMillis();
-                Date currentDate = new Date(currentTimeMillis);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
-                calendar.add(Calendar.DATE, currentValue);
-                Date futureDate = calendar.getTime();
-
-                posts.setTimeFrom(currentDate);
-                posts.setTimeTo(futureDate);
-
-                // Set the active post
-                posts.setActivePost(1);
-                posts.setUserAccount(user);
 
                 try {
-                    long postId = postsService.addAPost(posts);
-                    if (postId > 0) {
-                        reduceCredit(userId);
-                        Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
-                        for (Integer c : countImage) {
-                            try {
-                                detail_imageService.addADetailImage(c, Integer.parseInt(String.valueOf(postId)));
-                            } catch (ParseException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
+                    float price = Float.parseFloat(priceText);
+                    if (price <= 0) {
+                        pricePost.setError("Giá phải lớn hơn 0");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    pricePost.setError("Giá không hợp lệ");
+                    return;
+                }
 
-                        // Add detail_furniture
-                        Detail_Furniture detailFurniture = new Detail_Furniture();
-                        for (Furniture furniture : furnitureListChoose) {
-                            try {
-                                detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
-                            } catch (ParseException e) {
-                                throw new RuntimeException(e);
-                            }
-                            detailFurniture.setQuantity(1);
-                            detailFurniture.setFurniture(furniture);
-                            try {
-                                long check1 = detail_furnitureService.addADetailFurniture(detailFurniture);
-                                if (check1 > 0) {
-                                    Toast.makeText(this, "thêm nội thất thành công", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (ParseException e) {
-                                throw new RuntimeException(e);
-                            }
+                // Validate furniture selection
+                boolean isFurnitureSelected = false;
+                for (int i = 0; i < boxFurni.getChildCount(); i++) {
+                    View view = boxFurni.getChildAt(i);
+                    if (view instanceof CheckBox) {
+                        CheckBox checkBox = (CheckBox) view;
+                        if (checkBox.isChecked()) {
+                            isFurnitureSelected = true;
+                            break;
                         }
+                    }
+                }
 
-                        // Add detail_utilities
-                        for (Detail_Utilities detailUtilities : detail_utilitiesList) {
-                            if (detailUtilities.getUtilities() != null) {
+                if (!isFurnitureSelected) {
+                    Toast.makeText(this, "Chưa chọn nội thất", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Validate utilities selection
+                boolean isUtilitiesSelected = false;
+                for (int i = 0; i < boxUti.getChildCount(); i++) {
+                    View view = boxUti.getChildAt(i);
+                    if (view instanceof LinearLayout) {
+                        LinearLayout utilityLayout = (LinearLayout) view;
+                        CheckBox checkBox = (CheckBox) utilityLayout.getChildAt(0); // The first child is the CheckBox
+                        if (checkBox.isChecked()) {
+                            isUtilitiesSelected = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!isUtilitiesSelected) {
+                    Toast.makeText(this, "Chưa chọn tiện ích", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Validate image
+                if (!isUpdateImageButton.get()) {
+                    Toast.makeText(this, "Bạn chưa thêm ảnh vào trong dữ liệu", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Set the address
+                Address address = new Address();
+                String city = autoCitiesField.getText().toString();
+                String district = autoDistrictField.getText().toString();
+                String subdistrict = autoSubDistrictField.getText().toString();
+                String street = autoStreetField.getText().toString();
+                String housenum = houseNumberEditText.getText().toString();
+
+                if (city.isEmpty()) {
+                    autoCitiesField.setError("Chưa chọn thành phố");
+                    return;
+                }
+
+                if (district.isEmpty()) {
+                    autoDistrictField.setError("Chưa chọn quận");
+                    return;
+                }
+
+                if (subdistrict.isEmpty()) {
+                    autoSubDistrictField.setError("Chưa chọn phường");
+                    return;
+                }
+
+                if (street.isEmpty()) {
+                    autoStreetField.setError("Chưa chọn tên đường");
+                    return;
+                }
+
+                if (housenum.isEmpty()) {
+                    houseNumberEditText.setError("Chưa nhập số nhà");
+                    return;
+                }
+                runOnUiThread(() -> {
+
+                    String selectedCityName = autoCitiesField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedCityName)) {
+                        int cityID = getCitiesIdByName(selectedCityName);
+                        Cities cityObj = citiesService.getCityById(cityID);
+                        address.setCities(cityObj);
+                    }
+
+                    String selectedDistrictName = autoDistrictField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedDistrictName)) {
+                        int districtId = getDistrictByName(selectedDistrictName);
+                        Districts districtObj = districtsService.getDistrictById(districtId);
+                        address.setDistricts(districtObj);
+                    }
+
+                    String selectedSubDistrictName = autoSubDistrictField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedSubDistrictName)) {
+                        int subDistrictId = getSubDistrictIdByName(selectedSubDistrictName);
+                        SubDistricts subDistrictObj = subDistrictsService.getSubDistrictById(subDistrictId);
+                        address.setSubDistrics(subDistrictObj);
+                    }
+
+                    String selectedStreetName = autoStreetField.getText().toString();
+                    if (!TextUtils.isEmpty(selectedStreetName)) {
+                        int streetId = getStreetIdByName(selectedStreetName);
+                        Streets streetObj = streetsService.getStreetsById(streetId);
+                        address.setStreets(streetObj);
+                    }
+
+                    address.setHouseNumber(housenum);
+                    address.setIsActive(1);
+                    long addressId = addressService.addAddress(address);
+                    if (addressId > 0) {
+                        Toast.makeText(this, "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
+                        posts.setAddress(address);
+                    } else {
+                        Toast.makeText(this, "Thêm địa chỉ thất bại", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Set the post name
+                    posts.setPostName(namePost);
+
+                    // Set the price
+                    posts.setPrice(Float.parseFloat(priceText));
+
+                    // Set the description
+                    posts.setDescription(desPostA);
+
+
+                    // Set the time
+                    long currentTimeMillis = System.currentTimeMillis();
+                    Date currentDate = new Date(currentTimeMillis);
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(currentDate);
+                    calendar.add(Calendar.DATE, currentValue);
+                    Date futureDate = calendar.getTime();
+
+                    posts.setTimeFrom(currentDate);
+                    posts.setTimeTo(futureDate);
+
+                    // Set the active post
+                    posts.setActivePost(1);
+                    posts.setUserAccount(user);
+
+                    try {
+
+                        long postId = postsService.addAPost(posts);
+                        if (postId > 0) {
+                            Toast.makeText(this, "Thêm bài viết thành công", Toast.LENGTH_SHORT).show();
+                            for (Integer c : countImage) {
                                 try {
-                                    detailUtilities.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
+                                    detail_imageService.addADetailImage(c, Integer.parseInt(String.valueOf(postId)));
                                 } catch (ParseException e) {
                                     throw new RuntimeException(e);
                                 }
-                                long check2 = detail_utilitiesService.addADetailUtilities(detailUtilities);
-                                if (check2 > 0) {
-                                    Toast.makeText(this, "thêm tiện ích thành công", Toast.LENGTH_SHORT).show();
+                            }
+
+                            // Add detail_furniture
+                            Detail_Furniture detailFurniture = new Detail_Furniture();
+                            for (Furniture furniture : furnitureListChoose) {
+                                try {
+                                    detailFurniture.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                detailFurniture.setQuantity(1);
+                                detailFurniture.setFurniture(furniture);
+                                try {
+                                    long check1 = detail_furnitureService.addADetailFurniture(detailFurniture);
+                                    if (check1 > 0) {
+                                        Toast.makeText(this, "thêm nội thất thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
                                 }
                             }
+
+                            // Add detail_utilities
+                            for (Detail_Utilities detailUtilities : detail_utilitiesList) {
+                                if (detailUtilities.getUtilities() != null) {
+                                    try {
+                                        detailUtilities.setPosts(postsService.getPostById(Integer.parseInt(String.valueOf(postId))));
+                                    } catch (ParseException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    long check2 = detail_utilitiesService.addADetailUtilities(detailUtilities);
+                                    if (check2 > 0) {
+                                        Toast.makeText(this, "thêm tiện ích thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        } else {
+                            Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(this, "Thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.d("error", e.getMessage());
                     }
-                } catch (Exception e) {
-                    Log.d("error", e.getMessage());
-                }
-            });
+                });
+            } else {
+                Toast.makeText(this, "Số dư không đủ!! thêm bài viết thất bại", Toast.LENGTH_SHORT).show();
+            }
         });
 
 
@@ -858,7 +862,7 @@ public class PostOwnerActivity extends AppCompatActivity {
         }
     }
 
-    public void reduceCredit(int userId) {
+    public boolean reduceCredit(int userId) {
         Double defaultMoney = 30000.0;
         UserAccount user = userAccountService.getUserAccountById(userId);
         double currentCredit = user.getDigital_money();
@@ -866,9 +870,9 @@ public class PostOwnerActivity extends AppCompatActivity {
             double newCredit = currentCredit - (defaultMoney*currentValue);
             user.setDigital_money(newCredit);
             userAccountService.updateUserAccount(user);
-            Toast.makeText(this, "Bạn đã thanh toán thành công!!!.", Toast.LENGTH_SHORT).show();
+           return true;
         } else {
-            Toast.makeText(this, "Thanh toán không thành công!! Số dư trong tài khoản không đủ!!", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 }
